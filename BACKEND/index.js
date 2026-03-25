@@ -1,4 +1,4 @@
-
+require('dotenv').config(); // උඩින්ම මේක දාන්න
 /*const mysql = require("mysql");
 
 //const express = require("express"); // express import කරන්න
@@ -37,7 +37,7 @@ const connection = mysql.createConnection({
   host: "mysql-2e81e578-divyanjalie789-1021.i.aivencloud.com",
   port: 10760,
   user: "avnadmin",
-  password: "AVNS_zRY-hBim_pSn1krmwF8", // Screenshot එකේ තිබුණ password එක මෙතනට දාන්න
+  password: process.env.DB_PASSWORD,
   database: "defaultdb", 
   ssl: {
     rejectUnauthorized: true,
