@@ -1,0 +1,414 @@
+:root {
+  --pg-bg: linear-gradient(135deg, #7b99cc 0%, #6b7cb4 50%, #5d61a2 100%);
+  --card-bg: rgba(255, 255, 255, 0.9);
+  --txt-color: #333;
+}
+
+[data-theme="dark"] {
+  --pg-bg: #000000;
+  --card-bg: #111111;
+  --txt-color: #ffffff;
+}
+ 
+.content-page-container {
+  min-height: 100vh;
+  padding: 40px;
+  background: var(--pg-bg);
+  transition: 0.4s;
+}
+
+.content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.add-content-btn {
+  background: #ffeb3b;
+  color: #000;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.content-card {
+  background: var(--card-bg);
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  color: var(--txt-color);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.content-type-badge {
+  background: #2563eb;
+  color: white;
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.c-edit-btn { background: #ffc107; border: none; padding: 5px 15px; border-radius: 10px; cursor: pointer; }
+.c-delete-btn { background: #ff4b2b; color: white; border: none; padding: 5px 15px; border-radius: 10px; cursor: pointer; }
+
+/* Modals */
+.modal-overlay {
+  position: fixed;
+  top:0; left:0; width:100%; height:100%;
+  background: rgba(0,0,0,0.7);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 2000;
+}
+
+.modal-btns { display: flex; gap: 10px; margin-top: 20px; }
+.cancel-btn { background: #666; color: white; border: none; padding: 10px; border-radius: 20px; flex:1; cursor: pointer;}
+
+
+/* =========================================
+   Main Container & Background
+   ========================================= */
+.content-page-container {
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: var(--main-bg, linear-gradient(135deg, #7b99cc 0%, #6b7cb4 50%, #5d61a2 100%));
+  color: white;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  transition: all 0.4s ease;
+}
+
+/* Header Section */
+.content-header {
+  max-width: 1200px;
+  margin: 0 auto 40px auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 20px;
+}
+
+.content-header h2 {
+  font-size: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.add-content-btn {
+  background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 30px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.add-content-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 210, 255, 0.4);
+}
+
+/* =========================================
+   Content Grid & Cards
+   ========================================= */
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.content-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 25px;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.content-card:hover {
+  transform: translateY(-10px);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  border-color: #00d2ff;
+}
+
+/* Badge Style */
+.content-type-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(0, 210, 255, 0.2);
+  color: #00d2ff;
+  padding: 5px 12px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  border: 1px solid rgba(0, 210, 255, 0.3);
+}
+
+.content-card h3 {
+  margin: 20px 0 15px 0;
+  font-size: 1.4rem;
+  color: #fff;
+  line-height: 1.3;
+}
+
+.link-preview {
+  color: #ffeb3b;
+  text-decoration: none;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  transition: 0.2s;
+}
+
+.link-preview:hover {
+  text-decoration: underline;
+  opacity: 0.8;
+}
+
+/* Card Action Buttons */
+.card-actions {
+  display: flex;
+  gap: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 15px;
+}
+
+.c-edit-btn, .c-delete-btn {
+  flex: 1;
+  padding: 8px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.c-edit-btn {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.c-edit-btn:hover { background: #ffc107; color: #000; }
+
+.c-delete-btn {
+  background: rgba(255, 75, 43, 0.2);
+  color: #ff4b2b;
+  border: 1px solid rgba(255, 75, 43, 0.3);
+}
+
+.c-delete-btn:hover { background: #ff4b2b; color: #fff; }
+
+/* Empty State */
+.empty-state-card {
+  text-align: center;
+  padding: 50px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  grid-column: 1 / -1;
+  font-style: italic;
+  opacity: 0.7;
+}
+
+/* =========================================
+   Glassmorphism Modals
+   ========================================= */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; 
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.glass-effect {
+  background: rgba(25, 25, 25, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 25px;
+  padding: 35px;
+  width: 450px;
+  color: white;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+.glass-effect h3 {
+  color: #00d2ff;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.glass-effect input, .glass-effect select {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  outline: none;
+}
+
+.glass-effect option {
+    background: #222;
+}
+
+.save-btn {
+  background: #00d2ff;
+  color: #000;
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: bold;
+  width: 100%;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background: transparent;
+  color: #aaa;
+  border: none;
+  width: 100%;
+  margin-top: 10px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* Loading Style */
+.loading-text {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-top: 50px;
+    letter-spacing: 2px;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.5; }
+    50% { opacity: 1; }
+    100% { opacity: 0.5; }
+}
+
+
+
+
+/*add course */
+/* මුළු පිටුවේම පසුබිම (Background) */
+.dashboard-page {
+    min-height: 100vh;
+    padding: 40px 20px;
+    background: #2c3143; /* ඔබේ අනෙක් පිටු වලට සමාන පසුබිමක් */
+}
+
+/* කළු පැහැති Card එක (Form Container) */
+.form-container.glass-effect {
+    background: #1a1c23; /* Dark background */
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-sizing: border-box;
+}
+
+/* Form එකේ පොදු සැකසුම් */
+.course-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+/* Label එකේ පෙනුම */
+.course-form label {
+    color: #ffd700; /* Gold හෝ Accent color එකක් */
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+}
+
+/* Input, Textarea සහ Select එකම විදියට */
+.course-form input, 
+.course-form textarea, 
+.course-form select {
+    width: 100% !important;
+    box-sizing: border-box !important; /* පළල එළියට පැනීම වළක්වයි */
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.9) !important;
+    color: #333 !important;
+    font-size: 1rem;
+    outline: none;
+    transition: 0.3s;
+}
+
+.course-form textarea {
+    resize: none; /* ඇදීම තහනම් */
+}
+
+/* Button වල පෙනුම */
+.submit-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
+}
+
+.cancel-btn {
+    background-color: #4a4d58;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+

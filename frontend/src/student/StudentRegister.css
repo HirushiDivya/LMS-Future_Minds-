@@ -1,0 +1,115 @@
+/* Container - Light mode එකේදී ඔබ දුන් gradient එකම පවතී */
+.register-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #62bdfc 0%, #2d82e5 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: background 0.3s ease;
+}
+
+
+
+
+/* Dark Mode එකේදී පමණක් background එක වෙනස් කිරීම */
+[data-theme='dark'] .register-page  {
+  background: var(--bg-color); /* Navbar එකේ variable එක */
+}
+
+/* The Glassmorphism Card */
+.register-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+/* Dark Mode එකේදී Card එක මඳක් අඳුරු කිරීම */
+[data-theme='dark'] .register-card {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.register-card h2 { font-size: 2rem; margin-bottom: 5px; font-weight: 600; }
+.register-card p { font-size: 0.9rem; margin-bottom: 25px; opacity: 0.9; }
+
+.form-group { text-align: left; margin-bottom: 15px; }
+.form-group label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 5px; }
+
+.register-card input {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.register-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 25px;
+  background: linear-gradient(to right, #00d2ff, #3a7bd5);
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.profile-card-wide { max-width: 500px !important; }
+
+.profile-card-widequiz { max-width: 700px !important; }
+
+
+
+
+.mini-navbar {
+  display: flex;
+  justify-content: space-around;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  gap: 5px;
+}
+
+[data-theme='dark'] .mini-navbar { background: rgba(0, 0, 0, 0.3); }
+
+.mini-navbar button {
+  background: none;
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  flex: 1;
+}
+
+.mini-navbar button.active-tab {
+  background: #facc15; 
+  color: #002347;
+  font-weight: 700;
+}
+
+/*quiz */
+
+  .students-container {
+    padding-top: 100px; /* Navbar එකේ උස අනුව මෙය වෙනස් කරන්න (උදා: 80px - 120px) */
+    min-height: 100vh;
+    box-sizing: border-box;
+}

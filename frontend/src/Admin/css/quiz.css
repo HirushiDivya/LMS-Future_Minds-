@@ -1,0 +1,386 @@
+/* quiz.css */
+
+:root {
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --text-main: #ffffff;
+  --text-bold: #f0f0f0;
+  --accent-color: #00d2ff;
+  --delete-red: #ff4d4d;
+  --success-green: #16a34a;
+}
+
+.students-container {
+  padding: 40px;
+  min-height: 100vh;
+  background: var(--primary-gradient);
+  color: var(--text-main);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h2, h3 {
+  margin-bottom: 20px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* Table Styles */
+.table-responsive {
+  margin-bottom: 40px;
+  overflow-x: auto;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 20px;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.students-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.students-table th {
+  padding: 15px;
+  border-bottom: 2px solid var(--glass-border);
+  color: var(--accent-color);
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+.students-table td {
+  padding: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  vertical-align: middle;
+}
+
+.students-table tr:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Modal Styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  color: white;
+}
+
+/* Form Inputs */
+.search-input {
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #333;
+  outline: none;
+}
+
+.search-input:focus {
+  box-shadow: 0 0 10px var(--accent-color);
+}
+
+/* Buttons */
+.save-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: var(--success-green);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: transform 0.2s ease;
+}
+
+.save-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+.delete-btn {
+  background: var(--delete-red);
+}
+
+.view-btn {
+  /* Styled inline in your React code, but you can add shared styles here */
+  color: white;
+  text-decoration: none;
+}
+
+/* Utility */
+strong {
+  color: var(--accent-color);
+}
+
+
+
+
+
+
+
+
+
+
+/* Add these to your existing CSS file */
+/* --- Static Form Input Styles --- */
+
+/* 1. සියලුම input types (text, number, date, file) සහ textarea එකම ප්‍රමාණයට තබා ගැනීම */
+
+.quiz-form input[type="text"], 
+.quiz-form input[type="number"], 
+.quiz-form input[type="date"], 
+.quiz-form textarea,
+.quiz-form .file-input {
+    width: 100% !important;
+    max-width: 100% !important; /* වෙනස් වීම වැළැක්වීමට */
+    min-width: 100% !important;
+    box-sizing: border-box !important; /* Padding ඇතුළටම ගනී */
+    display: block;
+    padding: 12px;
+    border-radius: 8px; /* සියල්ලටම සමාන radius එකක් */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.9); /* පැහැදිලි පෙනුමට */
+    color: #333;
+    font-size: 1rem;
+    outline: none;
+    margin: 0;
+    margin: 8px 0;
+}
+
+/* 2. Textarea එකේ size එක වෙනස් කිරීම සම්පූර්ණයෙන්ම තහනම් කිරීම */
+textarea.full-width {
+    resize: none !important; /* User ට ඇදලා ලොකු කරන්න බැහැ */
+    height: 100px; /* කැමති ස්ථාවර උසක් දෙන්න */
+}
+
+/* 3. Form එකේ layout එක පාලනය */
+.quiz-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+.form-group-custom {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group-custom label {
+    color: var(--accent-color);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+/* 4. Column දෙකේ row එක නිවැරදි කිරීම */
+.form-row-custom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    width: 100%;
+}
+
+/* 5. File upload කොටස */
+.file-upload-section {
+    margin-top: 5px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border: 1px dashed var(--glass-border);
+}
+
+.helper-text {
+    font-size: 0.8rem;
+    color: #fff;
+    opacity: 0.8;
+    margin-top: 8px;
+    line-height: 1.4;
+}
+.table-responsive.glass-effect {
+    overflow: hidden; /* එළියට පනින දේවල් කපා දැමීමට */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+
+
+
+/* responsive grid for mobile */
+@media (max-width: 600px) {
+    .form-row-custom {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+
+
+
+
+
+
+/*paymnt */
+/* Container */
+.register-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #62bdfc 0%, #2d82e5 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: background 0.3s ease;
+  padding: 20px;
+}
+
+[data-theme='dark'] .register-page {
+  background: var(--bg-color, #121212);
+}
+
+/* Glassmorphism Card */
+.register-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 30px;
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+[data-theme='dark'] .register-card {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Summary Section */
+.summary-section {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.item-name { color: #facc15; margin: 0; font-size: 1.2rem; }
+.price-tag { font-size: 1.8rem; font-weight: bold; margin: 10px 0 0 0; }
+
+/* Mini Navbar for Tabs */
+.mini-navbar {
+  display: flex;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 5px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  gap: 5px;
+}
+
+.mini-navbar button {
+  background: none;
+  border: none;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 8px;
+  flex: 1;
+  transition: 0.3s;
+  font-weight: 500;
+}
+
+.mini-navbar button.active-tab {
+  background: #facc15;
+  color: #002347;
+  font-weight: 700;
+}
+
+/* Bank Details */
+.bank-details {
+  text-align: left;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+}
+
+.bank-details p { margin: 5px 0; }
+
+/* File Upload Area */
+.file-drop-area {
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 15px;
+  padding: 20px;
+  position: relative;
+  background: rgba(255, 255, 255, 0.02);
+  margin-bottom: 20px;
+}
+
+.file-input {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  opacity: 0; cursor: pointer;
+}
+
+.preview-container img {
+  max-width: 100%;
+  max-height: 150px;
+  border-radius: 10px;
+}
+
+.success-text { color: #4ade80; font-size: 0.8rem; margin-top: 8px; }
+
+/* Buttons */
+.register-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 25px;
+  background: linear-gradient(to right, #00d2ff, #3a7bd5);
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.register-btn:active { transform: scale(0.98); }
+
+.cancel-link {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 20px;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.85rem;
+}

@@ -1,0 +1,256 @@
+/* =========================================
+   Theme Variables (මෙහි පවතින වර්ණ වෙනස් නොකරන්න)
+   ========================================= */
+:root {
+  --main-bg: linear-gradient(135deg, #7b99cc 0%, #6b7cb4 50%, #5d61a2 100%);
+  --content-bg: rgba(255, 255, 255, 0.95);
+  --text-dark: #333;
+  --text-bold: #000;
+  --table-border: #f0f0f0;
+  --header-bg: #002347;
+  --title-color: #ffffff;
+}
+
+[data-theme="dark"] {
+  --main-bg: #001529; 
+  --content-bg: rgba(0, 35, 71, 0.6);
+  --text-dark: #ffffff;
+  --text-bold: #ffcc00; 
+  --table-border: rgba(255, 204, 0, 0.1);
+  --header-bg: #002347;
+  --title-color: #ffcc00;
+}
+
+/* =========================================
+   Main Container & Layout
+   ========================================= */
+.students-container {
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: var(--main-bg);
+  color: var(--text-dark);
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  transition: all 0.4s ease;
+  width: 100%;
+}
+
+h2 {
+  text-align: center;
+  font-size: 2.8rem;
+  margin-bottom: 30px;
+  font-weight: 700;
+  color: var(--title-color);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+h2::after {
+  content: "";
+  display: block;
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, #00d2ff, #ffeb3b);
+  margin: 15px auto;
+  border-radius: 10px;
+}
+
+/* =========================================
+   Search Bar
+   ========================================= */
+.search-wrapper {
+  max-width: 1000px;
+  margin: 0 auto 40px auto;
+  display: flex;
+  justify-content: center;
+}
+
+.search-input {
+  width: 300px;
+  padding: 12px 25px;
+  border-radius: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: var(--content-bg);
+  color: var(--text-dark);
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+}
+
+.search-input:focus {
+  width: 500px;
+  background: #ffffff;
+  color: #000;
+  border-color: #ffcc00;
+}
+
+/* =========================================
+   Table Design
+   ========================================= */
+.table-responsive {
+  max-width: 1150px;
+  margin: 0 auto;
+  background: var(--content-bg);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  overflow-x: auto;
+}
+
+.students-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.students-table thead tr {
+  background-color: var(--header-bg) !important;
+}
+
+.students-table th {
+  text-align: left;
+  padding: 18px 25px;
+  color: #ffeb3b;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.students-table td {
+  padding: 18px 25px;
+  text-align: left;
+  color: var(--text-dark);
+  font-size: 1rem;
+  border-bottom: 1px solid var(--table-border);
+}
+
+.students-table td strong {
+  color: var(--text-bold);
+}
+
+.students-table tbody tr:hover {
+  background-color: rgba(255, 204, 0, 0.05);
+}
+
+/* =========================================
+   Action Buttons
+   ========================================= */
+.view-btn {
+  padding: 8px 18px;
+  border-radius: 25px;
+  border: 1px solid rgba(0,0,0,0.1);
+  cursor: pointer;
+  font-weight: 600;
+  color: white;
+  transition: all 0.3s ease;
+  background: #00d2ff;
+  text-transform: capitalize;
+}
+
+.view-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  filter: brightness(1.1);
+}
+
+
+
+/* =========================================
+   Modals & Effects
+   ========================================= */
+.modal {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.glass-effect {
+  background: var(--main-bg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 25px;
+  padding: 35px;
+  width: 450px;
+  color: white;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme='dark'] .glass-effect {
+  background: #002347 !important;
+  border: 1px solid rgba(255, 204, 0, 0.3);
+}
+
+/* Edit Modal Inputs */
+.modal-content input, 
+.modal-content select {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
+  color: white;
+  outline: none;
+}
+
+.modal-content input::placeholder {
+  color: rgba(255,255,255,0.5);
+}
+
+.save-btn {
+  background: #16a34a;
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 15px;
+  transition: 0.3s;
+}
+
+.save-btn:hover {
+  background: #15803d;
+  transform: scale(1.02);
+}
+
+.cancel-link {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 10px;
+  border-radius: 12px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+
+.cancel-link:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.modal-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--title-color);
+  margin-top: 50px;
+}

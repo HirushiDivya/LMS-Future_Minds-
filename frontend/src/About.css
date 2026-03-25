@@ -1,0 +1,183 @@
+/* --- Variables - Theme අනුව මාරු වේ --- */
+:root {
+  --bg-gradient: linear-gradient(135deg, #74abe2 0%, #5563b1 100%); /* Light mode background */
+  --container-bg: rgba(255, 255, 255, 0.15); /* Light cards */
+  --text-main: #ffffff;
+  --accent-color: #facc15; /* Dashboard එකේ කහ පාට */
+  --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] {
+  --bg-gradient: #001529; /* Dark mode background */
+  --container-bg: #002347; /* Dark cards */
+  --text-main: #ffffff;
+  --accent-color: #ffcc00; /* Gold */
+  --card-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* --- Main Page Styling --- */
+.about-page {
+  background: var(--bg-gradient);
+  min-height: 100vh;
+  padding: 60px 20px;
+  color: var(--text-main);
+  transition: all 0.3s ease;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.about-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Hero Section */
+.about-hero {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.about-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.highlight {
+  color: var(--accent-color);
+}
+
+.title-underline {
+  width: 80px;
+  height: 4px;
+  background: var(--accent-color);
+  margin: 0 auto 20px;
+  border-radius: 2px;
+}
+
+.about-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.8;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Mission Box (Glassmorphism effect) */
+.about-mission-box {
+  background: var(--container-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 40px;
+  border-radius: 20px;
+  margin-bottom: 80px;
+  box-shadow: var(--card-shadow);
+}
+
+.mission-content h2 {
+  color: var(--accent-color);
+  font-size: 2rem;
+  margin-bottom: 15px;
+}
+
+/* Grid & Cards */
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 25px;
+  margin-bottom: 80px;
+}
+
+.about-card {
+  background: var(--container-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 40px 30px;
+  border-radius: 15px;
+  text-align: center;
+  transition: all 0.4s ease;
+  box-shadow: var(--card-shadow);
+}
+
+.about-card:hover {
+  transform: translateY(-12px);
+  border-color: var(--accent-color);
+}
+
+.icon-wrapper {
+  background: rgba(250, 204, 21, 0.15);
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+}
+
+.about-icon {
+  font-size: 32px;
+  color: var(--accent-color);
+}
+
+/* --- Contact Specific Styling --- */
+.contact-btn {
+  background: var(--accent-color);
+  color: #001529;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  align-self: center;
+  margin-top: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.contact-btn:hover {
+  background: #ffffff;
+  transform: scale(1.05);
+}
+
+/* Form inputs styling */
+input, textarea {
+  background: rgba(255, 255, 255, 0.9) !important;
+  color: #333 !important;
+  border: none !important;
+}
+
+[data-theme='dark'] input, 
+[data-theme='dark'] textarea {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 204, 0, 0.3) !important;
+}
+
+input:focus, textarea:focus {
+  outline: 2px solid var(--accent-color) !important;
+}
+
+/* Quote Section */
+.about-quote-section {
+  text-align: center;
+  padding: 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.quote-text {
+  font-style: italic;
+  font-size: 1.6rem;
+  color: var(--accent-color);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .about-title { font-size: 2.5rem; }
+  .about-card { padding: 30px 20px; }
+  .about-mission-box form div { grid-template-columns: 1fr !important; }
+}

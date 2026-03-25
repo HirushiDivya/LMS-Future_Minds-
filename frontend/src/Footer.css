@@ -1,0 +1,161 @@
+/* Footer Container */
+.footer {
+  /* Light Mode: ඔබ මුලින් ලබාදුන් Navy Blue වර්ණය */
+  background-color: #002347;
+  color: #fff;
+  font-family: sans-serif;
+  padding: 2rem 1rem;
+  transition: background-color 0.3s ease;
+}
+
+/* Dark Mode එකේදී Footer එකේ පසුබිම වෙනස් කිරීම */
+[data-theme='dark'] .footer {
+  background-color: var(--nav-bg); /* Navbar එකේ variable එක (Black) */
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Top Grid */
+.footer-top {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  border-bottom: 1px solid #374151;
+  padding-bottom: 1.5rem;
+}
+
+.footer-top h4 {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.footer-top ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-top ul li {
+  margin-bottom: 0.3rem;
+  font-size: 0.85rem;
+  color: #d1d5db;
+}
+
+@media (min-width: 768px) {
+  .footer-top {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Bottom Section */
+.footer-bottom {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .footer-bottom {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.brand-name {
+  font-weight: bold;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.brand-name span {
+  color: #facc15; /* ඔබ යෙදූ කහ පැහැය */
+}
+
+.tagline {
+  font-size: 0.7rem;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Social Icons */
+.socials {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.social {
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 0.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.social.facebook { background-color: #3b5998; }
+.social.x { background-color: #000; }
+.social.linkedin { background-color: #0077b5; }
+.social.youtube { background-color: #ff0000; }
+
+/* App Buttons */
+.footer-apps {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.footer-apps button {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.75rem;
+  background-color: #000;
+  border: 1px solid #4b5563;
+  border-radius: 0.35rem;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Legal Section */
+.footer-legal {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 1rem;
+  border-top: 1px solid #374151;
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 1rem;
+}
+
+.footer-legal .legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .footer-legal {
+    flex-direction: row;
+    align-items: center;
+  }
+  .footer-legal .legal-links {
+    margin-top: 0;
+  }
+}

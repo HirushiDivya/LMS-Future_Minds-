@@ -1,0 +1,407 @@
+/* --- Admin Dashboard Layout Container --- */
+.admin-dashboard-wrapper {
+  display: flex;
+  min-height: 100vh;
+  /* Light Mode background */
+  background: linear-gradient(135deg, #74abe2 0%, #5563b1 100%);
+  width: 100%;
+  transition: all 0.3s ease;
+  color: white;
+}
+
+/* --- Dark Mode Background --- */
+[data-theme='dark'] .admin-dashboard-wrapper {
+  background: #001529; /* Dark Blue */
+  color: #ffffff;
+}
+
+/* Main Content Area */
+.admin-main-content {
+  flex-grow: 1;
+  padding: 30px;
+  overflow-y: auto;
+  width: 100%;
+}
+
+/* Stats Cards Section */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.15); /* Glassmorphism */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.3s ease;
+}
+
+/* Dark Mode Stat Card */
+[data-theme='dark'] .stat-card {
+  background: #002347;
+  border: 1px solid rgba(255, 204, 0, 0.1);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  border-color: #ffcc00;
+}
+
+.stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background: #ffcc00; /* Gold Icon background */
+}
+
+.stat-info p {
+  margin: 0;
+  color: #ffffff; /* Light mode text */
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+[data-theme='dark'] .stat-info p {
+  color: #a0aec0;
+}
+
+.stat-info h2 {
+  margin: 5px 0 0;
+  font-size: 24px;
+  color: #ffffff;
+}
+
+[data-theme='dark'] .stat-info h2 {
+  color: #ffcc00; /* Gold Numbers in Dark Mode */
+}
+
+/* Charts & Tasks Section */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 25px;
+}
+
+.card-panel {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .card-panel {
+  background: rgba(0, 35, 71, 0.6);
+  border: 1px solid rgba(255, 204, 0, 0.2);
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 20px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 10px;
+}
+
+[data-theme='dark'] .card-title {
+  color: #ffcc00;
+  border-bottom-color: rgba(255, 204, 0, 0.1);
+}
+
+/* Task Status Pills */
+.status-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.status-pending { 
+  border-left: 5px solid #e11d48;
+  color: #fff; 
+}
+.status-approved { 
+  border-left: 5px solid #16a34a;
+  color: #fff; 
+}
+
+.status-box .count {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffcc00;
+}
+
+/* Loading Screen */
+.loading-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1.2rem;
+  background: #001529;
+  color: #ffcc00;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+/* Light mode එකේදී Title එක තද නිල් පාට වෙන්න */
+.dashboard-title-text {
+  display: block;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%; /* මුළු පළලම ගන්නා බව තහවුරු කිරීමට */
+}
+
+/* Dark mode එකේදී Title එක Gold වෙන්න */
+[data-theme='dark'] .dashboard-title-text {
+  color: #ffcc00 !important;
+  text-shadow: 0 0 15px rgba(255, 204, 0, 0.5);
+}
+
+
+/* Table Row Hover Effect */
+.table-row-hover:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transition: background 0.3s ease;
+}
+
+/* Review Button Hover */
+.review-btn:hover {
+  background: #fff !important;
+  transform: scale(1.05);
+}
+
+/* Status Pill shadows */
+.status-pill {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Table Responsive adjustments */
+@media (max-width: 1024px) {
+  .admin-table {
+    font-size: 14px;
+  }
+}
+
+/* --- Table Styles --- */
+.admin-table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* --- Professional Table Header Styles --- */
+.admin-table thead tr {
+  /* Header එකට තද පැහැති background එකක් දීමෙන් කැපී පෙනීම වැඩි වේ */
+  background: rgba(0, 0, 0, 0.2); 
+  border-bottom: 3px solid rgba(255, 204, 0, 0.3);
+}
+
+.admin-table th {
+  padding: 18px 15px;
+  color: #ffcc00; /* Gold Color */
+  font-family: 'Inter', sans-serif; /* Professional look එකක් සඳහා */
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase; /* සියලුම අකුරු capital කිරීම */
+  letter-spacing: 1px; /* අකුරු අතර පරතරය වැඩි කර පැහැදිලි බව වැඩි කිරීම */
+  text-align: left;
+  border: none;
+  white-space: nowrap; /* Header එක පේළි දෙකකට කැඩීම වැළැක්වීමට */
+}
+
+/* Table body එකේ alignment header එකට ගැලපෙන ලෙස සකස් කිරීම */
+.admin-table td {
+  padding: 16px 15px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Column Alignment - මුදල් සහ Status වැනි දේවල් මැදට කිරීම (Center Align) */
+/*
+.admin-table th:nth-child(3), 
+.admin-table td:nth-child(3),
+.admin-table th:nth-child(4), 
+.admin-table td:nth-child(4),
+.admin-table th:nth-child(7), 
+.admin-table td:nth-child(7) {
+  text-align: center;
+}
+  *
+  /* Alignments - Logic එකට අනුව */
+/* 1. Student & Course (Text) -> Left */
+.admin-table th:nth-child(1), .admin-table td:nth-child(1),
+.admin-table th:nth-child(2), .admin-table td:nth-child(2) {
+  text-align: left;
+}
+
+/* 2. Price, Method, Date, Slip (Data) -> Center */
+.admin-table th:nth-child(3), .admin-table td:nth-child(3),
+.admin-table th:nth-child(4), .admin-table td:nth-child(4),
+.admin-table th:nth-child(5), .admin-table td:nth-child(5),
+.admin-table th:nth-child(6), .admin-table td:nth-child(6) {
+  text-align: center;
+}
+
+/* 3. Status (Action) -> Right Alignment for clean finish */
+.admin-table th:nth-child(7), .admin-table td:nth-child(7) {
+  text-align: right;
+  padding-right: 30px;
+}
+/* Action Button එක තියෙන තීරුව දකුණට කිරීම (Right Align) */
+.admin-table th:last-child, 
+.admin-table td:last-child {
+  text-align: right;
+  padding-right: 25px;
+}
+
+/* Table Row එකක් මතින් mouse එක ගෙන යන විට ලැබෙන effect එක */
+.table-row-hover {
+  transition: all 0.2s ease-in-out;
+}
+
+.table-row-hover:hover {
+  background: rgba(255, 255, 204, 0.08) !important;
+  transform: scale(1.002);
+}
+
+/* Student Info Cell */
+.student-info .student-name {
+  font-weight: 600;
+  display: block;
+}
+
+.student-info .student-email-sub {
+  opacity: 0.7;
+  font-size: 12px;
+}
+
+/* Payment Slip Link */
+.view-slip-link {
+  color: #00b4d8;
+  text-decoration: underline;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.no-slip-text {
+  color: #ff4d4f;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+/* Status Badges */
+.status-badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: bold;
+  color: white;
+  display: inline-block;
+  min-width: 110px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Review Button */
+.review-btn {
+  background-color: #ffcc00;
+  color: #001529;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.review-btn:hover {
+  background-color: #ffffff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 204, 0, 0.3);
+}
+
+/* Empty State */
+.empty-row td {
+  padding: 40px;
+  text-align: center;
+  opacity: 0.6;
+  font-style: italic;
+}
+
+/* Student Name එක කැපී පෙනෙන ලෙස සෑදීම */
+.student-name {
+  color: #ffffff;
+  font-size: 15px;
+  letter-spacing: 0.3px;
+}
+
+
+
+/* Status Dropdown Styles */
+.status-select {
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: #001529;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  min-width: 120px;
+  text-align: center;
+}
+
+.status-select:hover {
+  border-color: #ffcc00;
+  background-color: #002347;
+}
+/* Status අනුව පාට වෙනස් වීම */
+.status-select.pending { border-left: 4px solid #f59e0b; color: #f59e0b; }
+.status-select.approved { border-left: 4px solid #16a34a; color: #16a34a; }
+.status-select.rejected { border-left: 4px solid #e11d48; color: #e11d48; }
+
+.status-select:focus {
+  border-color: #ffcc00;
+}

@@ -1,0 +1,151 @@
+/* මුළු පිටුවටම gradient background එක */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4481eb 0%, #04befe 100%);
+  padding: 20px;
+  font-family: 'Poppins', sans-serif; /* ලස්සන font එකක් ඇඩ් කළා */
+}
+
+/* Glassmorphism card style */
+.login-card {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  padding: 40px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.login-card h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 1rem;
+  margin-bottom: 30px;
+  opacity: 0.9;
+}
+
+/* Input group */
+.input-group {
+  position: relative;
+  margin-top: 20px; /* Label එකට ඉඩ තියන්න */
+  margin-bottom: 25px;
+  text-align: left;
+}
+
+.input-group input {
+  width: 100%;
+padding: 18px 12px 10px 12px; /* උඩ padding එක වැඩි කළා text එක පහළට තල්ලු කරන්න */  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid transparent; /* Focus border එකට ඉඩ තියන්න */
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #333;
+  outline: none;
+  transition: 0.3s;
+}
+
+/* Placeholder එක hide කරලා තියන්න (React එකේ placeholder=" " තිබීම අනිවාර්යයි) */
+.input-group input::placeholder {
+  color: transparent;
+}
+
+/* Label එකේ මුල් පිහිටීම (Input එක ඇතුළේ මැද) */
+.input-group label {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  z-index: 2;
+}
+
+/* Label එක උඩට පාවෙන අවස්ථාව (Focus හෝ Text ඇති විට) */
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+  top: -18px; /* Input එකෙන් පිටතට උඩට */
+  left: 5px;
+  font-size: 0.85rem;
+  color: white;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Input එක focus වූ විට */
+.input-group input:focus {
+  background: #ffffff;
+  border-color: #04befe;
+}
+
+/* Login Button එක */
+.login-btn {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(to right, #00d2ff, #3a7bd5);
+  border: none;
+  border-radius: 30px;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.login-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Forgot password සහ Create account ලින්ක් */
+.login-links {
+  margin-top: 25px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.login-links span {
+  cursor: pointer;
+  transition: 0.3s;
+  border-bottom: 1px solid transparent;
+}
+
+.login-links span:hover {
+  border-bottom: 1px solid white;
+}
+
+/* Loader style */
+.loader {
+  width: 20px;
+  height: 20px;
+  border: 3px solid #ffffff;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
