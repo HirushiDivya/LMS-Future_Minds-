@@ -14,10 +14,11 @@ Node.js
 
 ### ⚙️ Setup Instructions
 ### 1. Database Configuration
-Open MySQL Workbench.
-Create a new database named lms_db (or your preferred name).
-Navigate to the /database folder in this project.
-Import the lms_backup.sql file into your newly created database.
+1. Open **MySQL Workbench**.
+2. Go to `Server` > `Data Import`.
+3. Select `Import from Self-Contained File` and choose the `database/lms_backup.sql` file.
+4. Click **Start Import**. 
+   - *Note: This will automatically create a database named `students`.*
 
 ### 2. Backend Setup
 1. Navigate to the BACKEND folder:   ** cd BACKEND**
