@@ -29,3 +29,13 @@ Node.js
 Navigate to the frontend folder:  **cd frontend**
 Install dependencies:   ** npm install**
 Start the React application:   **npm start**
+
+### Test Credentials
+You can use the following credentials to test the system without creating new accounts:
+### 1. Admin Dashboard
+- **Email:** `futureminds60@gmail.com`
+- **Password:** `Admin123` **
+
+### 2. Student Portal
+- **Email:** `hirushidivyanjalie12@gmail.com`
+- **Password:** `1111` 
