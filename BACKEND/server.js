@@ -43,7 +43,7 @@ app.use("/api/payment", paymentroute);
 app.use("/api/login", loginrouter);
 app.use("/api/register", register);
 app.use("/api/pgateway", Paymntgateway);
-app.use("/api/invoice", invoice);
+//app.use("/api/invoice", invoice);
 
 
 
