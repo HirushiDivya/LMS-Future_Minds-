@@ -12,7 +12,7 @@ const ViewQuiz = () => {
   const [editQuestion, setEditQuestion] = useState(null);
   const [loading, setLoading] = useState(true);
   const [quizInfo, setQuizInfo] = useState({ title: "", questions_count: 0 });
-  // 1. Fetch Quiz and Questions (Single API Call)
+  // Fetch Quiz and Questions
   const fetchFullQuiz = async () => {
     try {
       const res = await axios.get(`http://localhost:5000/api/admin/quiz/${id}`);
@@ -73,10 +73,6 @@ const ViewQuiz = () => {
       </div>
     );
 
-
-
-  
-
   return (
     <div className="students-container">
       <h2>Update Quiz: {quizData.title}</h2>
@@ -91,7 +87,7 @@ const ViewQuiz = () => {
             <tr>
               <th>Type</th>
               <th>Title</th>
-               <th>Questions</th>
+              <th>Questions</th>
               <th>Price</th>
             </tr>
           </thead>
@@ -101,7 +97,7 @@ const ViewQuiz = () => {
                 <strong>QUIZ</strong>
               </td>
               <td>{quizData.title}</td>
-              <td>{quizData.questions_count} </td> 
+              <td>{quizData.questions_count} </td>
               <td>Rs. {quizData.price}</td>
               <td></td>
             </tr>
@@ -155,9 +151,7 @@ const ViewQuiz = () => {
         </table>
       </div>
 
-      {/* --- Quiz Edit Modal --- */}
-
-      {/* --- Question Edit Modal --- */}
+      {/* Question Edit Modal  */}
       {editQuestion && (
         <div className="modal">
           <div className="glass-effect" style={{ width: "550px" }}>
@@ -262,7 +256,6 @@ const ViewQuiz = () => {
         </div>
       )}
 
-      
       <button
         className="view-btn"
         onClick={() => navigate(-1)}
@@ -273,7 +266,7 @@ const ViewQuiz = () => {
           zIndex: "1000",
           padding: "12px 30px",
           borderRadius: "30px",
-          background: "rgba(255, 255, 255, 0.2)", // Glass effect එකට ගැලපෙන ලෙස
+          background: "rgba(255, 255, 255, 0.2)", 
           backdropFilter: "blur(10px)",
           border: "1px solid rgba(255, 255, 255, 0.3)",
           boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
@@ -282,7 +275,7 @@ const ViewQuiz = () => {
           cursor: "pointer",
           transition: "all 0.3s ease",
         }}
-        onMouseOver={(e) => (e.target.style.background = "#00d2ff")} // Hover කරන විට පාට වෙනස් වීමට
+        onMouseOver={(e) => (e.target.style.background = "#00d2ff")} 
         onMouseOut={(e) =>
           (e.target.style.background = "rgba(255, 255, 255, 0.2)")
         }
@@ -290,7 +283,6 @@ const ViewQuiz = () => {
         ← BACK TO LIST
       </button>
     </div>
-    
   );
 };
 

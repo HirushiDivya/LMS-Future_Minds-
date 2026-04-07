@@ -3,46 +3,48 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, useLocation } from "react-router-dom";
 
 //Admin
-import QuizEnrollmntReq from "./Admin/QuizEnrollmntReq";
 import Admindashbord from "./Admin/AdminDashbord";
 import AllStudents from "./Admin/AllStudents";
+import StudentProgress from "./Admin/StudentProgress";
+import AdminEnrollmentRequests from "./Admin/Enrollmentrequests";   //course enrollmnt req
 import ACourses from "./Admin/Acourses";
 import CourseContent from "./Admin/Coursecontent";
-import AdminEnrollmentRequests from "./Admin/Enrollmentrequests";
+import AddCourse from "./Admin/AddCourse";
+import QuizEnrollmntReq from "./Admin/QuizEnrollmntReq";
 import AQuiz from "./Admin/Quiz";
+import AddQuiz from "./Admin/AddQuiz";
 import AUpdateQuiz from "./Admin/UpdateQuiz";
 import ViewQuiz from "./Admin/ViewQuiz";
-import AddCourse from "./Admin/AddCourse";
-import StudentProgress from "./Admin/StudentProgress";
-import AllPayments from "./Admin/AllPayments"
-import AddQuiz from "./Admin/AddQuiz";
+import AllPayments from "./Admin/AllPayments";
 
 //Student
-import ForgotPassword from "./student/ForgotPassword";
-import ResetPassword from "./student/ResetPassword";
 import StudentRegister from "./student/StudentRegister";
-import VerifyOTP from "./student/VerifyOTP";
-import FPWVerifyOtp from "./student/fpVerifyOTP";
-import Sdashbord from "./student/Sdashbord";
+import ResetPassword from "./student/ResetPassword";
+import ForgotPassword from "./student/ForgotPassword";
+import VerifyOTP from "./student/VerifyOTP";             //reset pw
+import FPWVerifyOtp from "./student/fpVerifyOTP";        //fogot pw     
+import Home from "./Home";
+import SciencePage from "./Courses/SciencePage";
+import MathsPage from "./Courses/MathsPage";
+import TechPage from "./Courses/TechnologyPage";
+
 import StudentProfile from "./student/Studentprofile";
 import AllQuiz from "./student/Quiz/AllQuizez";
 import SViewQuiz from "./student/Quiz/SViewQuiz";
 import Questions from "./student/Quiz/Questions";
 import Payment from "./Payments/Paymnt";
-import QuizPayment from "./student/Quiz/Quizpaymnt"
-import PaymentGateway from "./Payments/PaymentGateway";
-import SciencePage from "./Courses/SciencePage";
-import MathsPage from "./Courses/MathsPage";
-import TechPage from "./Courses/TechnologyPage";
+import QuizPayment from "./student/Quiz/Quizpaymnt";
+
 import PaymentSuccess from "./Payments/PaymentSuccess";
 import PaymentFailed from "./Payments/PaymentFailed";
+import Success from "./Payments/Success";
+import ViewContent from "./Courses/ViewContent";
 
 //courses
 import Coursepage from "./Courses/CoursePage";
 import StudentCourseContent from "./Courses/StudentCoursecontent";
 
 import HomePage from "./HomePage";
-import Home from "./Home";
 import StudentLogin from "./Login";
 import Navbar from "./Navbar";
 import About from "./About";
@@ -52,26 +54,6 @@ import Footer from "./footer";
 
 function AppContent() {
   const location = useLocation();
-
-  /* // Only show Navbar/Footer on /student-reg
-  const isStudentRoute = 
-  location.pathname === "/all-students" ||
-  location.pathname === "/s-dashbord";
-  const isAdminRoute = [
-    "/a-dashbord", 
-    "/all-students", 
-    "/a-courses",
-    "/a-course-content/:course_code"
-  ].includes(
-    location.pathname,
-  );
-    const isStudentRoute = [
-    "/s-dashbord",
-    "/s-profile:name",
-    "/all-courses",
-    "/s-course-content/:course_code"
-  ].includes(location.pathname);
-*/
   const isAdminRoute =
     location.pathname.startsWith("/a-dashbord") ||
     location.pathname.startsWith("/all-students") ||
@@ -88,7 +70,6 @@ function AppContent() {
     location.pathname.startsWith("/add-quiz");
 
   const isStudentRoute =
-    location.pathname.startsWith("/s-dashbord") ||
     location.pathname.startsWith("/s-profile") ||
     location.pathname.startsWith("/all-courses") ||
     location.pathname.startsWith("/s-course-content/") ||
@@ -100,12 +81,13 @@ function AppContent() {
     location.pathname.startsWith("/questions") ||
     location.pathname.startsWith("/payment") ||
     location.pathname.startsWith("/qpayment") ||
-    location.pathname.startsWith("/payment-gateway") ||
     location.pathname.startsWith("/science-page") ||
     location.pathname.startsWith("/math-page") ||
     location.pathname.startsWith("/tech-page");
     location.pathname.startsWith("/payment-success");
-    location.pathname.startsWith("/payment-fail");
+    location.pathname.startsWith("/payment-fail") ||
+    location.pathname.startsWith("/success") ||
+    location.pathname.startsWith("/view-content");
 
   return (
     <div
@@ -125,7 +107,7 @@ function AppContent() {
           <Route path="/a-viewquiz/:id" element={<ViewQuiz />} />
           <Route path="/quizenrollment-req" element={<QuizEnrollmntReq />} />
           <Route path="/add-course" element={<AddCourse />} />
-           <Route path="/all-payments" element={<AllPayments />} />
+          <Route path="/all-payments" element={<AllPayments />} />
           <Route path="/sprogress/:id" element={<StudentProgress />} />
           <Route path="/add-quiz" element={<AddQuiz />} />
           <Route
@@ -141,18 +123,17 @@ function AppContent() {
           <Route path="/student-reg" element={<StudentRegister />} />
           <Route path="/verify-otp" element={<VerifyOTP />} />
           <Route path="/fpw-verify-otp" element={<FPWVerifyOtp />} />
-          <Route path="/s-dashbord" element={<Sdashbord />} />
           <Route path="/s-profile/:name" element={<StudentProfile />} />
           <Route path="/s-allquiz" element={<AllQuiz />} />
           <Route path="/s-viewquizz/:id" element={<SViewQuiz />} />
           <Route path="/questions/:id" element={<Questions />} />
           <Route path="/qpayment" element={<QuizPayment />} />
-          <Route path="/payment-gateway" element={<PaymentGateway />} />
           <Route path="/science-page" element={<SciencePage />} />
           <Route path="/math-page" element={<MathsPage />} />
           <Route path="/tech-page" element={<TechPage />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/payment-fail" element={<PaymentFailed />} />
+          <Route path="/success" element={<Success />} />
           <Route
             path="/s-course-content/:course_code"
             element={<StudentCourseContent />}
@@ -166,6 +147,7 @@ function AppContent() {
           <Route path="/about" element={<About />} />
           <Route path="/payment" element={<Payment />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/view-content/:id" element={<ViewContent />} />
         </Routes>
       </main>
       {isStudentRoute && <Footer />}

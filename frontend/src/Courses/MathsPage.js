@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import API from "../API";
 import { useNavigate } from "react-router-dom";
 import "./Studentcoursecontent.css";
-
+//courses ->maths
 export default function MathsPage() {
   const [courses, setCourses] = useState([]);
   const [search, setSearch] = useState("");

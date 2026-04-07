@@ -1,7 +1,5 @@
-/* =========================================
-   Theme Variables (මෙහි පවතින වර්ණ වෙනස් නොකරන්න)
-   ========================================= */
-:root {
+/*
+:root { 
   --main-bg: linear-gradient(135deg, #7b99cc 0%, #6b7cb4 50%, #5d61a2 100%);
   --content-bg: rgba(255, 255, 255, 0.95);
   --text-dark: #333;
@@ -20,10 +18,8 @@
   --header-bg: #002347;
   --title-color: #ffcc00;
 }
-
-/* =========================================
-   Main Container & Layout
-   ========================================= */
+*/
+/*Main Container & Layout*/
 .students-container {
   min-height: 100vh;
   padding: 40px 20px;
@@ -55,9 +51,7 @@ h2::after {
   border-radius: 10px;
 }
 
-/* =========================================
-   Search Bar
-   ========================================= */
+/* Search Bar*/
 .search-wrapper {
   max-width: 1000px;
   margin: 0 auto 40px auto;
@@ -78,7 +72,7 @@ h2::after {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   margin-bottom: 10px;
 }
-
+ 
 .search-input:focus {
   width: 500px;
   background: #ffffff;
@@ -86,9 +80,7 @@ h2::after {
   border-color: #ffcc00;
 }
 
-/* =========================================
-   Table Design
-   ========================================= */
+/*Table Design*/
 .table-responsive {
   max-width: 1150px;
   margin: 0 auto;
@@ -136,9 +128,7 @@ h2::after {
   background-color: rgba(255, 204, 0, 0.05);
 }
 
-/* =========================================
-   Action Buttons
-   ========================================= */
+/*Action Buttons */
 .view-btn {
   padding: 8px 18px;
   border-radius: 25px;
@@ -158,10 +148,8 @@ h2::after {
 }
 
 
-
-/* =========================================
-   Modals & Effects
-   ========================================= */
+ 
+/*Modals & Effects*/
 .modal {
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -254,3 +242,45 @@ h2::after {
   color: var(--title-color);
   margin-top: 50px;
 }
+
+
+
+
+
+
+
+
+
+
+
+/* Floating Back Button Style 
+.floating-back-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 1000;
+  padding: 12px 30px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.2); 
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); 
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.floating-back-btn:hover {
+  background: #00d2ff;
+  transform: translateY(-3px); 
+  box-shadow: 0 12px 40px rgba(0, 210, 255, 0.4);
+}
+
+.floating-back-btn:active {
+  transform: translateY(0); 
+}
+  */

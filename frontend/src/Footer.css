@@ -1,6 +1,6 @@
 /* Footer Container */
 .footer {
-  /* Light Mode: ඔබ මුලින් ලබාදුන් Navy Blue වර්ණය */
+  /* Light Mode:  */
   background-color: #002347;
   color: #fff;
   font-family: sans-serif;
@@ -8,9 +8,9 @@
   transition: background-color 0.3s ease;
 }
 
-/* Dark Mode එකේදී Footer එකේ පසුබිම වෙනස් කිරීම */
+/* Dark Mode */
 [data-theme='dark'] .footer {
-  background-color: var(--nav-bg); /* Navbar එකේ variable එක (Black) */
+  background-color: var(--nav-bg); /* Navbar variable  (Black) */
 }
 
 .footer-container {
@@ -82,7 +82,7 @@
 }
 
 .brand-name span {
-  color: #facc15; /* ඔබ යෙදූ කහ පැහැය */
+  color: #facc15; 
 }
 
 .tagline {

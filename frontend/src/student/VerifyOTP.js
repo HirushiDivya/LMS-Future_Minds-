@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import API from "../API";
-import "./StudentRegister.css"; // කලින් ලස්සන CSS එකම පාවිච්චි කරන්න
+import "./StudentRegister.css"; 
 
 export default function VerifyOTP() {
   const location = useLocation();
@@ -10,7 +10,7 @@ export default function VerifyOTP() {
   const [otp, setOtp] = useState("");
 
   useEffect(() => {
-    // Registration එකෙන් එවපු email එක ලබා ගැනීම
+    // Registration ->  email 
     if (location.state?.email) {
       setEmail(location.state.email);
     }
@@ -18,7 +18,7 @@ export default function VerifyOTP() {
 
   const verify = async () => {
     try {
-      // API එකට දත්ත යැවීම
+    
       const res = await API.post("/register/verify-otp", { email, otp });
       alert(res.data.message);
       navigate("/login");

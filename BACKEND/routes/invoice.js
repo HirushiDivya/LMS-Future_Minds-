@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
-const express = require("express"); // 1. express මුලින්ම ගේන්න
-const router = express.Router();    // 2. router එක නිර්වචනය කරන්න
+const express = require("express"); 
+const router = express.Router();    
 
 const sendInvoice = (studentEmail, amount, quizTitle) => {
     let transporter = nodemailer.createTransport({

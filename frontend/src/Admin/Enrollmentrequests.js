@@ -2,300 +2,231 @@ import React, { useState, useEffect } from "react";
 import API from "../API";
 import Swal from "sweetalert2";
 import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable"; // autoTable එක කෙලින්ම import කරන්න
+import autoTable from "jspdf-autotable";
 import "../Admin/css/Admindashbord.css";
 import { useNavigate } from "react-router-dom";
 
-
 export default function AdminEnrollmentRequests() {
-  const [enrollments, setEnrollments] = useState([]);
-  const [loading, setLoading] = useState(true);
-      const navigate = useNavigate();
-  
+    const [courseEnrollments, setCourseEnrollments] = useState([]);
+    const [quizEnrollments, setQuizEnrollments] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchEnrollments();
-  }, []);
+    const BACKEND_URL = "http://localhost:5000";
 
-  const fetchEnrollments = async () => {
-    try {
-      const res = await API.get("/admin/course/all-enrollments");
-      setEnrollments(res.data);
-      setLoading(false);
-    } catch (err) {
-      console.error("Error fetching enrollments:", err);
-      setLoading(false);
-    }
-  };
+    useEffect(() => {
+        fetchAllData();
+    }, []);
 
-  // PDF එක Generate කරන Function එක
-  const generatePDF = () => {
-    const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.getWidth();
-
-    // 1. Header Dark Blue Bar (Dashboard Theme එකට ගැලපෙන ලෙස)
-    doc.setFillColor(0, 35, 71); // Dark Blue (#002347)
-    doc.rect(0, 0, pageWidth, 40, "F");
-
-    // 2. Report Title
-    doc.setTextColor(255, 204, 0); // Gold Color (#ffcc00)
-    doc.setFontSize(22);
-    doc.setFont("helvetica", "bold");
-    doc.text("ENROLLMENT REQUESTS REPORT", pageWidth / 2, 25, {
-      align: "center",
-    });
-
-    // 3. Report Info Section
-    doc.setTextColor(40, 40, 40);
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "normal");
-    doc.text(`Total Requests: ${enrollments.length}`, 15, 50);
-    doc.text(`Report Generated: ${new Date().toLocaleString()}`, 15, 57);
-
-    // 4. Data Table
-    const tableColumn = [
-      "Student Name",
-      "Course Name",
-      "Price",
-      "Method",
-      "Date",
-      "Status",
-    ];
-
-    const tableRows = enrollments.map((item) => [
-      item.student_name,
-      item.course_name,
-      `LKR ${item.course_price}`,
-      item.payment_method,
-      new Date(item.enroll_date).toLocaleDateString(),
-      item.payment_status,
-    ]);
-
-    autoTable(doc, {
-      startY: 65,
-      head: [tableColumn],
-      body: tableRows,
-      theme: "grid",
-      headStyles: {
-        fillColor: [0, 35, 71], // Header එකටත් Dark Blue
-        textColor: [255, 204, 0], // Header Text එකට Gold
-        fontSize: 11,
-        fontStyle: "bold",
-      },
-      alternateRowStyles: {
-        fillColor: [245, 245, 245],
-      },
-      styles: {
-        fontSize: 10,
-        cellPadding: 4,
-      },
-      margin: { left: 15, right: 15 },
-      // Status එක අනුව පාට වෙනස් කිරීම (Conditional Styling)
-      didParseCell: function (data) {
-        if (data.column.index === 5) {
-          // Status column එක
-          const status = data.cell.raw;
-          if (status === "Approved")
-            data.cell.styles.textColor = [46, 204, 113]; // Green
-          if (status === "Pending") data.cell.styles.textColor = [230, 126, 34]; // Orange
-          if (status === "Rejected") data.cell.styles.textColor = [231, 76, 60]; // Red
+    const fetchAllData = async () => {
+        try {
+            setLoading(true);
+            const [courseRes, quizRes] = await Promise.all([
+                API.get("/admin/course/all-enrollments"),
+                API.get("/admin/quiz/all-paymntrequests")
+            ]);
+            setCourseEnrollments(courseRes.data);
+            setQuizEnrollments(quizRes.data);
+            setLoading(false);
+        } catch (err) {
+            console.error("Error fetching data:", err);
+            setLoading(false);
         }
-      },
-    });
+    };
 
-    // 5. Footer (පිටු අංකය පෙන්වීමට)
-    const pageCount = doc.internal.getNumberOfPages();
-    for (let i = 1; i <= pageCount; i++) {
-      doc.setPage(i);
-      doc.setFontSize(10);
-      doc.setTextColor(150);
-      doc.text(
-        `Page ${i} of ${pageCount}`,
-        pageWidth / 2,
-        doc.internal.pageSize.getHeight() - 10,
-        { align: "center" },
-      );
-    }
+    //  PDF Generation  
 
-    // 6. Save PDF
-    doc.save(`Enrollment_Report_${new Date().getTime()}.pdf`);
-  };
+    const generateCoursePDF = () => {
+        const doc = new jsPDF();
+        doc.setFillColor(0, 35, 71);
+        doc.rect(0, 0, 210, 40, "F");
+        doc.setTextColor(255, 204, 0);
+        doc.setFontSize(20);
+        doc.text("COURSE ENROLLMENT REPORT", 105, 25, { align: "center" });
 
-  const handleStatusChange = async (id, newStatus) => {
-    try {
-      const res = await API.put(`/admin/course/verify-payment/${id}`, {
-        status: newStatus,
-      });
+        const tableRows = courseEnrollments.map(item => [
+            item.student_name,
+            item.course_name,
+            `LKR ${item.course_price}`,
+            item.payment_method,
+            new Date(item.enroll_date).toLocaleDateString(),
+            item.payment_status
+        ]);
 
-      setEnrollments((prev) =>
-        prev.map((item) =>
-          item.enrollment_id === id
-            ? { ...item, payment_status: newStatus }
-            : item,
-        ),
-      );
+        autoTable(doc, {
+            startY: 50,
+            head: [["Student", "Course", "Price", "Method", "Date", "Status"]],
+            body: tableRows,
+            headStyles: { fillColor: [0, 35, 71], textColor: [255, 204, 0] }
+        });
+        doc.save("Course_Enrollments.pdf");
+    };
 
-      Swal.fire({
-        icon: "success",
-        title: res.data.message,
-        showConfirmButton: false,
-        timer: 1500,
-      });
-    } catch (err) {
-      console.error("Update failed:", err);
-      const errorMsg = err.response?.data?.message || "Update failed!";
-      Swal.fire({ icon: "warning", title: "අවධානය!", text: errorMsg });
-      fetchEnrollments();
-    }
-  };
+    const generateQuizPDF = () => {
+        const doc = new jsPDF();
+        doc.setFillColor(0, 35, 71);
+        doc.rect(0, 0, 210, 40, "F");
+        doc.setTextColor(255, 204, 0);
+        doc.setFontSize(20);
+        doc.text("QUIZ ENROLLMENT REPORT", 105, 25, { align: "center" });
 
-  if (loading)
-    return <div className="loading-screen">දත්ත පූරණය වෙමින් පවතී...</div>;
+        const tableRows = quizEnrollments.map(item => [
+            item.student_name,
+            item.quiz_name,
+            `LKR ${item.amount}`,
+            item.payment_method,
+            item.status
+        ]);
 
-  return (
-    <div className="admin-dashboard-wrapper">
-      <main className="admin-main-content">
-        <h1 className="dashboard-title-text">Enrollment Requests 🎓</h1>
+        autoTable(doc, {
+            startY: 50,
+            head: [["Student", "Quiz Name", "Price", "Method", "Status"]],
+            body: tableRows,
+            headStyles: { fillColor: [0, 35, 71], textColor: [255, 204, 0] }
+        });
+        doc.save("Quiz_Enrollments.pdf");
+    };
 
-        <div className="card-panel admin-table-container">
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th>Student & Email</th>
-                <th>Course Name</th>
-                <th>Price</th>
-                <th>Method</th>
-                <th>Enroll Date</th>
-                <th>Payment Slip</th>
-                <th>Enrollment Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {enrollments.map((item) => (
-                <tr key={item.enrollment_id} className="table-row-hover">
-                  <td className="student-info">
-                    <span className="student-name">{item.student_name}</span>
-                    <span className="student-email-sub">
-                      {item.student_email}
-                    </span>
-                  </td>
-                  <td>{item.course_name}</td>
-                  <td className="text-center">LKR {item.course_price}</td>
-                  <td className="text-center">{item.payment_method}</td>
-                  <td className="text-center">
-                    {new Date(item.enroll_date).toLocaleDateString()}
-                  </td>
-                  <td className="text-center">
-                    {item.payment_slip ? (
-                      <img
-                        src={`http://localhost:5000/${item.payment_slip.replace(/\\/g, "/")}`}
-                        alt="Slip"
-                        style={{
-                          width: "40px",
-                          height: "40px",
-                          borderRadius: "4px",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => {
-                          Swal.fire({
-                            imageUrl: `http://localhost:5000/${item.payment_slip.replace(/\\/g, "/")}`,
-                            title: "Payment Slip",
-                            confirmButtonColor: "#002347",
-                          });
-                        }}
-                      />
-                    ) : (
-                      <span style={{ color: "red", fontSize: "12px" }}>
-                        No Slip
-                      </span>
-                    )}
-                  </td>
-                  <td className="text-center">
-                    <select
-                      className={`status-select ${item.payment_status.toLowerCase()}`}
-                      value={item.payment_status}
-                      onChange={(e) =>
-                        handleStatusChange(item.enrollment_id, e.target.value)
-                      }
-                    >
-                      <option value="Pending">Pending</option>
-                      <option value="Approved" disabled={!item.payment_slip}>
-                        Approved
-                      </option>
-                      <option value="Rejected" disabled={!item.payment_slip}>
-                        Rejected
-                      </option>
-                    </select>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
 
-          <header
-            className="content-header"
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            {/* PDF Download Button එක */}
-            <div
-              className="button-group"
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                width: "100%",
-                marginTop: "20px",
-              }}
-            >
-              <button
-                onClick={generatePDF}
-                className="download-btn"
-                style={{
-                  backgroundColor: "#e67e22",
-                  color: "white",
-                  padding: "10px 20px",
-                  border: "none",
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  fontWeight: "bold",
-                }}
-              >
-                📥 Download PDF Report
-              </button>
-            </div>
-          </header>
+    const handleCourseStatus = async (id, newStatus) => {
+        try {
+            await API.put(`/admin/course/verify-payment/${id}`, { status: newStatus });
+            setCourseEnrollments(prev => prev.map(item => item.enrollment_id === id ? { ...item, payment_status: newStatus } : item));
+            Swal.fire({ icon: "success", title: "Course Status Updated", timer: 1500, showConfirmButton: false });
+        } catch (err) {
+            Swal.fire("Error", "Update failed", "error");
+        }
+    };
+
+    const handleQuizStatus = async (paymentId, newStatus) => {
+        try {
+            await API.put("/admin/quiz/verify-payment", { paymentId, status: newStatus });
+            setQuizEnrollments(prev => prev.map(item => item.payment_id === paymentId ? { ...item, status: newStatus } : item));
+            Swal.fire({ icon: "success", title: "Quiz Status Updated", timer: 1500, showConfirmButton: false });
+        } catch (err) {
+            Swal.fire("Error", "Update failed", "error");
+        }
+    };
+
+    const showImage = (path) => {
+        Swal.fire({
+            imageUrl: `${BACKEND_URL}/${path.replace(/\\/g, "/")}`,
+            confirmButtonColor: "#002347",
+        });
+    };
+
+    if (loading) return <div className="loading-screen">Loading...</div>;
+
+    return (
+        <div className="admin-dashboard-wrapper" style={{ marginRight: "450px"}}>
+            <main className="admin-main-content">
+                
+                {/*  Section 1: Course Enrollments  */}
+                <div style={{ marginBottom: "50px" }}>
+                    <h1 className="dashboard-title-text" style={{paddingBottom: "30px"}}>Course Enrollment Requests 🎓</h1>
+                    <div className="card-panel admin-table-container" style={{maxWidth: "1200px"}}>
+                        <table className="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Student & Email</th>
+                                    <th>Course</th>
+                                    <th>Price</th>
+                                    <th>Slip</th>
+                                    <th>Time</th>
+                                    <th>Status</th>
+                                    <th>Payment Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {courseEnrollments.map((item) => (
+                                    <tr key={item.enrollment_id} className="table-row-hover">
+                                        <td>{item.student_name}<br/><small>{item.student_email}</small></td>
+                                        <td>{item.course_name}</td>
+                                        <td>LKR {item.course_price}</td>
+                                        <td>
+                                            {item.payment_slip ? 
+                                                <img src={`${BACKEND_URL}/${item.payment_slip.replace(/\\/g, "/")}`} 
+                                                     alt="slip" style={{width:"40px", cursor:"pointer"}} 
+                                                     onClick={() => showImage(item.payment_slip)}/> 
+                                                : <span style={{color:"red"}}>No Slip</span>}
+                                        </td>
+                                        <td>{new Date(item.enroll_date).toLocaleString()}</td>
+                                        <td>{item.student_account_status}</td>
+                                        <td>
+                                            <select className={`status-select ${item.payment_status.toLowerCase()}`}
+                                                value={item.payment_status}
+                                                onChange={(e) => handleCourseStatus(item.enrollment_id, e.target.value)}>
+                                                <option value="Pending">Pending</option>
+                                                <option value="Approved">Approved</option>
+                                                <option value="Rejected">Rejected</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                        <button onClick={generateCoursePDF} className="review-btn" style={{marginTop: "15px"}} >
+                            📥 Download Course Enrollment Requests
+                        </button>
+                    </div>
+                </div>
+
+                {/*Section2 Quiz Enrollments  */}
+                <div>
+                    <h1 className="dashboard-title-text" style={{paddingBottom: "30px"}}>Quiz Enrollment Requests 📝</h1>
+                    <div className="card-panel admin-table-container" style={{maxWidth: "1200px"}}>
+                        <table className="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Quiz Name</th>
+                                    <th>Price</th>
+                                    <th>Slip</th>
+                                    <th>Time</th>
+                                    <th>Status</th>
+                                    <th>Payment Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {quizEnrollments.map((item) => (
+                                    <tr key={item.payment_id} className="table-row-hover">
+                                        <td>{item.student_name}</td>
+                                        <td>{item.quiz_name}</td>
+                                        <td>LKR {item.amount}</td>
+                                        <td>
+                                            {item.payment_slip ? 
+                                                <img src={`${BACKEND_URL}/${item.payment_slip.replace(/\\/g, "/")}`} 
+                                                     alt="slip" style={{width:"40px", cursor:"pointer"}} 
+                                                     onClick={() => showImage(item.payment_slip)}/> 
+                                                : <span style={{color:"red"}}>No Slip</span>}
+                                        </td>
+                                        <td>{new Date(item.created_at).toLocaleString()}</td>
+                                        <td>{item.student_account_status}</td>
+                                        <td>
+                                            <select className={`status-select ${item.status.toLowerCase()}`}
+                                                value={item.status}
+                                                disabled={item.status === "Approved"}
+                                                onChange={(e) => handleQuizStatus(item.payment_id, e.target.value)}>
+                                                <option value="Pending">Pending</option>
+                                                <option value="Approved">Approved</option>
+                                                <option value="Rejected">Rejected</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                        <button onClick={generateQuizPDF} className="review-btn"  style={{marginTop: "15px"}} >
+                            📥 Download Quiz Enrollment Requests
+                        </button>
+                    </div>
+                </div>
+
+            </main>
+
+             <button className="floating-back-btn" onClick={() => navigate("/a-dashbord")}>
+          ← BACK TO DASHBOARD
+        </button>
         </div>
-      </main>
-
-      <button
-        className="view-btn"
-        onClick={() => navigate('/a-dashbord')}
-        style={{
-          position: "fixed",
-          bottom: "30px",
-          right: "30px",
-          zIndex: "1000",
-          padding: "12px 30px",
-          borderRadius: "30px",
-          background: "rgba(255, 255, 255, 0.2)", // Glass effect එකට ගැලපෙන ලෙස
-          backdropFilter: "blur(10px)",
-          border: "1px solid rgba(255, 255, 255, 0.3)",
-          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
-          fontSize: "1rem",
-          fontWeight: "bold",
-          cursor: "pointer",
-          transition: "all 0.3s ease",
-        }}
-        onMouseOver={(e) => (e.target.style.background = "#00d2ff")} // Hover කරන විට පාට වෙනස් වීමට
-        onMouseOut={(e) =>
-          (e.target.style.background = "rgba(255, 255, 255, 0.2)")
-        }
-      >
-        ← BACK TO DASHBORD
-      </button>
-    </div>
-  );
+    );
 }

@@ -1,6 +1,21 @@
 const express = require("express");
 const router = express.Router();
 const db = require('../index');
+const multer = require('multer');
+const path = require('path');
+
+
+// File save path
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); 
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage: storage });
 
 //http://localhost:5000/api/content/course/S001
 //get all content usig course_code
@@ -29,30 +44,24 @@ router.get("/course/:course_code", (req, res) => {
 //http://localhost:5000/api/content/add
 // http://localhost:5000/api/content/add/:course_code
 // Add new content for a specific course
-router.post("/add/:course_code", (req, res) => {
-  // URL එකෙන් course_code එක ගන්නවා
+router.post("/add/:course_code", upload.single('file'), (req, res) => {
   const { course_code } = req.params; 
-  // Body එකෙන් අනිත් දත්ත ටික ගන්නවා
   const { content_type, title, external_link } = req.body;
 
-  // Validation (දැන් body එකේ course_code අවශ්‍ය නැහැ, මොකද ඒක URL එකේ තියෙන නිසා)
+  const finalLink = req.file ? `http://localhost:5000/uploads/${req.file.filename}` : external_link;
+
   if (!content_type || !title) {
-    return res.status(400).json({ message: "content_type and title are required" });
+    return res.status(400).json({ message: "Type and Title are required" });
   }
 
-  const sql = `
-    INSERT INTO coursecontent (course_code, content_type, title, external_link)
-    VALUES (?, ?, ?, ?)
-  `;
+  const sql = `INSERT INTO coursecontent (course_code, content_type, title, external_link) VALUES (?, ?, ?, ?)`;
 
-db.query(sql, [course_code, content_type, title, external_link || null], (err, result) => {
-    if (err) {
-        console.error("Database Error:", err); // සර්වර් එකේ ලොග් එක බලන්න
-        return res.status(500).json({ error: err.message }); // Error එක හරියටම පෝස්ට්මන් එකට යවන්න
-    }
+  db.query(sql, [course_code, content_type, title, finalLink], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
     res.json({ message: "Success", contentId: result.insertId });
+  });
 });
-});
+
 
 //http://localhost:5000/api/content/update/1
 //edit course content
@@ -125,7 +134,7 @@ router.delete("/delete/:id", (req, res) => {
 router.get("/:student_id/:course_id", (req, res) => {
     const { course_id, student_id } = req.params;
 
-    // 1. මුලින්ම පරීක්ෂා කරනවා මේ ශිෂ්‍යයා අදාළ Course එකට Approved ද කියලා
+    // 1. check paymnt ststs approve or pending
     const checkStatusSql = `
         SELECT payment_status 
         FROM enrollments 
@@ -134,17 +143,17 @@ router.get("/:student_id/:course_id", (req, res) => {
     db.query(checkStatusSql, [student_id, course_id], (err, result) => {
         if (err) return res.status(500).json(err);
 
-        // Enrollment එකක් නැත්නම්
+        // if not yet enroll 
         if (result.length === 0) {
             return res.status(403).json({ 
                 access: false, 
-                message: "ඔබ මෙම පාඨමාලාවට ලියාපදිංචි වී නැත." 
+                message: "You are not enrolled in this course." 
             });
         }
 
         const status = result[0].payment_status;
 
-        // 2. Status එක 'Approved' නම් පමණක් Content එක ලබා දෙනවා
+        // 2.if only sttus = approve can access ->content
         if (status === 'Approved') {
             const contentSql = "SELECT * FROM coursecontent WHERE id = ?";
             
@@ -156,14 +165,14 @@ router.get("/:student_id/:course_id", (req, res) => {
                 });
             });
         } 
-        // 3. 'Pending' හෝ 'Rejected' නම් Content එක දෙන්නේ නැහැ
+        // 3. 'status = pending,reject can not access
         else {
             res.status(403).json({ 
                 access: false, 
-                message: `ඔබේ ලියාපදිංචිය තවමත් ${status} මට්ටමේ පවතී. පාඨමාලාවට ඇතුළු වීමට Admin අනුමැතිය අවශ්‍යයි.` 
+                message: `Your enrollment status is still ${status}. Admin approval is required to access the course.` 
             });
         }
-    });
+    });   
 });
 
 

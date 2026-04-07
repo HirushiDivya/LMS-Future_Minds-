@@ -1,0 +1,142 @@
+.dashboard-page {
+    background-color: #f4f7fe; /* ලා අළු පැහැති පසුබිම */
+    padding: 40px 20px;
+    min-height: 100vh;
+}
+
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 20px 0;
+}
+
+/* Card Styling */
+.course-card {
+    background: #ffffff;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    border: 1px solid #edf2f7;
+    display: flex;
+    flex-direction: column;
+}
+
+.course-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Image Section */
+.image-container {
+    position: relative;
+    width: 100%;
+    height: 200px;
+}
+
+.quiz-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.category-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: #5d5dff;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    z-index: 1;
+}
+
+/* Body Section */
+.card-body {
+    padding: 20px;
+}
+
+.card-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #718096;
+    margin-bottom: 10px;
+}
+
+.course-card h3 {
+    font-size: 22px;
+    color: #1a202c;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.course-id-text {
+    color: #a0aec0;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* Footer Section */
+.course-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.course-price {
+    font-size: 20px;
+    font-weight: 800;
+    color: #5d5dff;
+}
+
+.buy-btn {
+    background: #1a202c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.buy-btn:hover {
+    background: #2d3748;
+}
+
+/* Icons for Admin */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.edit-icon-btn, .delete-icon-btn {
+    background: #f7fafc;
+    border: 1px solid #e2e8f0;
+    padding: 8px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* Add New Card */
+.add-new-card {
+    border: 2px dashed #cbd5e0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.6);
+    color: #4a5568;
+}
+
+.plus-icon {
+    font-size: 50px;
+    color: #5d5dff;
+    margin-bottom: 10px;
+}

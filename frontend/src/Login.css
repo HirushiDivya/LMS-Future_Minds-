@@ -1,4 +1,4 @@
-/* මුළු පිටුවටම gradient background එක */
+/*gradient background එක */
 .login-page {
   min-height: 100vh;
   display: flex;
@@ -6,7 +6,7 @@
   justify-content: center;
   background: linear-gradient(135deg, #4481eb 0%, #04befe 100%);
   padding: 20px;
-  font-family: 'Poppins', sans-serif; /* ලස්සන font එකක් ඇඩ් කළා */
+  font-family: 'Poppins', sans-serif; 
 }
 
 /* Glassmorphism card style */
@@ -37,15 +37,16 @@
 /* Input group */
 .input-group {
   position: relative;
-  margin-top: 20px; /* Label එකට ඉඩ තියන්න */
+  margin-top: 20px; /* Label*/
   margin-bottom: 25px;
   text-align: left;
 }
 
 .input-group input {
   width: 100%;
-padding: 18px 12px 10px 12px; /* උඩ padding එක වැඩි කළා text එක පහළට තල්ලු කරන්න */  background: rgba(255, 255, 255, 0.9);
-  border: 2px solid transparent; /* Focus border එකට ඉඩ තියන්න */
+padding: 18px 12px 10px 12px; 
+ background: rgba(255, 255, 255, 0.9);
+  border: 2px solid transparent; 
   border-radius: 8px;
   font-size: 1rem;
   color: #333;
@@ -53,12 +54,12 @@ padding: 18px 12px 10px 12px; /* උඩ padding එක වැඩි කළා te
   transition: 0.3s;
 }
 
-/* Placeholder එක hide කරලා තියන්න (React එකේ placeholder=" " තිබීම අනිවාර්යයි) */
+/* Placeholder  hide  */
 .input-group input::placeholder {
   color: transparent;
 }
 
-/* Label එකේ මුල් පිහිටීම (Input එක ඇතුළේ මැද) */
+/* Label  */
 .input-group label {
   position: absolute;
   left: 12px;
@@ -71,10 +72,10 @@ padding: 18px 12px 10px 12px; /* උඩ padding එක වැඩි කළා te
   z-index: 2;
 }
 
-/* Label එක උඩට පාවෙන අවස්ථාව (Focus හෝ Text ඇති විට) */
+/* Label */
 .input-group input:focus + label,
 .input-group input:not(:placeholder-shown) + label {
-  top: -18px; /* Input එකෙන් පිටතට උඩට */
+  top: -18px; /* Input */
   left: 5px;
   font-size: 0.85rem;
   color: white;
@@ -82,13 +83,13 @@ padding: 18px 12px 10px 12px; /* උඩ padding එක වැඩි කළා te
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
-/* Input එක focus වූ විට */
+/* Input - focus  */
 .input-group input:focus {
   background: #ffffff;
   border-color: #04befe;
 }
 
-/* Login Button එක */
+/* Login Button  */
 .login-btn {
   width: 100%;
   padding: 15px;
@@ -116,7 +117,7 @@ padding: 18px 12px 10px 12px; /* උඩ padding එක වැඩි කළා te
   cursor: not-allowed;
 }
 
-/* Forgot password සහ Create account ලින්ක් */
+/* Forgot password , Create account  */
 .login-links {
   margin-top: 25px;
   display: flex;

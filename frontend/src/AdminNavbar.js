@@ -4,7 +4,7 @@ import {
   LayoutDashboard,
   Users,
   BookOpen,
-  CreditCard,
+  CreditCard, 
   UserPlus,
 } from "lucide-react";
 import "./AdminNavbar.css";
@@ -14,7 +14,6 @@ const AdminNavbar = () => {
   const navigate = useNavigate();
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
  
-  // Logout Modal එක පාලනය කිරීමට අලුත් state එකක්
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   useEffect(() => {
@@ -35,7 +34,7 @@ const AdminNavbar = () => {
   return (
     <>
       <aside className="admin-sidebar">
-        <div className="sidebar-header">LMS ADMIN</div>
+        <div className="sidebar-header"> ADMIN</div>
 
         <nav className="nav-container">
           <NavLink
@@ -117,9 +116,7 @@ const AdminNavbar = () => {
         </div>
       </aside>
 
-      {/* ==============================
-          Logout Confirmation Modal 
-      ============================== */}
+      {/* Logout Confirmation Modal  */}
       {showLogoutConfirm && (
         <div
           style={{

@@ -1,225 +1,221 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import API from "../../API";
+import API from "../../API"; // ඔබේ folder structure එකට අනුව path එක නිවැරදි කරගන්න
 import "../StudentRegister.css";
+//import "./ViewQuiz.css";
 
-const QuizPayment = () => {
-  const location = useLocation();
+
+export default function QuizPayment() {
+  const { state } = useLocation();
   const navigate = useNavigate();
 
-  const { id, title, price } = location.state || {};
-  const [file, setFile] = useState(null);
-  const [preview, setPreview] = useState(null); // Slip එක පෙන්වීමට
-  const [uploading, setUploading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("gateway");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [currentUserID, setCurrentUserID] = useState(null);
 
   useEffect(() => {
-    if (!id) {
+    const id = localStorage.getItem("userID");
+    setCurrentUserID(id);
+
+    // වැරදි විදිහට page එකට ආවොත් back කරනවා
+    if (!state || !state.id) {
       alert("Invalid Access. Redirecting back...");
       navigate(-1);
     }
-  }, [id, navigate]);
+  }, [state, navigate]);
 
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    if (selectedFile) {
-      setFile(selectedFile);
-      setPreview(URL.createObjectURL(selectedFile)); // Preview එකක් සෑදීම
-    }
-  };
+  if (!state) return null;
 
-  const handleOnlinePayment = async () => {
-    const studentId = localStorage.getItem("userID");
+  // Destructure data from state
+  const { id, title, price, type } = state;
+  const isQuiz = type === "QUIZ" || !type; // Default quiz ලෙස සලකයි
+  const displayName = title;
+
+  // --- Stripe Payment Handler ---
+  const handleStripePayment = async () => {
+    setIsSubmitting(true);
     try {
-      setUploading(true);
-      if (!price) {
-        alert("Price information missing.");
-        return;
-      }
-      const formattedPrice = Number(price).toFixed(2);
-
-      const initRes = await API.post("/pgateway/initiate", {
-        student_id: studentId,
+      const response = await API.post("/pgateway/create-checkout-session", {
+        student_id: currentUserID,
+        amount: price,
         quiz_id: id,
-        amount: formattedPrice,
+        course_id: null, // මෙය Quiz Payment එකක් නිසා
       });
 
-      const orderId = initRes.data.order_id;
-      const hashRes = await API.post("/pgateway/generate-hash", {
-        order_id: orderId,
-        amount: formattedPrice,
-        currency: "LKR",
-      });
-
-      const hash = hashRes.data.hash;
-
-      const paymentData = {
-        sandbox: true,
-        merchant_id: "1234249",
-        return_url: "http://localhost:3000/payment-success",
-        cancel_url: "http://localhost:3000/payment-failed",
-        notify_url: "http://your-live-backend-url.com/api/pgateway/payment-notify",
-        order_id: orderId,
-        items: title,
-        amount: formattedPrice,
-        currency: "LKR",
-        hash: hash,
-        first_name: "Student",
-        last_name: studentId,
-        email: "test@example.com",
-        phone: "0771234567",
-        address: "Colombo",
-        city: "Colombo",
-        country: "Sri Lanka",
-      };
-
-      const form = document.createElement("form");
-      form.method = "POST";
-      form.action = "https://sandbox.payhere.lk/pay/checkout";
-
-      Object.entries(paymentData).forEach(([key, value]) => {
-        const input = document.createElement("input");
-        input.type = "hidden";
-        input.name = key;
-        input.value = value;
-        form.appendChild(input);
-      });
-
-      document.body.appendChild(form);
-      form.submit();
-    } catch (err) {
-      console.error(err);
-      alert("Online payment initialization failed!");
+      if (response.data.url) {
+        window.location.href = response.data.url;
+      }
+    } catch (error) {
+      console.error("Stripe Checkout failed:", error);
+      alert("ගෙවීම් පද්ධතියට සම්බන්ධ වීමට නොහැකි විය.");
     } finally {
-      setUploading(false);
+      setIsSubmitting(false);
     }
   };
 
-  const handleBankSlipUpload = async (e) => {
-    e.preventDefault();
-    const studentId = localStorage.getItem("userID");
-    if (!file) { alert("Please select a file first."); return; }
+  // --- Bank Slip Handlers ---
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      setPreview(URL.createObjectURL(file));
+    }
+  };
 
-    try {
-      setUploading(true);
-      const formData = new FormData();
-      formData.append("slip", file);
-      formData.append("student_id", studentId);
-      formData.append("quiz_id", id);
-      formData.append("amount", price);
 
-      const res = await API.post("/payment/quiz/upload-bank-slip", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      alert(res.data.message);
+const handleBankSlipSubmit = async () => {
+  if (!selectedFile) {
+    alert("කරුණාකර බැංකු රිසිට්පත (Slip) ලබා දෙන්න.");
+    return;
+  }
+
+  setIsSubmitting(true);
+  
+  // ✅ 1. Invoice Number එක මෙතැනදී සාදා ගන්න
+  const datePart = Date.now().toString().slice(-6);
+  const generatedInvoiceNo = `INV-QZ-${id}-${datePart}`;
+
+  const formData = new FormData();
+  formData.append("slip", selectedFile);
+  formData.append("student_id", currentUserID);
+  formData.append("quiz_id", id);
+  formData.append("amount", price);
+  formData.append("invoice_number", generatedInvoiceNo); // send to Backend 
+
+  try {
+    const res = await API.post("/payment/quiz/upload-bank-slip", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    if (res.data.paymentId) {
+      navigate(`/success?order_id=${res.data.paymentId}&type=quiz&method=bank`);
+    } else {
+      alert(res.data.message || "Upload successful.");
       navigate(-1);
-    } catch (err) {
-      alert("Upload failed.");
-    } finally {
-      setUploading(false);
     }
-  };
+  } catch (err) {
+    alert(err.response?.data?.error || "Upload failed.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <div className="register-page">
-      <div className="register-card" style={{ maxWidth: "550px", textAlign: "center", padding: "30px" }}>
-        <h2 style={{ color: "white", marginBottom: "20px" }}>Quiz Enrollment</h2>
-        
-        {/* Quiz Info */}
-        <div style={{ background: "rgba(255,255,255,0.1)", padding: "20px", borderRadius: "15px", marginBottom: "25px", border: "1px solid rgba(255,255,255,0.1)" }}>
-          <h3 style={{ margin: "5px 0", color: "#facc15" }}>{title}</h3>
-          <p style={{ fontSize: "1.4rem", fontWeight: "bold", color: "white", margin: "10px 0" }}>Rs. {price}</p>
+      <div
+        className="register-card profile-card-wide"
+        style={{ maxWidth: "550px" }}
+      >
+        <h2>Quiz Enrollment</h2>
+        <p>Complete your payment to unlock access</p>
+
+        <div className="summary-section">
+          <h3 className="item-name" style={{ color: "#facc15" }}>
+            {displayName}
+          </h3>
+          <p className="price-tag" style={{ fontSize: "1.5rem" }}>
+            LKR {price}
+          </p>
         </div>
 
-        {/* Online Payment Option */}
-        <div style={{ marginBottom: "30px" }}>
+        {/* Tab Switcher */}
+        <div className="mini-navbar">
           <button
-            className="view-btn"
-            style={{ width: "100%", background: "#4ade80", color: "#000", fontWeight: "bold", padding: "12px", borderRadius: "10px", fontSize: "1rem" }}
-            onClick={handleOnlinePayment}
-            disabled={uploading}
+            className={paymentMethod === "gateway" ? "active-tab" : ""}
+            onClick={() => setPaymentMethod("gateway")}
           >
-            {uploading ? "Processing..." : "💳 Pay Instantly via Card / Genie"}
+            💳 Card Payment (Stripe)
+          </button>
+          <button
+            className={paymentMethod === "slip" ? "active-tab" : ""}
+            onClick={() => setPaymentMethod("slip")}
+          >
+            🏦 Bank Slip
           </button>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", margin: "25px 0", color: "rgba(255,255,255,0.3)" }}>
-          <hr style={{ flex: 1, border: "0.5px solid rgba(255,255,255,0.1)" }} />
-          <span style={{ margin: "0 10px", fontSize: "0.8rem" }}>OR BANK TRANSFER</span>
-          <hr style={{ flex: 1, border: "0.5px solid rgba(255,255,255,0.1)" }} />
-        </div>
-
-        {/* Bank Details Section */}
-        <div style={{ textAlign: "left", background: "rgba(255,255,255,0.05)", padding: "20px", borderRadius: "15px", marginBottom: "20px", border: "1px dashed rgba(255,255,255,0.2)" }}>
-          <h4 style={{ color: "#4ade80", marginBottom: "10px", fontSize: "1rem" }}>Bank Details:</h4>
-          <div style={{ color: "white", fontSize: "0.9rem", lineHeight: "1.6" }}>
-            <p><b>Bank:</b> Bank of Ceylon (BOC)</p>
-            <p><b>Account Name:</b> Exam Center PLC</p>
-            <p><b>Account Number:</b> 1234567890</p>
-            <p><b>Branch:</b> Colombo Fort</p>
-          </div>
-        </div>
-
-        {/* Advanced File Upload Area */}
-        <div style={{ textAlign: "left" }}>
-          <h4 style={{ color: "white", marginBottom: "10px", fontSize: "1rem" }}>Upload Your Slip:</h4>
-          <form onSubmit={handleBankSlipUpload}>
-            <div 
-              style={{
-                border: "2px dashed rgba(255,255,255,0.2)",
-                borderRadius: "15px",
-                padding: "20px",
-                textAlign: "center",
-                position: "relative",
-                backgroundColor: "rgba(255,255,255,0.02)",
-                cursor: "pointer",
-                transition: "0.3s"
-              }}
-              onMouseOver={(e) => e.currentTarget.style.borderColor = "#4ade80"}
-              onMouseOut={(e) => e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)"}
+        {/* Content based on Tab */}
+        {paymentMethod === "gateway" ? (
+          <div className="gateway-info">
+            <p style={{ marginBottom: "20px", color: "rgba(255,255,255,0.8)" }}>
+              You will be redirected to Stripe’s secure payment gateway.
+            </p>
+            <button
+              className="register-btn"
+              onClick={handleStripePayment}
+              disabled={isSubmitting}
+              style={{ background: "#4ade80", color: "#000" }}
             >
-              <input 
-                type="file" 
-                accept="image/*" 
-                onChange={handleFileChange} 
-                style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", opacity: 0, cursor: "pointer" }}
-                required 
+              {isSubmitting ? "Processing..." : "Pay Instantly via Card"}
+            </button>
+          </div>
+        ) : (
+          <div className="slip-upload-container">
+            <div
+              className="bank-details"
+              style={{ textAlign: "left", fontSize: "0.9rem" }}
+            >
+              <p>
+                <b>Bank:</b> Bank of Ceylon (BOC)
+              </p>
+              <p>
+                <b>Acc Name:</b> Exam Center PLC
+              </p>
+              <p>
+                <b>Acc No:</b> 1234567890
+              </p>
+            </div>
+
+            <div className="file-drop-area" style={{ marginTop: "15px" }}>
+              <input
+                type="file"
+                onChange={handleFileUpload}
+                accept="image/*"
+                className="file-input"
               />
-              
               {!preview ? (
-                <div>
-                  <div style={{ fontSize: "2rem", marginBottom: "10px" }}>📷</div>
-                  <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.9rem" }}>
-                    Click or Drag & Drop your payment slip here
-                  </p>
+                <div className="upload-placeholder">
+                  <div style={{ fontSize: "2rem" }}>📷</div>
+                  <p>Click to upload Bank Slip</p>
                 </div>
               ) : (
-                <div style={{ position: "relative" }}>
-                  <img src={preview} alt="Slip Preview" style={{ maxWidth: "100%", maxHeight: "150px", borderRadius: "10px" }} />
-                  <p style={{ color: "#4ade80", fontSize: "0.8rem", marginTop: "10px" }}>✔ Slip Selected</p>
+                <div className="preview-container">
+                  <img
+                    src={preview}
+                    alt="Slip Preview"
+                    style={{ maxHeight: "150px" }}
+                  />
+                  <p style={{ color: "#4ade80", fontSize: "0.8rem" }}>
+                    ✔ Slip Selected
+                  </p>
                 </div>
               )}
             </div>
 
-            <button 
-              type="submit" 
-              className="register-btn" 
-              disabled={uploading || !file} 
-              style={{ width: "100%", marginTop: "20px", padding: "12px", background: file ? "#facc15" : "#555", color: "#000", fontWeight: "bold" }}
+            <button
+              className="register-btn"
+              onClick={handleBankSlipSubmit}
+              disabled={isSubmitting || !selectedFile}
+              style={{
+                marginTop: "20px",
+                background: selectedFile ? "#facc15" : "#555",
+              }}
             >
-              {uploading ? "Uploading..." : "📤 Submit Payment Slip"}
+              {isSubmitting ? "Uploading..." : "Submit Bank Slip"}
             </button>
-          </form>
-        </div>
+          </div>
+        )}
 
-        <button 
-          onClick={() => navigate(-1)} 
-          style={{ background: "none", border: "none", color: "rgba(255,255,255,0.5)", marginTop: "25px", cursor: "pointer", textDecoration: "underline", fontSize: "0.9rem" }}
+        <button
+          className="cancel-link"
+          onClick={() => navigate(-1)}
+          style={{ marginTop: "20px", display: "block", width: "100%" }}
         >
           Cancel and Go Back
         </button>
       </div>
     </div>
   );
-};
-
-export default QuizPayment;
+}

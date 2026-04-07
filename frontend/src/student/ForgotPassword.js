@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // මුලින්ම useNavigate import කරගන්න
+import { useNavigate } from "react-router-dom"; 
 import API from "../API";
 import "./StudentRegister.css";
 
@@ -20,11 +20,11 @@ const navigate = useNavigate();
   const contactSupport = () => {
     const phone = "94761758959";
     
-    // මෙතනදී trim() එකක් දාන්න හිස් තැන් ඉවත් වෙන්න
+    //  trim() 
     const userEmail = email ? email : "[Email not provided]";
     const message = `Hi, I'm having trouble resetting my password. (Email: ${userEmail})`;
     
-    // encodeURIComponent එක හරියටම වැඩ කරනවා නේද කියලා බලන්න
+    // encodeURIComponent check
     const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
     
     window.open(whatsappUrl, "_blank");
@@ -42,7 +42,7 @@ const navigate = useNavigate();
             type="email"
             placeholder="example@mail.com"
             value={email}
-            onChange={(e) => setEmail(e.target.value)} // State එක update වීම මෙතනදී වෙනවා
+            onChange={(e) => setEmail(e.target.value)} // State  update 
           />
         </div>
 

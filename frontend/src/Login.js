@@ -20,11 +20,11 @@ export default function StudentLogin() {
     setLoading(true);
     const res = await API.post("/login/login", { email, password });
 
-    // Backend එකෙන් එන දත්ත පරීක්ෂා කිරීමට (Console එක බලන්න)
+    // Backend check (Console)
     console.log("Login Response:", res.data);
 
     if (res.data.name) {
-      // ලොකල් ස්ටෝරේජ් එකේ දත්ත සේව් කිරීම
+      // local storage sve
       localStorage.setItem("userName", res.data.name);
       localStorage.setItem("userRole", res.data.role);
       localStorage.setItem("userID", res.data.userID);
@@ -32,9 +32,7 @@ export default function StudentLogin() {
       
       alert(res.data.message);
       
-      // Navigate කිරීමට පෙර window.location.reload() කිරීමෙන් වළකින්න
-      // එය වෙනුවට navigate කර පසුව reload කරන්න හෝ state එකක් පාවිච්චි කරන්න
-// Role එක අනුව Navigate කිරීම
+     //navigate base on role
       if (res.data.role === "admin") {
         navigate("/a-dashbord");
       } else {

@@ -3,11 +3,10 @@
 const db = require("../index");
 
 const checkUserStatus = (req, res, next) => {
-    // ශිෂ්‍යයාගේ ID එක ලබා ගැනීම (මෙය බොහෝවිට req.body හෝ req.params හරහා ලැබෙනු ඇත)
     const studentId = req.body.studentId || req.query.studentId || req.params.studentId;
 
     if (!studentId) {
-        return next(); // studentId නැතිනම් මීළඟ පියවරට යන්න (නැතහොත් error එකක් දෙන්න)
+        return next(); 
     }
 
     const sql = "SELECT status FROM students WHERE id = ?";
@@ -20,7 +19,7 @@ const checkUserStatus = (req, res, next) => {
             });
         }
         
-        next(); // ශිෂ්‍යයා Active නම් පමණක් ඉදිරියට යාමට ඉඩ දෙන්න
+        next(); 
     });
 };
 

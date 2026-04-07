@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./About.css"; // Using the same CSS file for consistency
+import "./About.css"; 
 import {
   FaEnvelope,
   FaPhone,
@@ -20,21 +20,21 @@ const Contact = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // ඔබේ WhatsApp අංකය මෙතනට ඇතුළත් කරන්න (රටේ කේතය සමඟ - උදා: 94771234567)
+    e.preventDefault(); //  WhatsApp 
 
-    const phoneNumber = "94761758959"; // Message එක සකස් කිරීම
+    const phoneNumber = "94761758959"; // Message 
 
     const message =
       
       `*Name:* ${formData.name}%0A` +
       `*Email:* ${formData.email}%0A` +
       `*Subject:* ${formData.subject}%0A` +
-      `*Message:* ${formData.message}`; // WhatsApp URL එක සාදා එය අලුත් tab එකක open කිරීම
+      `*Message:* ${formData.message}`; // WhatsApp URL -> open new tab
 
     const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
     window.open(whatsappURL, "_blank");
 
-    // --- මෙතනින් පස්සේ form එක clear කරනවා ---
+    // clear form ---
     setFormData({
       name: "",
       email: "",
@@ -42,13 +42,13 @@ const Contact = () => {
       message: "",
     });
   };
-
+ 
   return (
     <div className="about-page">
       <div className="about-container">
         {/* Hero Section */}
         <section className="about-hero">
-          <h1 className="about-title">
+          <h1 className="about-title" style={{paddingTop : "0px", marginTop :"-30px"}}>
             Contact <span className="highlight">Us</span>
           </h1>
           <div className="title-underline"></div>
@@ -64,33 +64,34 @@ const Contact = () => {
             <div className="icon-wrapper">
               <FaPhone className="about-icon" />
             </div>
-            <h3>Call Us</h3>
-            <p>+94 761758959</p>
-            <p>Mon - Fri, 9am - 6pm</p>
+            <h3 className="aboutcardh3">Call Us</h3>
+            <p className='about-small-card'>+94 761758959</p>
+            <p className='about-small-card'>Mon - Fri, 9am - 6pm</p>
           </div>
 
           <div className="about-card">
             <div className="icon-wrapper">
               <FaEnvelope className="about-icon" />
             </div>
-            <h3>Email Us</h3>
-            <p>support@futureminds.com</p>
-            <p>contact@futureminds.com</p>
+            <h3 className="aboutcardh3">Email Us</h3>
+            <p className='about-small-card'>support@futureminds.com</p>
+            <p className='about-small-card'>contact@futureminds.com</p>
           </div>
 
           <div className="about-card">
             <div className="icon-wrapper">
               <FaMapMarkerAlt className="about-icon" />
             </div>
-            <h3>Visit Us</h3>
-            <p>123 Tech Plaza, Colombo 07,</p>
-            <p>Sri Lanka.</p>
+            <h3 className="aboutcardh3">Visit Us</h3>
+            <p className='about-small-card'>123 Tech Plaza, Colombo 07,</p>
+            <p className='about-small-card'>Sri Lanka.</p>
           </div>
         </div>
 
         {/* Contact Form Section */}
-        <section className="about-mission-box">
-          <div className="mission-content">
+        <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
+        <section className="contact-us-box"style={{ width: "500px" }}>
+          <div className="contact-header">
             <h2 style={{ textAlign: "center", marginBottom: "30px" }}>
               Send a Message
             </h2>
@@ -145,6 +146,7 @@ const Contact = () => {
             </form>
           </div>
         </section>
+        </div>
       </div>
     </div>
   );

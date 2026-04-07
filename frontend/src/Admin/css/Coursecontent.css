@@ -1,4 +1,5 @@
-:root {
+
+:root { 
   --pg-bg: linear-gradient(135deg, #7b99cc 0%, #6b7cb4 50%, #5d61a2 100%);
   --card-bg: rgba(255, 255, 255, 0.9);
   --txt-color: #333;
@@ -82,9 +83,7 @@
 .cancel-btn { background: #666; color: white; border: none; padding: 10px; border-radius: 20px; flex:1; cursor: pointer;}
 
 
-/* =========================================
-   Main Container & Background
-   ========================================= */
+/*Main Container & Background*/
 .content-page-container {
   min-height: 100vh;
   padding: 40px 20px;
@@ -129,9 +128,7 @@
   box-shadow: 0 6px 20px rgba(0, 210, 255, 0.4);
 }
 
-/* =========================================
-   Content Grid & Cards
-   ========================================= */
+/*Content Grid & Cards */
 .content-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -245,9 +242,7 @@
   opacity: 0.7;
 }
 
-/* =========================================
-   Glassmorphism Modals
-   ========================================= */
+/*Glassmorphism Modals*/
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; 
@@ -329,17 +324,15 @@
 }
 
 
-
+ 
 
 /*add course */
-/* මුළු පිටුවේම පසුබිම (Background) */
 .dashboard-page {
     min-height: 100vh;
     padding: 40px 20px;
-    background: #2c3143; /* ඔබේ අනෙක් පිටු වලට සමාන පසුබිමක් */
+    background: #2c3143; 
 }
 
-/* කළු පැහැති Card එක (Form Container) */
 .form-container.glass-effect {
     background: #1a1c23; /* Dark background */
     border-radius: 15px;
@@ -349,7 +342,6 @@
     box-sizing: border-box;
 }
 
-/* Form එකේ පොදු සැකසුම් */
 .course-form {
     display: flex;
     flex-direction: column;
@@ -357,9 +349,8 @@
     width: 100%;
 }
 
-/* Label එකේ පෙනුම */
 .course-form label {
-    color: #ffd700; /* Gold හෝ Accent color එකක් */
+    color: #ffd700; 
     font-size: 0.9rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -367,12 +358,11 @@
     margin-bottom: 8px;
 }
 
-/* Input, Textarea සහ Select එකම විදියට */
 .course-form input, 
 .course-form textarea, 
 .course-form select {
     width: 100% !important;
-    box-sizing: border-box !important; /* පළල එළියට පැනීම වළක්වයි */
+    box-sizing: border-box !important; 
     padding: 12px;
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -384,10 +374,9 @@
 }
 
 .course-form textarea {
-    resize: none; /* ඇදීම තහනම් */
+    resize: none; 
 }
 
-/* Button වල පෙනුම */
 .submit-btn {
     background-color: #007bff;
     color: white;
@@ -410,5 +399,98 @@
     border: none;
     border-radius: 8px;
     cursor: pointer;
+}
+
+
+/* Acourse.js,AddCourse.js,AddQuiz.js*/
+/* Floating Back Button Style 
+.floating-back-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 1000;
+  padding: 12px 30px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+}
+ 
+.floating-back-btn:hover {
+  background: #00d2ff;
+  transform: translateY(-3px); 
+  box-shadow: 0 12px 40px rgba(0, 210, 255, 0.4);
+}
+
+.floating-back-btn:active {
+  transform: translateY(0); 
+}
+  */
+
+
+/*courses(admin*/
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.course-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 25px;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+.course-card:hover {
+  transform: translateY(-10px);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  border-color: #00d2ff;
+}
+[data-theme="dark"] .course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+[data-theme="dark"] .course-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 25px;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .course-card:hover {
+  transform: translateY(-10px);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  border-color: #00d2ff;
 }
 

@@ -1,0 +1,64 @@
+.viewquiz-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: background 0.3s ease;
+} 
+[data-theme='dark'] .viewquiz-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #001529;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: background 0.3s ease;
+}
+.SViewquiz-header {
+    display: block; 
+    text-align: center;
+    font-size: 2rem;
+    color: #000;
+    margin-bottom: 30px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+[data-theme='dark'] .SViewquiz-header {
+    display: block; 
+    text-align: center;
+    font-size: 2rem;
+    color: #e9e5e5;
+    margin-bottom: 30px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+.SViewQuiz-tble-data{
+  color: #484444;
+}
+ 
+[data-theme='dark'] .locked-section{
+  padding: 30px;
+  background: rgba(144, 6, 6, 0.05);
+  border-radius: 15px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+[data-theme='light'] .locked-section{
+  padding: 30px;
+  background: rgba(137, 15, 15, 0.05);
+  border-radius: 15px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.payment-sentsnce{
+  margin-bottom: 20px;
+  color: #000;
+}
+
+[data-theme='dark'] .payment-sentsnce{
+  margin-bottom: 20px;
+  color: #8d8c8c;
+}

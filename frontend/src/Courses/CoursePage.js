@@ -1,16 +1,26 @@
 import { useState, useEffect } from "react";
 import API from "../API";
 import { useNavigate } from "react-router-dom";
-import "./Studentcoursecontent.css";
+//import "./Studentcoursecontent.css";
+import "./Course.css";
 
 export default function Coursepage() {
-  const [courses, setCourses] = useState([]);
-  const [search, setSearch] = useState("");
-  const [module, setModule] = useState("");
+  const navigate = useNavigate();
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [courses, setCourses] = useState([]); //course list
+  const [search, setSearch] = useState(""); //title-search
+  const [module, setModule] = useState(""); //module code
   const [category, setCategory] = useState("All");
 
-  const navigate = useNavigate();
+  const BASE_URL = "http://localhost:5000"; // ඔබේ backend port එක 5000 නම්
 
+  const categories =
+    category === "All" ? ["Science", "Technology", "Mathematics"] : [category];
+
+  //search course by course category -science,technology,physics
+  //deta retrieve from backend- async- wait
+  //trim() - remove emty spaces
+  //!== not empty
   const fetchCourses = async () => {
     try {
       let url = "/courses";
@@ -18,48 +28,86 @@ export default function Coursepage() {
       else if (search.trim() !== "") url = `/courses/title/${search}`;
       else if (category !== "All") url = `/courses/category/${category}`;
 
+      //ask data from backend
       const res = await API.get(url);
-      setCourses(res.data ? (Array.isArray(res.data) ? res.data : [res.data]) : []);
+      const baseCourses = res.data
+        ? Array.isArray(res.data)
+          ? res.data
+          : [res.data]
+        : [];
+
+      const coursesWithFullDetails = await Promise.all(
+        baseCourses.map(async (course) => {
+          try {
+            // Student count
+            const countRes = await API.get(
+              `/courses/count-students/${course.id}`,
+            );
+
+            // random rating 2-5
+            const randomRating = (Math.random() * (5 - 2) + 2).toFixed(1);
+
+            return {
+              ...course,
+              students: countRes.data.total_enrolled,
+              rating: randomRating,
+            };
+          } catch (err) {
+            // Individual course error - default
+            return {
+              ...course,
+              students: 0,
+              rating: (Math.random() * (5 - 2) + 2).toFixed(1),
+            };
+          }
+        }),
+      );
+
+      setCourses(coursesWithFullDetails);
     } catch (err) {
-      console.error("Error fetching courses:", err);
+      // if whole fetch process become error
+      console.error("Error fetching courses", err);
       setCourses([]);
     }
   };
 
+
+   const handleViewContent = (courseCode) => {
+    navigate(`/s-course-content/${courseCode}`);
+  };
+
+  //react hook - real time updates happen
   useEffect(() => {
     fetchCourses();
   }, [category, search, module]);
 
-  const handleViewContent = (courseCode) => {
-    navigate(`/s-course-content/${courseCode}`);
-  };
-
-  // View More ක්ලික් කළ විට category එක අනුව අදාළ page එකට යැවීමේ logic එක
+  //cat = category(science,tech,maths)
   const handleViewMore = (cat) => {
-    if (cat === "Science") {
+    if (cat == "Science") {
       navigate("/science-page");
-    } else if (cat === "Technology") {
+    } else if (cat == "Technology") {
       navigate("/tech-page");
-    } else if (cat === "Mathematics") {
+    } else if (cat == "Mathematics") {
       navigate("/math-page");
     }
   };
-
-  const categories = category === "All" ? ["Science", "Technology", "Mathematics"] : [category];
-
-  return (
-    <div className="dashboard-page">
-      <h1 className="dashboard-title">Courses</h1>
-
-      {/* Search & Filter Section */}
-      <div className="search-container">
+ 
+  return ( 
+    <div className="coursedashboard-page">
+       <h3 className= "about-title" style={{paddingTop : "0px", marginTop :"10px", paddingBottom: "20px"}}>
+            Explore <span className="highlight">{category}</span> Courses
+          </h3>
+      <div className="coursepagesearch-container">
         <div className="search-box">
           <span>🔍</span>
           <input
             type="text"
             placeholder="Search Title..."
             value={search}
-            onChange={(e) => { setSearch(e.target.value); setModule(""); }}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setModule("");
+            }}
           />
         </div>
 
@@ -69,16 +117,23 @@ export default function Coursepage() {
             type="text"
             placeholder="Module Code..."
             value={module}
-            onChange={(e) => { setModule(e.target.value); setSearch(""); }}
+            onChange={(e) => {
+              setModule(e.target.value);
+              setSearch("");
+            }}
           />
         </div>
 
-        <div className="search-box">
-          <span>📂</span>
+        <div className="search-boxx">
+         {/* <span>📂</span> */}
           <select
             value={category}
-            onChange={(e) => { setCategory(e.target.value); setModule(""); setSearch(""); }}
-          >
+            onChange={(e) => {
+              setCategory(e.target.value);
+              setModule("");
+              setSearch("");
+            }}
+          > 
             <option value="All">All Categories</option>
             <option value="Science">Science</option>
             <option value="Technology">Technology</option>
@@ -87,48 +142,64 @@ export default function Coursepage() {
         </div>
       </div>
 
-      <div className="category-section-container">
-        {categories.map((cat) => {
-          // මෙහිදී filter කිරීම නිවැරදිව සිදු කර ඇත
-          const filteredCourses = courses.filter(c => c.category === cat);
-          
-          if (filteredCourses.length === 0 && category !== "All") return null;
+      {/* courses  */}
 
-          return (
-            <div key={cat} className="category-row-wrapper">
-              <h2 className="category-row-title">{cat}</h2>
-              <div className="course-grid-row">
-                {/* මුල් කාඩ් 3 පෙන්වීමට */}
-                {filteredCourses.slice(0, 3).map((course) => (
-                  <div key={course.id} className="course-card">
-                    <span className="course-code">{course.course_code}</span>
+      <div className="course-category-section-conatiner">
+        <section>
+         
+ 
+          <div className="courses-grid" style={{paddingBottom: "30px"}}>
+            {/* categories.map වෙනුවට කෙලින්ම courses.map භාවිතා කරන්න */}
+            {courses.length > 0 ? (
+              courses.map((course) => (
+                <div key={course.id} className="coursepge-card">
+                  <div className="course-badge">
+                    <span>{course.category}</span>
+                  </div>
+                  <img
+                    src={
+                      course.course_img
+                        ? course.course_img.startsWith("http")
+                          ? course.course_img // Web link එකක් නම් කෙලින්ම පෙන්වන්න
+                          : `${BASE_URL}/uploads/${course.course_img}` // Local upload එකක් නම් path එක හදන්න
+                         : "https://via.placeholder.com/300x200?text=No+Image"
+                    }
+                    alt={course.title}
+                    onError={(e) => {
+                      e.target.src =
+                        "https://via.placeholder.com/300x200?text=Error+Loading";
+                    }}
+                  />
+                  <div className="course-content">
+                    <div className="course-meta">
+                      <span>⭐ {(Math.random() * (5 - 2) + 2).toFixed(1)}</span>
+                      <span>👥 {course.students}k Students</span>
+                    </div>
+
                     <h3>{course.title}</h3>
-                    <p>{course.descriptions?.substring(0, 80)}...</p>
+
                     <div className="course-footer">
-                      <span className="course-price">LKR {course.price}</span>
-                      <button onClick={() => handleViewContent(course.course_code)} className="view-btn">
-                        View Content
+                      <span className="price">LKR {course.price}</span>
+                      <button
+                        className="buy-btn"
+                        onClick={() => handleViewContent(course.course_code)}
+                      >
+                        Buy Now
                       </button>
                     </div>
                   </div>
-                ))}
-                
-                {/* Dynamic View More Card */}
-                {filteredCourses.length > 0 && (
-                  <div className="course-card view-more-card" onClick={() => handleViewMore(cat)}>
-                    <div className="view-more-content">
-                      <h3>View More</h3>
-                      <p>Explore all {cat} courses</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          );
-        })}
-        
+                </div>
+              ))
+            ) : (
+              <p>No courses found.</p>
+            )}
+          </div>
+        </section>
+
         {courses.length === 0 && (
-          <p className="no-courses-msg">No courses found matching your criteria.</p>
+          <p className="no-courses-msg">
+            No courses found matching your criteria.
+          </p>
         )}
       </div>
     </div>

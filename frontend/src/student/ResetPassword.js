@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import API from "../API";
-import "./StudentRegister.css"; // කලින් ලස්සන CSS එකම පාවිච්චි කරන්න
+import "./StudentRegister.css"; 
 
 export default function ResetPassword() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [email, setEmail] = useState(location.state?.email || ""); //1.get email 
+  const [email, setEmail] = useState(location.state?.email || ""); //get email 
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -23,7 +23,7 @@ export default function ResetPassword() {
         newPassword,
       });
       alert(res.data.message);
-      navigate("/login"); // සාර්ථක වුණාම login එකට යනවා
+      navigate("/login"); // after complete -> login page
     } catch (err) {
       alert(err.response?.data?.message || "Reset failed");
     }
@@ -41,7 +41,7 @@ return (
             <input
               type="email"
               value={email}
-              readOnly // Email එක වෙනස් කරන්න බැරි වෙන්න දාන්න
+              readOnly // Email cant change
               className="readonly-input"
             />
           </div>

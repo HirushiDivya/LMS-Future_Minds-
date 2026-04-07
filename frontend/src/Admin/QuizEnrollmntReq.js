@@ -7,7 +7,6 @@ export default function QuizEnrollmntReq() {
   const [enrollments, setEnrollments] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // ඔබේ Backend එකේ Base URL එක මෙතැනට ලබා දෙන්න
   const BACKEND_URL = "http://localhost:5000";
 
   useEffect(() => {
@@ -25,7 +24,6 @@ export default function QuizEnrollmntReq() {
     }
   };
 
-  // පින්තූරය ලොකුවට පෙන්වීමට භාවිතා කරන function එක
   const showFullImage = (slipPath) => {
     const fullUrl = `${BACKEND_URL}/${slipPath.replace(/\\/g, "/")}`;
     Swal.fire({
@@ -39,23 +37,19 @@ export default function QuizEnrollmntReq() {
   };
 
   const handleStatusChange = async (paymentId, newStatus) => {
-  // දැනටමත් Approved නම් වෙනස් කිරීමට ඉඩ නොදෙයි
   const currentItem = enrollments.find((item) => item.payment_id === paymentId);
   if (currentItem.status === "Approved") {
     Swal.fire("Attention!", "This payment is already approved.", "info");
     return;
   }
 
-  // Pending සිට Approved හෝ Rejected ලෙස වෙනස් කිරීම
   if (newStatus === "Approved" || newStatus === "Rejected") {
     try {
-      // 1. Backend එකේ අලුත් පොදු Route එක (PUT method) භාවිතා කිරීම
       const res = await API.put("/admin/quiz/verify-payment", {
         paymentId,
         status: newStatus,
       });
 
-      // 2. සාර්ථක නම් දේශීය State එක Update කිරීම
       setEnrollments((prev) =>
         prev.map((item) =>
           item.payment_id === paymentId 
@@ -76,14 +70,13 @@ export default function QuizEnrollmntReq() {
       const errorMsg = err.response?.data?.message || "Status update failed!";
       Swal.fire("Error!", errorMsg, "error");
       
-      // වැරදුනහොත් දත්ත නැවත පූරණය කිරීම (Reload)
       fetchEnrollments();
     }
   }
 };
 
   if (loading)
-    return <div className="loading-screen">දත්ත පූරණය වෙමින් පවතී...</div>;
+    return <div className="loading-screen">Loading...</div>;
 
   return (
     <div className="admin-dashboard-wrapper">
@@ -118,7 +111,6 @@ export default function QuizEnrollmntReq() {
                         onClick={() => showFullImage(item.payment_slip)}
                       >
                         <img
-                          // Path එකේ තියෙන \\ වෙනුවට / දමා URL එක සකසයි
                           src={`${BACKEND_URL}/${item.payment_slip.replace(/\\/g, "/")}`}
                           alt="Slip"
                           style={{

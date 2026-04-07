@@ -7,7 +7,7 @@ export default function FPWVerifyOtp() {
   const location = useLocation();
   const navigate = useNavigate();
   
-  // කලින් screen එකෙන් එවපු email එක ගන්නවා, නැත්නම් හිස්ව තියනවා
+  //  fetch email or empty
   const [email, setEmail] = useState(location.state?.email || "");
   const [otp, setOtp] = useState("");
 
@@ -40,7 +40,7 @@ export default function FPWVerifyOtp() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              readOnly={!!location.state?.email} // Email එක ආවා නම් edit කරන්න බැරි වෙන්න දාන්න පුළුවන්
+              readOnly={!!location.state?.email} // Email can not edit
             />
           </div>
 

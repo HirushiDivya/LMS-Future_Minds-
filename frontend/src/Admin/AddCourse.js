@@ -1,7 +1,7 @@
 import { useState } from "react";
 import API from "../API";
 import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2"; // 1.SweetAlert import 
+import Swal from "sweetalert2";
 import "../Admin/css/Coursecontent.css";
 
 export default function AddCourse() {
@@ -11,41 +11,84 @@ export default function AddCourse() {
     price: "",
     category: "Science",
   });
+
+  // Image file එක සහ preview එක සඳහා වෙනම states
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  // State එකක් තබා ගන්න link එක සඳහා
+  const [imageUrl, setImageUrl] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // File එකක් තෝරාගත් විට ක්‍රියාත්මක වන function එක
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      setImageUrl(""); // File එකක් තෝරන විට කලින් තිබූ link එක අයින් කරන්න
+      setPreviewUrl(URL.createObjectURL(file));
+    }
+  };
+
+  // URL එකක් ඇතුළත් කළ විට ක්‍රියාත්මක වන function එක
+  const handleLinkChange = (e) => {
+    const link = e.target.value;
+    setImageUrl(link);
+    setSelectedFile(null); // Link එකක් දෙන විට කලින් තෝරාගත් file එක අයින් කරන්න
+    setPreviewUrl(link); // Preview එකට කෙලින්ම link එක දෙන්න
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
+    const data = new FormData();
+    data.append("title", formData.title);
+    data.append("descriptions", formData.descriptions);
+    data.append("price", formData.price);
+    data.append("category", formData.category);
+    const defaultImage =
+      "https://cdn.pixabay.com/photo/2022/11/19/14/42/e-learning-7602249_1280.jpg";
+
+    if (selectedFile) {
+      // 1. පරිශීලකයා File එකක් තෝරා ඇත්නම් එය යවන්න
+      data.append("course_img", selectedFile);
+    } else if (imageUrl && imageUrl.trim() !== "") {
+      // 2. පරිශීලකයා Link එකක් ඇතුළත් කර ඇත්නම් එය 'image_url' ලෙස යවන්න
+      data.append("image_url", imageUrl);
+    } else {
+      // 3. දෙකම නැතිනම් Default Link එක 'image_url' ලෙස යවන්න
+      data.append("image_url", defaultImage);
+    }
+
     try {
-      const response = await API.post("/courses/add", formData);
-      
+      const response = await API.post("/courses/add", data);
+      // API එකට POST request එක යැවීම
+
       if (response.status === 200) {
-        //2. Advance Alert
         Swal.fire({
           title: "Success!",
           text: "Course Added Successfully!",
           icon: "success",
           confirmButtonColor: "#00d2ff",
-          background: "#1e1e2f", 
-          color: "#fff"
+          background: "#1e1e2f",
+          color: "#fff",
         }).then(() => {
-          navigate("/a-courses"); 
+          navigate("/a-courses");
         });
       }
     } catch (err) {
       console.error("Error adding course:", err);
-      // Error alert 
+      // Error එකක් ආ විට පෙන්වන පණිවිඩය
       Swal.fire({
         title: "Error!",
-        text: "Failed to add course. Please try again.",
+        text: "Failed to add course. Please check your connection or backend.",
         icon: "error",
-        confirmButtonColor: "#d33"
+        confirmButtonColor: "#d33",
       });
     } finally {
       setLoading(false);
@@ -53,11 +96,21 @@ export default function AddCourse() {
   };
 
   return (
-    <div className="dashboard-page">
-      <div className="form-container glass-effect" style={{ maxWidth: "600px", margin: "0 auto" }}>
-        <h2 style={{ textAlign: "center", color: "#fff", marginBottom: "30px" }}>Add New Course</h2>
-        
-        <form onSubmit={handleSubmit} className="course-form">
+    <div className="admin-main-content">
+      <div
+        className="form-container glass-effect"
+        style={{ maxWidth: "600px", margin: "0 auto" }}
+      >
+        <h2 className="dashboard-title-text"
+        >
+          Add New Course
+        </h2>
+
+        <form
+          onSubmit={handleSubmit}
+          className="course-form"
+          encType="multipart/form-data"
+        >
           <div>
             <label>Course Title</label>
             <input
@@ -82,7 +135,93 @@ export default function AddCourse() {
             />
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "15px" }}>
+          <div style={{ marginBottom: "15px" }}>
+            <label>Course Image (Upload or Paste Link)</label>
+
+            {/* Link එක ඇතුළත් කරන Input එක */}
+            <input
+              type="text"
+              placeholder="Paste Image URL here..."
+              value={imageUrl}
+              onChange={handleLinkChange}
+              style={{
+                width: "100%",
+                padding: "10px",
+                marginBottom: "10px",
+                borderRadius: "5px",
+                border: "1px solid rgba(255,255,255,0.2)",
+                background: "rgba(0,0,0,0.3)",
+                color: "white",
+              }}
+            />
+
+            <div
+              style={{ textAlign: "center", margin: "5px 0", color: "#aaa" }}
+            >
+              - OR -
+            </div>
+
+            {/* File Upload කොටස */}
+            <div
+              className="image-upload-box"
+              style={{
+                border: "2px dashed rgba(95, 94, 94, 0.3)",
+                padding: "20px",
+                textAlign: "center",
+                borderRadius: "10px",
+                background: "rgba(255,255,255,0.05)",
+                cursor: "pointer",
+              }}
+            >
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                id="imgInput"
+                hidden
+              />
+              <label
+                htmlFor="imgInput"
+                style={{ cursor: "pointer", color: "#00d2ff" }}
+              >
+                {selectedFile
+                  ? `✅ ${selectedFile.name}`
+                  : "Click to Upload Image"}
+              </label>
+
+              {/* Preview එක පෙන්වීම (File එකක වුණත්, Link එකක වුණත්) */}
+              {previewUrl && (
+                <div style={{ marginTop: "15px" }}>
+                  <p style={{ fontSize: "12px", color: "#888" }}>
+                    Image Preview:
+                  </p>
+                  <img
+                    src={previewUrl}
+                    alt="Preview"
+                    style={{
+                      display: "block",
+                      margin: "5px auto 0",
+                      maxWidth: "150px",
+                      borderRadius: "8px",
+                      border: "1px solid #00d2ff",
+                    }}
+                    onError={(e) => {
+                      e.target.src =
+                        "https://via.placeholder.com/150?text=Invalid+Link";
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "15px",
+            }}
+          >
             <div>
               <label>Price (LKR)</label>
               <input
@@ -97,7 +236,11 @@ export default function AddCourse() {
 
             <div>
               <label>Category</label>
-              <select name="category" value={formData.category} onChange={handleChange}>
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+              >
                 <option value="Science">Science</option>
                 <option value="Technology">Technology</option>
                 <option value="Mathematics">Mathematics</option>
@@ -105,11 +248,21 @@ export default function AddCourse() {
             </div>
           </div>
 
-          <div style={{ display: "flex", gap: "15px", marginTop: "10px" }}>
-            <button type="submit" disabled={loading} className="submit-btn" style={{ flex: 2 }}>
+          <div style={{ display: "flex", gap: "15px", marginTop: "25px" }}>
+            <button
+              type="submit"
+              disabled={loading}
+              className="review-btn"
+              style={{ flex: 2 }}
+            >
               {loading ? "Adding..." : "ADD COURSE"}
             </button>
-            <button type="button" onClick={() => navigate(-1)} className="cancel-btn" style={{ flex: 1 }}>
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="review-btn"
+              style={{ flex: 1 }}
+            >
               CANCEL
             </button>
           </div>
@@ -117,26 +270,8 @@ export default function AddCourse() {
       </div>
 
       <button
-        className="view-btn"
-        onClick={() => navigate(-1)}
-        style={{
-          position: "fixed",
-          bottom: "30px",
-          right: "30px",
-          zIndex: "1000",
-          padding: "12px 30px",
-          borderRadius: "30px",
-          background: "rgba(255, 255, 255, 0.2)",
-          backdropFilter: "blur(10px)",
-          border: "1px solid rgba(255, 255, 255, 0.3)",
-          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
-          fontSize: "1rem",
-          fontWeight: "bold",
-          cursor: "pointer",
-          transition: "all 0.3s ease",
-        }}
-        onMouseOver={(e) => (e.target.style.background = "#00d2ff")}
-        onMouseOut={(e) => (e.target.style.background = "rgba(255, 255, 255, 0.2)")}
+        className="floating-back-btn"
+        onClick={() => navigate("/a-dashbord")}
       >
         ← BACK TO LIST
       </button>

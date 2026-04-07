@@ -6,6 +6,44 @@ const upload = multer({ dest: "uploads/" });
 const csv = require("csv-parser");
 const fs = require("fs");
 const bcrypt = require('bcrypt'); //for pw hash
+const path = require('path');
+
+// --- Multer Configuration ආරම්භය ---
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // පින්තූර save වෙන්නේ මේ folder එකට
+  },
+  filename: (req, file, cb) => {
+    // File එකට unique නමක් දීම (උදා: 171216500.jpg)
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+
+
+
+//Admin dashbord
+// http://localhost:5000/api/admin/dashboard-stats
+router.get("/dashboard-stats", (req, res) => {
+  const sql = `
+        SELECT 
+            (SELECT COUNT(*) FROM students) AS total_students,
+            (SELECT COUNT(*) FROM courses) AS total_courses,
+            (SELECT COUNT(*) FROM enrollments) AS total_enrollments,
+            (SELECT COUNT(*) FROM Quizzes) AS total_quizzes,
+            (SELECT COUNT(*) FROM Quiz_Payments WHERE status = 'Approved') AS approved_quiz_enrollmnts,
+            (SELECT COUNT(*) FROM Quiz_Payments WHERE status = 'Pending') AS pending_quiz_enrollmnts,
+            (SELECT COUNT(*) FROM enrollments WHERE payment_status = 'Approved') AS approved_enrollments,
+            (SELECT COUNT(*) FROM enrollments WHERE payment_status = 'Pending') AS pending_enrollments
+    `;
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error("Dashboard Stats Error:", err);
+      return res.status(500).json({ error: "An error occurred while retrieving data.." });
+    }
+    res.json(results[0]);
+  });
+});
 
 //http://localhost:5000/api/admin/
 // GET all students
@@ -16,10 +54,129 @@ router.get("/", (req, res) => {
   });
 });
 
+/*
+//http://localhost:5000/api/admin/course/all-enrollments
+//All students enrollment requests (course)
+router.get("/course/all-enrollments" , (req, res) => {
+  const sql = `
+        SELECT 
+            e.enrollment_id, 
+            s.full_name AS student_name, 
+            s.email AS student_email,
+            c.title AS course_name, 
+            c.price AS course_price,
+            e.payment_status, 
+            e.payment_method,
+            e.payment_slip,
+            e.enroll_date
+        FROM enrollments e
+        JOIN students s ON e.student_id = s.id
+        JOIN courses c ON e.course_id = c.id
+        ORDER BY e.enroll_date DESC`; //Latest first
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res
+        .status(500)
+        .json({ error: "An error occurred while fetching data." });
+    }
+    res.json(results);
+  });
+});
+*/
+// http://localhost:5000/api/admin/course/all-enrollments
+// All students enrollment requests (course)
+router.get("/course/all-enrollments", (req, res) => {
+  const sql = `
+        SELECT 
+            e.enrollment_id, 
+            s.full_name AS student_name, 
+            s.email AS student_email,
+            s.status AS student_account_status, -- මෙන්න මේ කොටස අලුතින් එකතු කළා
+            c.title AS course_name, 
+            c.price AS course_price,
+            e.payment_status, 
+            e.payment_method,
+            e.payment_slip,
+            e.enroll_date
+        FROM enrollments e
+        JOIN students s ON e.student_id = s.id
+        JOIN courses c ON e.course_id = c.id
+        ORDER BY e.enroll_date DESC`; // Latest first
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res
+        .status(500)
+        .json({ error: "An error occurred while fetching data." });
+    }
+    res.json(results);
+  });
+});
+//http://localhost:5000/api/admin/course/pending-payments
+//admin - all pending payments(course)
+router.get("/course/pending-payments", (req, res) => {
+  // JOIN - student + course tabls
+  const sql = `
+        SELECT 
+            e.enrollment_id, 
+            s.full_name AS student_name, 
+            c.title AS course_name, 
+            e.payment_slip, 
+            e.enroll_date 
+        FROM enrollments e
+        JOIN students s ON e.student_id = s.id
+        JOIN courses c ON e.course_id = c.id
+        WHERE e.payment_status = 'Pending'`;
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json(err);
+    }
+    res.json(results);
+  });
+});
+
+// --- SviewQuiz,Scoursecontent http://localhost:5000/api/admin/student/quiz-payments/:studentId
+// student ->all quiz paymnt details
+router.get("/student/quiz-payments/:studentId", (req, res) => {
+    const { studentId } = req.params;
+
+    const sql = `
+        SELECT 
+            qp.id AS payment_id,
+            q.title AS quiz_name,
+            qp.amount,
+            qp.payment_method,
+            qp.status,
+            qp.payment_slip,
+            qp.created_at
+        FROM Quiz_Payments qp
+        JOIN Quizzes q ON qp.quiz_id = q.id
+        WHERE qp.student_id = ?
+        ORDER BY qp.created_at DESC
+    `;
+
+    db.query(sql, [studentId], (err, results) => {
+        if (err) {
+            console.error("Database Error:", err);
+            return res.status(500).json({ error: "An error occurred while fetching data." });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ message: "No quiz payments found for this student." });
+        }
+
+        res.json(results);
+    });
+});
+
 
 /*
 // http://localhost:5000/api/admin/quiz/all-paymntrequests
-// Admin - Get all quiz payment requests (Pending, Approved, Rejected)
 router.get("/quiz/all-paymntrequests", (req, res) => {
     const sql = `
         SELECT 
@@ -47,14 +204,13 @@ router.get("/quiz/all-paymntrequests", (req, res) => {
 });
 */
 
-/*
 // http://localhost:5000/api/admin/quiz/all-paymntrequests
-// Admin - Get all quiz payment requests (Pending, Approved, Rejected)
 router.get("/quiz/all-paymntrequests", (req, res) => {
     const sql = `
         SELECT 
             qp.id AS payment_id,
             s.full_name AS student_name,
+            s.status AS student_account_status, -- ශිෂ්‍යයාගේ Active/Deactive status එක
             q.title AS quiz_name,
             qp.amount,
             qp.payment_method,
@@ -72,53 +228,14 @@ router.get("/quiz/all-paymntrequests", (req, res) => {
             console.error("Database Error:", err);
             return res.status(500).json({ error: err.message });
         }
-
-        // පින්තූරය (BLOB) Base64 string එකක් බවට පත් කිරීම
-        const processedResults = results.map(row => {
-            if (row.payment_slip) {
-                return {
-                    ...row,
-                    // Buffer එක base64 string එකක් ලෙස convert කරයි
-                    payment_slip: row.payment_slip.toString('base64')
-                };
-            }
-            return row;
-        });
-
-        res.json(processedResults);
-    });
-});
-*/
-
-// http://localhost:5000/api/admin/quiz/all-paymntrequests
-router.get("/quiz/all-paymntrequests", (req, res) => {
-    const sql = `
-        SELECT 
-            qp.id AS payment_id,
-            s.full_name AS student_name,
-            q.title AS quiz_name,
-            qp.amount,
-            qp.payment_method,
-            qp.status,
-            qp.payment_slip,
-            qp.created_at
-        FROM Quiz_Payments qp
-        JOIN students s ON qp.student_id = s.id
-        JOIN Quizzes q ON qp.quiz_id = q.id
-        ORDER BY qp.created_at DESC
-    `;
-
-    db.query(sql, (err, results) => {
-        if (err) {
-            console.error("Database Error:", err);
-            return res.status(500).json({ error: err.message });
-        }
-        // කිසිදු වෙනසක් නැතිව කෙලින්ම results යවන්න
         res.json(results);
     });
 });
 
-////http://localhost:5000/api/admin/student/:id
+
+
+
+//http://localhost:5000/api/admin/student/:id
 // GET 1 student
 router.get("/student/:id", (req, res) => {
   const { id } = req.params;
@@ -149,7 +266,7 @@ router.put("/student/:id", async (req, res) => {
   let sql = "UPDATE students SET full_name = ?, email = ?, mobile = ?, status = ?";
   let values = [full_name, email, mobile, status || 'Active'];
 
-  // ඇඩ්මින් නව password එකක් එවා ඇත්නම් පමණක් එය update කරන්න
+  // Update the password only if provided by the admin.
   if (password && password.trim() !== "") {
     const hashedPassword = await bcrypt.hash(password, 10);
     sql += ", password = ?";
@@ -200,60 +317,7 @@ router.delete("/student/:id", (req, res) => {
   });
 });
 
-//http://localhost:5000/api/admin/course/all-enrollments
-//All students enrollment requests
-router.get("/course/all-enrollments" , (req, res) => {
-  const sql = `
-        SELECT 
-            e.enrollment_id, 
-            s.full_name AS student_name, 
-            s.email AS student_email,
-            c.title AS course_name, 
-            c.price AS course_price,
-            e.payment_status, 
-            e.payment_method,
-            e.payment_slip,
-            e.enroll_date
-        FROM enrollments e
-        JOIN students s ON e.student_id = s.id
-        JOIN courses c ON e.course_id = c.id
-        ORDER BY e.enroll_date DESC`; //Latest first
 
-  db.query(sql, (err, results) => {
-    if (err) {
-      console.error("Database error:", err);
-      return res
-        .status(500)
-        .json({ error: "දත්ත ලබා ගැනීමේදී දෝෂයක් සිදුවිය." });
-    }
-    res.json(results);
-  });
-});
-
-//http://localhost:5000/api/admin/course/pending-payments
-//admin - all pending payments
-router.get("/course/pending-payments", (req, res) => {
-  // JOIN - student + course tabls
-  const sql = `
-        SELECT 
-            e.enrollment_id, 
-            s.full_name AS student_name, 
-            c.title AS course_name, 
-            e.payment_slip, 
-            e.enroll_date 
-        FROM enrollments e
-        JOIN students s ON e.student_id = s.id
-        JOIN courses c ON e.course_id = c.id
-        WHERE e.payment_status = 'Pending'`;
-
-  db.query(sql, (err, results) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json(err);
-    }
-    res.json(results);
-  });
-});
 
 //http://localhost:5000/api/admin/course/verify-payment/1
 // Admin- approve or reject payment(should have slip)
@@ -301,134 +365,37 @@ router.put("/course/verify-payment/:id", (req, res) => {
   });
 });
 
-// http://localhost:5000/api/admin/dashboard-stats
-router.get("/dashboard-stats", (req, res) => {
-  const sql = `
-        SELECT 
-            (SELECT COUNT(*) FROM students) AS total_students,
-            (SELECT COUNT(*) FROM courses) AS total_courses,
-            (SELECT COUNT(*) FROM enrollments) AS total_enrollments,
-            (SELECT COUNT(*) FROM Quizzes) AS total_quizzes,
-            (SELECT COUNT(*) FROM Quiz_Payments WHERE status = 'Approved') AS approved_quiz_enrollmnts,
-            (SELECT COUNT(*) FROM Quiz_Payments WHERE status = 'Pending') AS pending_quiz_enrollmnts,
-            (SELECT COUNT(*) FROM enrollments WHERE payment_status = 'Approved') AS approved_enrollments,
-            (SELECT COUNT(*) FROM enrollments WHERE payment_status = 'Pending') AS pending_enrollments
-    `;
 
-  db.query(sql, (err, results) => {
-    if (err) {
-      console.error("Dashboard Stats Error:", err);
-      return res.status(500).json({ error: "An error occurred while retrieving data.." });
-    }
-    res.json(results[0]);
-  });
-});
 
 //quiz
-//http://localhost:5000/api/admin/create-quiz
-// create new quiz (Header Data)
-router.post("/create-quiz", (req, res) => {
-  const { title, qdescription, expires_at, time_limit_minutes, price, course_id } = req.body;
-  const sql = "INSERT INTO Quizzes (title, qdescription, expires_at, time_limit_minutes, price, course_id) VALUES (?, ?, ?, ?, ?, ?)";
-
-  db.query(sql, [title, qdescription, expires_at, time_limit_minutes, price, course_id], (err, result) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json({ message: "Quiz created successfully", quizId: result.insertId });
+// 1.fetch all quizzes associated with a specific course code
+router.get("/quizzes-by-course/:course_code", (req, res) => {
+  const { course_code } = req.params;
+  const sql = "SELECT * FROM Quizzes WHERE course_id = ?";
+  db.query(sql, [course_code], (err, result) => {
+    if (err) return res.status(500).json(err);
+    res.json(result);
   });
 });
 
-//http://localhost:5000/api/admin/upload-questions/:quizId
-// 2.Questions Bulk Upload using .CSV
-// http://localhost:5000/api/admin/upload-questions/:quizId
-router.post("/upload-questions/:quizId", upload.single("file"), (req, res) => {
-  const quizId = req.params.quizId;
-  const filePath = req.file.path;
-  const results = [];
-
-  // CSV read start
-  fs.createReadStream(filePath)
-    .pipe(csv())
-    .on("data", (data) => results.push(data))
-    .on("end", () => {
-      // rows add to db
-      results.forEach((row) => {
-        // add Explanation 
-        const sql = `
-          INSERT INTO Questions 
-          (quiz_id, question_text, option_a, explanation_a, option_b, explanation_b, option_c, explanation_c, option_d, explanation_d, correct_option) 
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `;
-
-        // CSV  Column names (row.a_desc )
-        const values = [
-          quizId,
-          row.question,      // Q
-          row.a,             // Option A
-          row.a_desc || null, // Explanation A 
-          row.b,             // Option B
-          row.b_desc || null, // Explanation B
-          row.c,             // Option C
-          row.c_desc || null, // Explanation C
-          row.d,             // Option D
-          row.d_desc || null, // Explanation D
-          row.correct        // Correct answer(A, B, C, D)
-        ];
-
-        db.query(sql, values, (err) => {
-          if (err) console.error("Error inserting row:", err);
-        });
-      });
-
-      // Temporary file remove
-      fs.unlinkSync(filePath);
-      res.json({ message: "Questions with explanations uploaded successfully!" });
-    });
-});
-
-
-/*
-// http://localhost:5000/api/admin/quiz/approve-payment
-//Quiz rewquest approve
-router.post("/quiz/approve-payment", (req, res) => {
-  const { paymentId } = req.body;
-
-  // check exist state(pending or approve)
-  const checkSql = "SELECT status FROM Quiz_Payments WHERE id = ?";
-
-  db.query(checkSql, [paymentId], (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
-
-    // if paymntid not in db
-    if (results.length === 0) {
-      return res
-        .status(404)
-        .json({ error: "Invalid Payment ID. No record found." });
-    }
-
-    // already status = Approved 
-    if (results[0].status === "Approved") {
-      return res
-        .status(400)
-        .json({ message: "This payment has already been approved." });
-    }
-
-    // Status =! Approved => update 
-    const updateSql =
-      "UPDATE Quiz_Payments SET status = 'Approved' WHERE id = ?";
-
-    db.query(updateSql, [paymentId], (err, result) => {
-      if (err) return res.status(500).json({ error: err.message });
-
-      res.json({ message: "Payment approved and quiz access granted!" });
-    });
+// 2. Get paid quizzes for a specific student
+router.get("/my-quizzes/:userId", (req, res) => {
+  const { userId } = req.params;
+  const sql = "SELECT quiz_id FROM Quiz_Enrollments WHERE student_id = ? AND payment_status = 'approved'";
+  db.query(sql, [userId], (err, result) => {
+    if (err) return res.status(500).json(err);
+    res.json(result); // result = [{quiz_id: 1}, {quiz_id: 5}]
   });
 });
-*/
+ 
+ 
+
+//4.admin approve,reject quiz paymnt(bank slip upoad)
 // http://localhost:5000/api/admin/quiz/verify-payment
 router.put("/quiz/verify-payment", (req, res) => {
-  const { paymentId, status } = req.body; // status = 'Approved' හෝ 'Rejected'
+  const { paymentId, status } = req.body; // status = 'Approved' / 'Rejected'
 
-  // 1. මුලින්ම ගෙවීමක් පවතීදැයි පරීක්ෂා කිරීම
+  // check paymnt have or not
   const checkSql = "SELECT status FROM Quiz_Payments WHERE id = ?";
 
   db.query(checkSql, [paymentId], (err, results) => {
@@ -438,12 +405,12 @@ router.put("/quiz/verify-payment", (req, res) => {
       return res.status(404).json({ error: "Invalid Payment ID. No record found." });
     }
 
-    // 2. දැනටමත් තීරණයක් ගෙන ඇති පේමන්ට් එකක්දැයි බැලීම (Optional)
+  
     if (results[0].status === status) {
       return res.status(400).json({ message: `This payment is already ${status}.` });
     }
 
-    // 3. Status එක (Approved/Rejected) Update කිරීම
+    // status update -approve,reject
     const updateSql = "UPDATE Quiz_Payments SET status = ? WHERE id = ?";
 
     db.query(updateSql, [status, paymentId], (err, result) => {
@@ -458,7 +425,7 @@ router.put("/quiz/verify-payment", (req, res) => {
   });
 });
 
-//get 1 question
+// 5.get 1 question
 // http://localhost:5000/api/admin/get-questions/:id
 router.get("/get-questions/:id", (req, res) => {
   const quizId = req.params.id;
@@ -481,7 +448,7 @@ router.get("/get-questions/:id", (req, res) => {
   });
 });
 
-// get all quiz details
+// 6.get all quiz details
 // http://localhost:5000/api/admin/all-quizzes
 router.get("/all-quizzes", (req, res) => {
   const sql = "SELECT * FROM Quizzes";
@@ -497,155 +464,12 @@ router.get("/all-quizzes", (req, res) => {
 });
 
 
-//get all quizes
-// http://localhost:5000/api/admin/all-quizzes
-router.get("/all-quizzes", (req, res) => {
-  // LEFT JOIN + COUNT => question count
-  const sql = `
-    SELECT q.*, COUNT(qs.id) AS questions_count 
-    FROM Quizzes q 
-    LEFT JOIN Questions qs ON q.id = qs.quiz_id 
-    GROUP BY q.id
-  `;
-
-  db.query(sql, (err, result) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json(result);
-  });
-});
-
-//delete 1 quiz
-// http://localhost:5000/api/admin/delete-quiz/:id
-router.delete("/delete-quiz/:id", (req, res) => {
-  const quizId = req.params.id;
-
-  const sql = "DELETE FROM Quizzes WHERE id = ?";
-
-  db.query(sql, [quizId], (err, result) => {
-    if (err) return res.status(500).json({ error: err.message });
-
-    // Database එකේ එවැනි Quiz ID එකක් තිබුණාදැයි බලයි
-    if (result.affectedRows === 0) {
-      return res
-        .status(404)
-        .json({ error: "Quiz not found or already deleted." });
-    }
-
-    res.json({ message: "Quiz deleted successfully!" });
-  });
-});
-
-//delete 1  question
-// http://localhost:5000/api/admin/delete-question/:id
-router.delete("/delete-question/:id", (req, res) => {
-  const questionId = req.params.id;
-
-  // Questions id delete  
-  const sql = "DELETE FROM Questions WHERE id = ?";
-
-  db.query(sql, [questionId], (err, result) => {
-    if (err) return res.status(500).json({ error: err.message });
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: "Question not found." });
-    }
-
-    res.json({ message: "Question deleted successfully!" });
-  });
-});
-
-//deleteall questions from quiz
-// http://localhost:5000/api/admin/clear-questions/:quizId
-router.delete("/clear-questions/:quizId", (req, res) => {
-  const quizId = req.params.quizId;
-
-  const sql = "DELETE FROM Questions WHERE quiz_id = ?";
-
-  db.query(sql, [quizId], (err, result) => {
-    if (err) return res.status(500).json({ error: err.message });
-
-    res.json({
-      message: `Cleared all ${result.affectedRows} questions from Quiz ID: ${quizId}`,
-    });
-  });
-});
-
-//update quiz
-// http://localhost:5000/api/admin/update-quiz/:id
-router.put("/update-quiz/:id", (req, res) => {
-  const quizId = req.params.id;
-  const { title, qdescription,expires_at, time_limit_minutes, price, course_id } = req.body;
-
-  const sql =
-    "UPDATE Quizzes SET title = ?, qdescription = ?, expires_at =? , time_limit_minutes = ?, price = ?, course_id = ? WHERE id = ?";
-
-  db.query(sql, [title, qdescription, expires_at, time_limit_minutes, price, course_id, quizId], (err, result) => {
-    if (err) return res.status(500).json({ error: err.message });
-
-    //check changes
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: "Quiz not found." });
-    }
-
-    res.json({ message: "Quiz updated successfully!" });
-  });
-});
-
-/// update question
-// http://localhost:5000/api/admin/update-question/:id
-router.put("/update-question/:id", (req, res) => {
-  const questionId = req.params.id;
-  const {
-    question_text,
-    option_a,
-    explanation_a, // අලුතින් එක් කළා
-    option_b,
-    explanation_b, // අලුතින් එක් කළා
-    option_c,
-    explanation_c, // අලුතින් එක් කළා
-    option_d,
-    explanation_d, // අලුතින් එක් කළා
-    correct_option,
-  } = req.body;
-
-  const sql = `UPDATE Questions 
-               SET question_text = ?, 
-                   option_a = ?, explanation_a = ?, 
-                   option_b = ?, explanation_b = ?, 
-                   option_c = ?, explanation_c = ?, 
-                   option_d = ?, explanation_d = ?, 
-                   correct_option = ? 
-               WHERE id = ?`;
-
-  const values = [
-    question_text,
-    option_a,
-    explanation_a || null, // අගයක් නැතිනම් NULL ලෙස save වේ
-    option_b,
-    explanation_b || null,
-    option_c,
-    explanation_c || null,
-    option_d,
-    explanation_d || null,
-    correct_option,
-    questionId,
-  ];
-
-  db.query(sql, values, (err, result) => {
-    if (err) return res.status(500).json({ error: err.message });
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: "Question not found." });
-    }
-
-    res.json({ message: "Question updated successfully!" });
-  });
-});
 
 
-//get 1 quiz by id
+
+
+
+//13.get 1 quiz by id
 // http://localhost:5000/api/admin/quiz/:id
 router.get("/quiz/:id", (req, res) => {
   const quizId = req.params.id;
@@ -673,61 +497,15 @@ router.get("/quiz/:id", (req, res) => {
   });
 });
 
-//get question count from quiz
-// http://localhost:5000/api/admin/questions-only-count/:id
-router.get("/questions-only-count/:id", (req, res) => {
-  const quizId = req.params.id;
-  const sql =
-    "SELECT COUNT(*) AS total_questions FROM Questions WHERE quiz_id = ?";
-
-  db.query(sql, [quizId], (err, result) => {
-    if (err) return res.status(500).json({ error: err.message });
-
-    res.json({
-      quiz_id: quizId,
-      questions_count: result[0].total_questions,
-    });
-  });
-}); 
 
 
 
 
 
-
-
-// http://localhost:5000/api/admin/course/all-enrollments
-// Admin - Get all course enrollment requests (All Statuses)
-router.get("/course/all-enrollments", (req, res) => {
-    const sql = `
-        SELECT 
-            e.enrollment_id,
-            s.full_name AS student_name,
-            c.title AS course_name,
-            c.course_code,
-            e.payment_method,
-            e.payment_status,
-            e.payment_slip,
-            e.enroll_date,
-            e.invoice_number
-        FROM enrollments e
-        JOIN students s ON e.student_id = s.id
-        JOIN courses c ON e.course_id = c.id
-        ORDER BY e.enroll_date DESC
-    `;
-
-    db.query(sql, (err, results) => {
-        if (err) {
-            console.error("Database Error:", err);
-            return res.status(500).json({ error: err.message });
-        }
-        res.json(results);
-    });
-});
 
 
 // http://localhost:5000/api/admin/all-enrollments
-// ලබාගන්නේ සියලුම Course Enrollments විස්තර පමණි
+// all course enrollmnt details
 router.get("/all-enrollments", (req, res) => {
     const sql = `
         SELECT 
@@ -752,7 +530,7 @@ router.get("/all-enrollments", (req, res) => {
 
 
 // http://localhost:5000/api/admin/all-payments
-// Course සහ Quiz යන දෙකෙහිම ගෙවීම් විස්තර (Unified Payments View)
+// (Unified Payments View -course,quiz)
 router.get("/all-payments", (req, res) => {
     const sql = `
         SELECT 

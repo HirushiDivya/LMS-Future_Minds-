@@ -7,7 +7,7 @@ export default function PaymentFailed() {
   return (
     <div style={{ textAlign: "center", marginTop: "100px" }}>
       <h1 style={{ color: "red" }}>❌ Payment Failed!</h1>
-      <p>ගෙවීම අසාර්ථක විය. කරුණාකර නැවත උත්සාහ කරන්න.</p>
+      <p>Transaction unsuccessful. Please try again later.</p>
       <button onClick={() => navigate(-1)}>Try Again</button>
     </div>
   );

@@ -1,0 +1,242 @@
+:root {
+  --bg-colorr: #07315c;        /* Light mode  */
+  --card-bg: #fff;         /* Card */
+  --text-color: #1e293b;      /* letters */
+  --border-color: #eef2f6;    /* Border  */
+}
+
+[data-theme='light'] .coursedashboard-page {
+  background-color:#f4f2f2;
+}
+
+
+.coursedashboard-page {
+    padding-top: 10px !important;
+    margin-top: 0 !important;
+}
+
+.section-title {
+    margin-top: 20px; /* ඔබට අවශ්‍ය ප්‍රමාණයට පමණක් මෙතනින් හිඩැස පාලනය කරන්න */
+    margin-bottom: 10px;
+}
+ 
+/*Dark mode*/
+[data-theme='dark'] .coursedashboard-page, .student-course-content-page-container  {
+   /* background-color: var(--bg-colorr);*/
+   background-color: #001529;
+}
+[data-theme='dark'] .section-title{
+    color: #fff;
+}
+[data-theme='dark'].coursepge-card {
+    background: #d40e0e;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    position: relative;
+    border: 1px solid #eef2f6;
+}
+
+
+/*light mode*/
+/*search bar */
+.coursepagesearch-container {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 15px 30px;
+  display: flex;
+  justify-content:center;
+  align-items: center;
+  gap: 15px;
+  max-width: 900px;
+  width: 100%;
+  margin-bottom: 50px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+  margin-left: auto;
+  margin-right: auto;
+}
+.search-box input, 
+.search-box select {
+  padding: 10px 15px 10px 40px;
+  border-radius: 25px;
+  border: none;
+  background: rgba(232, 226, 226, 0.95);
+  font-size: 0.9rem;
+  outline: none;
+  width: 180px;
+  color: #333;
+}
+/* Dropdown container tag */
+.search-boxx select {
+  background-color: transparent; /* (Transparent) */
+  color: var(--text-color); 
+  border: 1px solid rgba(128, 128, 128, 0.4); 
+  border-radius: 25px;
+  padding: 10px 15px 10px 35px;
+  cursor: pointer;
+  appearance: none; 
+  outline: none;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+.search-boxx select:hover {
+  border-color: var(--accent-color);
+  background-color: rgba(255, 255, 255, 0.05); 
+}
+.search-boxx select option {
+  background-color: var(--card-bg); 
+  color: var(--text-color);
+  padding: 10px;
+}
+[data-theme='dark'] .search-boxx select option {
+  background-color: #1a1a1a; 
+  color: #ffffff;
+}
+ 
+/*course cards*/
+.courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 40px auto 0;
+}
+
+[data-theme='light'] .coursepge-card {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    position: relative;
+    border: 1px solid #eef2f6;
+}
+[data-theme='dark'] .coursepge-card {
+    background: #07315c;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    position: relative;
+    border: 1px solid #041c34;
+}
+
+.coursepge-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15);
+}
+
+.course-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: #6366f1;
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    z-index: 2;
+}
+
+.coursepge-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.course-content {
+    padding: 20px;
+}
+
+.course-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-bottom: 10px;
+}
+
+[data-theme='light'] .course-content h3 {
+    font-size: 1.25rem;
+    color: #1e293b;
+    margin-bottom: 20px;
+}
+[data-theme='dark'] .course-content h3 {
+    font-size: 1.25rem;
+    color: #efe7e7;
+    margin-bottom: 20px;
+}
+
+.course-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 15px;
+}
+
+.price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0a0b0b;
+}
+
+.buy-btn {
+    background: #1e293b;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.buy-btn:hover {
+    background: #6366f1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

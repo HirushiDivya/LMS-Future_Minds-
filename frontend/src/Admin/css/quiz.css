@@ -1,5 +1,5 @@
 /* quiz.css */
-
+/*
 :root {
   --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   --glass-bg: rgba(255, 255, 255, 0.1);
@@ -10,7 +10,7 @@
   --delete-red: #ff4d4d;
   --success-green: #16a34a;
 }
-
+*/
 .students-container {
   padding: 40px;
   min-height: 100vh;
@@ -125,7 +125,6 @@ h2, h3 {
 }
 
 .view-btn {
-  /* Styled inline in your React code, but you can add shared styles here */
   color: white;
   text-decoration: none;
 }
@@ -146,23 +145,20 @@ strong {
 
 /* Add these to your existing CSS file */
 /* --- Static Form Input Styles --- */
-
-/* 1. සියලුම input types (text, number, date, file) සහ textarea එකම ප්‍රමාණයට තබා ගැනීම */
-
 .quiz-form input[type="text"], 
 .quiz-form input[type="number"], 
 .quiz-form input[type="date"], 
 .quiz-form textarea,
 .quiz-form .file-input {
     width: 100% !important;
-    max-width: 100% !important; /* වෙනස් වීම වැළැක්වීමට */
+    max-width: 100% !important; 
     min-width: 100% !important;
-    box-sizing: border-box !important; /* Padding ඇතුළටම ගනී */
+    box-sizing: border-box !important; 
     display: block;
     padding: 12px;
-    border-radius: 8px; /* සියල්ලටම සමාන radius එකක් */
+    border-radius: 8px; 
     border: 1px solid rgba(255, 255, 255, 0.2);
-    background: rgba(255, 255, 255, 0.9); /* පැහැදිලි පෙනුමට */
+    background: rgba(255, 255, 255, 0.9); 
     color: #333;
     font-size: 1rem;
     outline: none;
@@ -170,13 +166,11 @@ strong {
     margin: 8px 0;
 }
 
-/* 2. Textarea එකේ size එක වෙනස් කිරීම සම්පූර්ණයෙන්ම තහනම් කිරීම */
 textarea.full-width {
-    resize: none !important; /* User ට ඇදලා ලොකු කරන්න බැහැ */
-    height: 100px; /* කැමති ස්ථාවර උසක් දෙන්න */
+    resize: none !important; 
+    height: 100px; 
 }
 
-/* 3. Form එකේ layout එක පාලනය */
 .quiz-form {
     display: flex;
     flex-direction: column;
@@ -199,7 +193,6 @@ textarea.full-width {
     margin-bottom: 2px;
 }
 
-/* 4. Column දෙකේ row එක නිවැරදි කිරීම */
 .form-row-custom {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -207,7 +200,6 @@ textarea.full-width {
     width: 100%;
 }
 
-/* 5. File upload කොටස */
 .file-upload-section {
     margin-top: 5px;
     padding: 15px;
@@ -224,7 +216,7 @@ textarea.full-width {
     line-height: 1.4;
 }
 .table-responsive.glass-effect {
-    overflow: hidden; /* එළියට පනින දේවල් කපා දැමීමට */
+    overflow: hidden; 
     padding: 20px;
     box-sizing: border-box;
 }
@@ -384,3 +376,42 @@ textarea.full-width {
   cursor: pointer;
   font-size: 0.85rem;
 }
+
+
+
+
+
+
+/* Floating Back Button Style 
+.floating-back-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 1000;
+  padding: 12px 30px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.2); 
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); 
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+}
+ 
+.floating-back-btn:hover {
+  background: #00d2ff;
+  transform: translateY(-3px); 
+  box-shadow: 0 12px 40px rgba(0, 210, 255, 0.4);
+}
+
+.floating-back-btn:active {
+  transform: translateY(0); 
+}
+*/
+
+

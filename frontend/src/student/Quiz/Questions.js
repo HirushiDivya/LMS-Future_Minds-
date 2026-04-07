@@ -17,12 +17,12 @@ const Questions = () => {
   const [showResult, setShowResult] = useState(false);
   const [score, setScore] = useState(0);
 
-  // --- Timer State ---
+  //  Timer State 
   const [timeLeft, setTimeLeft] = useState(null); 
 
-  // Finish function (Auto-submit වලටත් පහසු වෙන්න useCallback භාවිතා කර ඇත)
+  // Finish function (Auto-submit)
   const handleFinish = useCallback(async (finalAnswers = selectedAnswers) => {
-    // දැනටමත් result පෙන්වනවා නම් නැවත submit කිරීම නවත්වයි
+    // if already result display - stop submit 
     if (showResult) return;
 
     const studentId = localStorage.getItem("userID");
@@ -41,7 +41,7 @@ const Questions = () => {
       setShowResult(true);
     } catch (err) {
       console.error("Submission error:", err);
-      setShowResult(true); // Error එකක් ආවත් ලකුණු බැලීමට Result screen එකට යවයි
+      setShowResult(true); // if error occur -> go to Result screen 
     }
   }, [id, questions, selectedAnswers, showResult]);
 
@@ -54,7 +54,7 @@ const Questions = () => {
     if (timeLeft === null || showResult) return;
 
     if (timeLeft <= 0) {
-      handleFinish(); // වෙලාව ඉවර වුණාම auto-submit වේ
+      handleFinish(); // time expire -> auto-submit 
       return;
     }
 
@@ -70,16 +70,16 @@ const Questions = () => {
       setLoading(true);
       const studentId = localStorage.getItem("userID");
       
-      // 1. Quiz එකේ විස්තර (Title, Duration) ලබා ගැනීම
+      //Quiz details  (Title, Duration) 
       const detailsRes = await API.get(`/quiz/quiz/${id}`);
       setQuizData(detailsRes.data);
 
-      // Backend එකේ field එක time_limit_minutes නිසා එය ලබා ගනී
+      // Backend field -> time_limit_minutes 
       if (detailsRes.data.time_limit_minutes) {
         setTimeLeft(detailsRes.data.time_limit_minutes * 60);
       }
 
-      // 2. ප්‍රශ්න ලබා ගැනීම
+      // questions
       if (studentId) {
         try {
           const questionsRes = await API.get(`/quiz/get-questions/${id}?studentId=${studentId}`);
@@ -103,7 +103,7 @@ const Questions = () => {
   };
 
   const handleOptionSelect = (option) => {
-    // පිළිතුරක් තේරූ පසු හෝ වෙලාව ඉවර වූ පසු පිළිතුරු වෙනස් කළ නොහැක
+    // can't change selected answers
     if (selectedAnswers[currentQuestionIndex] || timeLeft <= 0) return;
     setSelectedAnswers({
       ...selectedAnswers,
@@ -126,7 +126,7 @@ const Questions = () => {
   if (loading) return <div className="register-page"><h2>Loading...</h2></div>;
   if (!quizData) return <div className="register-page"><h2>Quiz Not Found</h2></div>;
 
-  // --- Result View ---
+  //  Result View -----
   if (showResult) {
     return (
       <div className="register-page">
@@ -134,7 +134,7 @@ const Questions = () => {
           <div style={{ fontSize: "80px" }}>🏆</div>
           <h2>Quiz Completed!</h2>
           <h1 style={{ fontSize: "3.5rem", margin: "20px 0" }}>{score} / {questions.length}</h1>
-          <p>ඔබ සාර්ථකව ප්‍රශ්නාවලිය නිම කරන ලදී.</p>
+          <p>You have successfully completed the quiz.</p>
           <button onClick={() => navigate(-1)} className="register-btn">Back to Home</button>
         </div>
       </div>
@@ -173,7 +173,7 @@ const Questions = () => {
           <div style={{ textAlign: "center", padding: "40px" }}>
             <div style={{ fontSize: "50px" }}>🔒</div>
             <h3>Access Denied</h3>
-            <p>මෙම ප්‍රශ්නාවලිය නැරඹීමට කරුණාකර අනුමැතිය ලබාගන්න.</p>
+            <p>Access restricted. Please request approval to view this quiz.</p>
           </div>
         ) : (
           <div className="quiz-content">
@@ -217,10 +217,10 @@ const Questions = () => {
                       borderLeft: `5px solid ${isCorrect ? "#16a34a" : "#ef4444"}`
                     }}>
                       <strong style={{ color: isCorrect ? "#4ade80" : "#f87171" }}>
-                        {isCorrect ? "✅ නිවැරදියි!" : "❌ වැරදියි!"}
+                        {isCorrect ? "✅ Correct!" : "❌ Incorrect!"}
                       </strong>
                       <p style={{ marginTop: "10px", fontSize: "0.95rem", lineHeight: "1.4", color: "white" }}>
-                        {explanationText ? explanationText : "මෙම ප්‍රශ්නය සඳහා විවරණයක් ඇතුළත් කර නැත."}
+                        {explanationText ? explanationText : "No explanation has been provided for this question."}
                       </p>
                     </div>
                   )}

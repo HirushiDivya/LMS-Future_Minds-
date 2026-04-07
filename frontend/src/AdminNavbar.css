@@ -1,6 +1,7 @@
 /* --- Theme Variables --- */
+
 :root {
-  /* Light Mode (ඔයාගේ තද නිල් පාට) */
+  /* Light Mode  */
   --sidebar-bg: #001a33; 
   --sidebar-text: #ffffff;
   --nav-item-color: #94a3b8;
@@ -9,7 +10,7 @@
 }
 
 [data-theme="dark"] {
-  /* Dark Mode (සම්පූර්ණ කළු පාට) */
+  /* Dark Mode   */
   --sidebar-bg: #000000;
   --sidebar-text: #ffffff;
   --nav-item-color: #a1a1aa;
@@ -27,7 +28,7 @@
   position: sticky;
   top: 0;
   left: 0;
-  transition: background-color 0.4s ease; /* පාට මාරු වෙද්දී හෙමින් වෙන්න */
+  transition: background-color 0.4s ease; 
 }
 
 .sidebar-header {
@@ -113,56 +114,51 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  background: none;      /* Background එක අයින් කළා */
-  border: none;          /* Border එක අයින් කළා */
-  color: #dc2626;        /* රතු පාට */
+  background: none;      
+  border: none;          
+  color: #dc2626;       
   padding: 8px 10px;
   cursor: pointer;
   transition: opacity 0.3s ease;
   font-weight: 500;
-  width: fit-content;    /* Box එකක් නැති නිසා අවශ්‍ය ප්‍රමාණය පමණක් ගනී */
+  width: fit-content;    
 }
 
 .logout-btn-nav:hover {
-  opacity: 10.7;          /* Hover කළ විට තරමක් ලා පැහැ වේ */
-  background: none;      /* Hover එකටත් background නැත */
+  opacity: 10.7;          
+  background: none;      
 }
 
 .logout-text {
-  font-size: 15px;       /* අකුරු වල ප්‍රමාණය */
+  font-size: 15px;       
 }
 
 
 
-
-/* සාමාන්‍ය link එකේ ස්වභාවය */
 .nav-item {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 12px 20px;
   text-decoration: none;
-  color: #a0aec0; /* නිහඬ වර්ණයක් */
+  color: #a0aec0; 
   transition: all 0.3s ease;
   border-radius: 8px;
   margin: 4px 10px;
 }
 
-/* Mouse එක උඩට ගිය විට (Hover) */
 .nav-item:hover {
   background: rgba(255, 255, 255, 0.1);
   color: white;
 }
 
-/* දැනට ඉන්න Page එකට අදාළ Link එක (Active Link) */
 .nav-item.active {
-  background: linear-gradient(45deg, #3a7bd5, #00d2ff); /* කැපී පෙනෙන පාටක් */
+  background: linear-gradient(45deg, #3a7bd5, #00d2ff); 
   color: white !important;
   font-weight: bold;
   box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3);
 }
 
-/* Icon එකේ පාටත් active වෙලාවට වෙනස් කරන්න අවශ්‍ය නම් */
 .nav-item.active svg {
   color: white;
 }

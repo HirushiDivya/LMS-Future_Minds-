@@ -1,0 +1,426 @@
+/*course-content*/
+.course-page-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #fff;
+  transition: all 0.3s ease; 
+}
+
+
+[data-theme='light'] .student-course-content-main-content{
+    background-color:#a53636;
+}
+[data-theme='light'] .student-course-content-header {
+    color: #000;
+    text-align: center; 
+    width: 100%;
+    margin-inline: auto;  
+    display: block;       
+}
+[data-theme='light'] .course-page-layout{
+background-color:#f4f2f2;
+}
+[data-theme='light'] .course-content-card {
+  background: #fff !important; 
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+  position: relative;
+  border: 1px solid #eef2f6;
+  width: 300px;
+  height: 200px;
+}
+.course-content-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15);
+}
+[data-theme='light'] .course-content-card-title{
+    color: #000;
+}
+[data-theme='light'] .coursecontent-sub-header{
+color:#000;
+}
+
+[data-theme='light'] .Name-address {
+    color: #000;
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+    margin-top: -100px; 
+    position: relative; 
+    z-index: 10;
+    display: block; 
+    text-align: left;
+    width: 550px;           
+    white-space: nowrap;    
+    overflow: hidden;       
+    text-overflow: ellipsis; 
+}
+
+
+.divider{
+  color: #000;
+  margin-top: -30px;
+}
+
+/*Dark*
+/* --- Dark Mode adjustments --- */
+[data-theme='dark'] .view-btn-active {
+  background: #008ba3; 
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(0, 139, 163, 0.4);
+}
+[data-theme='dark'] .view-btn-locked {
+  background: rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+[data-theme='dark'] .coursecontent-sub-header{
+color:#FFF;
+}
+[data-theme='dark'] .student-course-content-header{
+ color: #fff;
+    text-align: center; 
+    width: 100%;
+}
+[data-theme='dark'] .course-page-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #07315c;
+  transition: all 0.3s ease; 
+}
+/* Dark Mode එක සඳහා Glass Effect එක */
+[data-theme='dark'] .course-content-card {
+  background: rgba(255, 255, 255, 0.05) !important; 
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  transition: all 0.3s ease;
+    width: 300px;
+  height: 200px;
+}
+[data-theme='dark'] .course-content-card:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  transform: translateY(-5px);
+  border-color: rgba(250, 204, 21, 0.4) !important; /* ඔයාගේ theme එකේ හැටියට border එක වෙනස් වේ */
+}
+[data-theme='dark'] .course-content-card-title{
+    color: #fff;
+}
+
+/*sidebar
+[data-theme='dark'] .course-sidebar {
+  width: 220px;
+  background: rgba(255, 255, 255, 0.02) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-right: 0.5px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    inset 0 10px 15px rgba(255, 255, 255, 0.08),
+    4px 0 24px rgba(0, 0, 0, 0.5);
+  padding: 15px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
+  overflow-y: auto;
+}*/
+[data-theme='dark'].sidebar-section {
+  margin-top: 25px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 15px;
+}
+[data-theme='dark'] .course-sidebarr::-webkit-scrollbar {
+  width: 4px;
+}
+[data-theme='dark'] .course-sidebarr::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+
+
+
+/* --- Active Button Style --- */
+.view-btn-active {
+  background: var(--cyan-btn); 
+  color: var(--cyan-text);      
+  padding: 12px 28px;
+  border-radius: 50px;
+  border: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: lowercase; 
+  letter-spacing: 0.5px;
+  margin-top: -10px;
+  width: 200px;
+  height: 40px;
+  
+}
+
+.view-btn-active:hover {
+  transform: translateY(-3px) scale(1.05);
+  filter: brightness(1.15);
+  box-shadow: 0 8px 25px rgba(0, 229, 255, 0.5);
+}
+.view-btn-active:active {
+  transform: scale(0.98);
+}
+/* --- Locked Button Style --- */
+.view-btn-locked {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.4);
+  padding: 12px 28px;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: not-allowed;
+  font-weight: 700;
+  font-size: 0.9rem;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Sidebar General Styling */
+
+/* Sidebar එක Minimize වූ විට */
+.sidebar-minimized .course-sidebar {
+  width: 60px; /* කුඩා වූ පසු පළල */
+  padding: 20px 10px;
+}
+/* Toggle Button Styling */
+.sidebar-toggle-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+.toggle-btn {
+  background: #334155;
+  border: none;
+  color: #facc15;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  transition: background 0.2s;
+}
+.toggle-btn:hover {
+  background: #475569;
+}
+/* Sidebar ඇතුළේ ඇති content සැඟවීමට Animation */
+.sidebar-content-wrapper {
+  animation: fadeIn 0.3s ease;
+}
+
+
+
+
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+/* Sidebar Section Styling */
+.sidebar-section ul li {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* දිග වැඩි නම් තිත් පෙන්වීමට */
+}
+
+
+
+
+
+/* Main Content Adjustments */
+.course-main-content {
+  flex: 1;
+  padding: 30px;
+  transition: all 0.3s ease;
+}
+.no-item {
+  color: #64748b !important;
+  font-style: italic;
+}
+
+/* Main Content Styling */
+.course-main-content {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+}
+.quiz-badge {
+  background-color: #ffcc00 !important;
+  color: #000 !important;
+}
+.no-item-text {
+  color: #94a3b8;
+  grid-column: 1/-1;
+  text-align: center;
+}
+/* Responsive fix */
+@media (max-width: 768px) {
+  .course-page-layout {
+    flex-direction: column;
+  }
+  .course-sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+}
+
+
+
+
+/*search bar*/
+.search-bar-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 60%;
+  max-width: 500px; /* Search bar එකේ දිග මෙතැනින් වෙනස් කරන්න */
+  margin: 15px 0;
+}
+.simple-search-input {
+  width: 100%;
+  padding: 12px 20px 12px 45px; /* වම් පැත්තේ icon එකට ඉඩ තබා ඇත */
+  border-radius: 30px; /* ගොඩක් rounded වීමට */
+  border: 1px solid #e0e0e0; /* ලා අළු පාට border එක */
+  background-color: #ffffff;
+  font-size: 15px;
+  color: #333;
+  outline: none;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.03); /* ඉතාම සියුම් හෙවනැල්ලක් */
+  transition: border-color 0.3s ease;
+}
+.simple-search-input::placeholder {
+  color: #999; /* Placeholder එකේ පාට */
+}
+.simple-search-input:focus {
+  border-color: #bbb; /* Focus කළ විට border එක තද වේ */
+}
+.search-bar-icon {
+  position: absolute;
+  left: 18px;
+  color: #888;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+/* Floating Back Button Style */
+.course-sidebarr {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 1000;
+  padding: 12px 30px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.2); /* Glass effect */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* Safari compatibility */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+
+  width: 220px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-right: 0.5px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    inset 0 10px 15px rgba(255, 255, 255, 0.08),
+    4px 0 24px rgba(0, 0, 0, 0.5);
+  padding: 15px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
+  overflow-y: auto;
+}
+.course-sidebarr:hover {
+  background: #07315c;
+  transform: translateY(-3px); 
+  box-shadow: 0 12px 40px rgba(0, 210, 255, 0.4);
+}
+[data-theme='light'] .course-sidebarr:hover {
+  background: #eaedef;
+  transform: translateY(-3px); 
+  box-shadow: 0 12px 40px rgba(0, 210, 255, 0.4);
+}
+.course-sidebarr:active {
+  transform: translateY(0); 
+}
+.sidebar-header h4 {
+  color: #000;
+  margin-bottom: 5px;
+  margin-top: 1px;
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  font-weight: 1000;       /* අගය වැඩි වන විට අකුරු තද වේ (100-900) */
+  font-weight: bold;      /* සාමාන්‍ය තද අකුරු */
+  
+}
+.sidebar-section {
+  margin-bottom: 25px;
+}
+.sidebar-section h5 {
+  color: #150b0b;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #334155;
+  padding-bottom: 5px;
+   font-weight: 4000;       /* අගය වැඩි වන විට අකුරු තද වේ (100-900) */
+  font-weight: bold;
+}
+.sidebar-section ul {
+  list-style: none;
+  padding: 0;
+}
+.sidebar-section ul li {
+  color: #000;
+  font-size: 0.85rem;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 100;
+}
+
+

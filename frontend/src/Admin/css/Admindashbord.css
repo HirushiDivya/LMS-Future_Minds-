@@ -1,9 +1,9 @@
-/* --- Admin Dashboard Layout Container --- */
+/*  Admin Dashboard Layout Container  */
 .admin-dashboard-wrapper {
   display: flex;
   min-height: 100vh;
-  /* Light Mode background */
-  background: linear-gradient(135deg, #74abe2 0%, #5563b1 100%);
+  /* Light Mode background  */
+  background: #fff;
   width: 100%;
   transition: all 0.3s ease;
   color: white;
@@ -11,13 +11,60 @@
 
 /* --- Dark Mode Background --- */
 [data-theme='dark'] .admin-dashboard-wrapper {
-  background: #001529; /* Dark Blue */
+  background: #001529; 
   color: #ffffff;
 }
+
+[data-theme='light'] .review-btn{
+background-color: #d5d5d5;
+}
+
+/* Light mode Title - Dark blue  */
+[data-theme='light'] .dashboard-title-text {
+  display: block;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%; 
+  font-weight: bold;
+  font-size: 50px;
+}
+
+/* Dark mode -Title - Gold  */
+[data-theme='dark'] .dashboard-title-text {
+  color: #ffcc00 !important;
+  text-shadow: 0 0 15px rgba(255, 204, 0, 0.5);
+  font-size: 50px;
+  display: block;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%; 
+  font-weight: bold;
+}
+
+.allstudent-title-text{
+display: block;
+  text-align: center;
+  margin-left: 250px;
+  margin-right: auto;
+  width: 100%; 
+  font-weight: bold;
+  font-size: 50px;
+  color: #ffcc00;
+}
+
 
 /* Main Content Area */
 .admin-main-content {
   flex-grow: 1;
+  padding: 30px;
+  overflow-y: auto;
+  width: 100%;
+}
+[data-theme='dark'] .admin-main-content {
+background-color: #001529;
+flex-grow: 1;
   padding: 30px;
   overflow-y: auto;
   width: 100%;
@@ -31,8 +78,10 @@
   margin-bottom: 30px;
 }
 
+
+
 .stat-card {
-  background: rgba(255, 255, 255, 0.15); /* Glassmorphism */
+  background: rgba(255, 255, 255, 0.15); 
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   padding: 24px;
@@ -65,16 +114,17 @@
   align-items: center;
   justify-content: center;
   color: white;
-  background: #ffcc00; /* Gold Icon background */
+  background: #ffcc00; 
 }
 
 .stat-info p {
   margin: 0;
-  color: #ffffff; /* Light mode text */
+  color: #000; 
   font-size: 14px;
   font-weight: 500;
   opacity: 0.8;
 }
+
 
 [data-theme='dark'] .stat-info p {
   color: #a0aec0;
@@ -83,7 +133,7 @@
 .stat-info h2 {
   margin: 5px 0 0;
   font-size: 24px;
-  color: #ffffff;
+  color: #635f5f;
 }
 
 [data-theme='dark'] .stat-info h2 {
@@ -98,7 +148,7 @@
 }
 
 .card-panel {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(173, 172, 172, 0.1);
   backdrop-filter: blur(10px);
   padding: 20px;
   border-radius: 12px;
@@ -114,7 +164,7 @@
 .card-title {
   font-size: 18px;
   font-weight: 600;
-  color: #ffffff;
+  color: #080808;
   margin-bottom: 20px;
   border-bottom: 2px solid rgba(255, 255, 255, 0.1);
   padding-bottom: 10px;
@@ -135,16 +185,33 @@
   margin-bottom: 15px;
   background: rgba(255, 255, 255, 0.1);
 }
+[data-theme='light'] .status-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  background: #7372721a;
+}
+
 
 .status-pending { 
   border-left: 5px solid #e11d48;
   color: #fff; 
 }
+[data-theme='light'] .status-pending { 
+  border-left: 5px solid #e11d48;
+  color: #000; 
+}
 .status-approved { 
   border-left: 5px solid #16a34a;
   color: #fff; 
 }
-
+[data-theme='light'] .status-approved { 
+  border-left: 5px solid #16a34a;
+  color: #000; 
+}
 .status-box .count {
   font-size: 20px;
   font-weight: bold;
@@ -171,21 +238,33 @@
 
 
 
-/* Light mode එකේදී Title එක තද නිල් පාට වෙන්න */
-.dashboard-title-text {
-  display: block;
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%; /* මුළු පළලම ගන්නා බව තහවුරු කිරීමට */
+
+
+/*All students*/
+
+.search-wrapper {
+  flex: 0 0 300px;
 }
 
-/* Dark mode එකේදී Title එක Gold වෙන්න */
-[data-theme='dark'] .dashboard-title-text {
-  color: #ffcc00 !important;
-  text-shadow: 0 0 15px rgba(255, 204, 0, 0.5);
+.search-input {
+  width: 100%;
+  margin-top: 50px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  outline: none;
 }
 
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Light mode */
+[data-theme='light']  .search-input::placeholder {
+  color: rgba(0, 0, 0, 0.6); /* Black color with transparency */
+}
 
 /* Table Row Hover Effect */
 .table-row-hover:hover {
@@ -212,6 +291,11 @@
 }
 
 /* --- Table Styles --- */
+[data-theme='light'] .admin-table-container {
+  width: 100%;
+  overflow-x: auto;
+  background-color: #7372721a;
+}
 .admin-table-container {
   width: 100%;
   overflow-x: auto;
@@ -222,9 +306,9 @@
   border-collapse: collapse;
 }
 
-/* --- Professional Table Header Styles --- */
+/* Table Header Styles --- */
 .admin-table thead tr {
-  /* Header එකට තද පැහැති background එකක් දීමෙන් කැපී පෙනීම වැඩි වේ */
+  /* Header- dark  background  */
   background: rgba(0, 0, 0, 0.2); 
   border-bottom: 3px solid rgba(255, 204, 0, 0.3);
 }
@@ -232,17 +316,28 @@
 .admin-table th {
   padding: 18px 15px;
   color: #ffcc00; /* Gold Color */
-  font-family: 'Inter', sans-serif; /* Professional look එකක් සඳහා */
+  font-family: 'Inter', sans-serif; 
   font-size: 12px;
   font-weight: 700;
-  text-transform: uppercase; /* සියලුම අකුරු capital කිරීම */
-  letter-spacing: 1px; /* අකුරු අතර පරතරය වැඩි කර පැහැදිලි බව වැඩි කිරීම */
+  text-transform: uppercase; 
+  letter-spacing: 1px; 
   text-align: left;
   border: none;
-  white-space: nowrap; /* Header එක පේළි දෙකකට කැඩීම වැළැක්වීමට */
+  white-space: nowrap; 
+}
+[data-theme='light'] .admin-table th {
+  padding: 18px 15px;
+  color: #0c0c0a; 
+  font-family: 'Inter', sans-serif; 
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase; 
+  letter-spacing: 1px; 
+  text-align: left;
+  border: none;
+  white-space: nowrap; 
 }
 
-/* Table body එකේ alignment header එකට ගැලපෙන ලෙස සකස් කිරීම */
 .admin-table td {
   padding: 16px 15px;
   font-size: 14px;
@@ -250,26 +345,23 @@
   vertical-align: middle;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
-
-/* Column Alignment - මුදල් සහ Status වැනි දේවල් මැදට කිරීම (Center Align) */
-/*
-.admin-table th:nth-child(3), 
-.admin-table td:nth-child(3),
-.admin-table th:nth-child(4), 
-.admin-table td:nth-child(4),
-.admin-table th:nth-child(7), 
-.admin-table td:nth-child(7) {
-  text-align: center;
+[data-theme='light'] .admin-table td {
+  padding: 16px 15px;
+  font-size: 14px;
+  color: rgba(4, 1, 1, 0.9);
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
-  *
-  /* Alignments - Logic එකට අනුව */
-/* 1. Student & Course (Text) -> Left */
+
+
+  /* Alignments/
+/* Student & Course (Text) -> Left */
 .admin-table th:nth-child(1), .admin-table td:nth-child(1),
 .admin-table th:nth-child(2), .admin-table td:nth-child(2) {
   text-align: left;
 }
 
-/* 2. Price, Method, Date, Slip (Data) -> Center */
+/* Price, Method, Date, Slip (Data) -> Center */
 .admin-table th:nth-child(3), .admin-table td:nth-child(3),
 .admin-table th:nth-child(4), .admin-table td:nth-child(4),
 .admin-table th:nth-child(5), .admin-table td:nth-child(5),
@@ -277,19 +369,19 @@
   text-align: center;
 }
 
-/* 3. Status (Action) -> Right Alignment for clean finish */
+/* Status (Action) -> Right Alignment for clean finish */
 .admin-table th:nth-child(7), .admin-table td:nth-child(7) {
   text-align: right;
   padding-right: 30px;
 }
-/* Action Button එක තියෙන තීරුව දකුණට කිරීම (Right Align) */
+/* Action Button (Right Align) */
 .admin-table th:last-child, 
 .admin-table td:last-child {
   text-align: right;
   padding-right: 25px;
 }
 
-/* Table Row එකක් මතින් mouse එක ගෙන යන විට ලැබෙන effect එක */
+/* effect  */
 .table-row-hover {
   transition: all 0.2s ease-in-out;
 }
@@ -298,11 +390,15 @@
   background: rgba(255, 255, 204, 0.08) !important;
   transform: scale(1.002);
 }
-
+[data-theme='light'] .student-name {
+    color: #000; 
+    font-weight: bold; 
+}
 /* Student Info Cell */
 .student-info .student-name {
   font-weight: 600;
   display: block;
+  background: #003a75;
 }
 
 .student-info .student-email-sub {
@@ -310,6 +406,12 @@
   font-size: 12px;
 }
 
+
+
+
+
+
+/*All Payments*/
 /* Payment Slip Link */
 .view-slip-link {
   color: #00b4d8;
@@ -338,7 +440,7 @@
   letter-spacing: 0.5px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
-
+ 
 /* Review Button */
 .review-btn {
   background-color: #ffcc00;
@@ -365,7 +467,7 @@
   font-style: italic;
 }
 
-/* Student Name එක කැපී පෙනෙන ලෙස සෑදීම */
+/* Student Name  */
 .student-name {
   color: #ffffff;
   font-size: 15px;
@@ -392,16 +494,383 @@
   min-width: 120px;
   text-align: center;
 }
-
+[data-theme='light'] .status-select {
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: #d5d3d3;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  min-width: 120px;
+  text-align: center;
+}
 .status-select:hover {
   border-color: #ffcc00;
   background-color: #002347;
 }
-/* Status අනුව පාට වෙනස් වීම */
+[data-theme='light'] .status-select:hover {
+  border-color: #d1d1d1;
+  background-color: #dddddd;
+}
+/* Status */
 .status-select.pending { border-left: 4px solid #f59e0b; color: #f59e0b; }
 .status-select.approved { border-left: 4px solid #16a34a; color: #16a34a; }
 .status-select.rejected { border-left: 4px solid #e11d48; color: #e11d48; }
 
 .status-select:focus {
   border-color: #ffcc00;
+}
+
+
+
+
+/* Header and Layout Adjustments */
+.dashboard-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.dashboard-title-text {
+  font-size: 24px; 
+  font-weight: bold; 
+  color: #ffcc00;
+  margin: 0;
+}
+
+/* Notifications */
+.notification-container {
+  position: relative;
+}
+
+.notification-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #ef4444;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: bold;
+  border: 2px solid #1e293b;
+}
+
+.notification-dropdown {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: #ffffff;
+  color: #333;
+  width: 260px;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  z-index: 1000;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+.notif-title {
+  font-weight: bold; 
+  margin: 0 0 12px 0;
+  font-size: 14px;
+}
+
+.view-req-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #002347;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.view-req-btn:hover {
+  background-color: #003a75;
+}
+
+/* Stat Cards */
+.clickable-stat {
+  cursor: pointer;
+}
+
+/* Charts */
+.chart-container {
+  height: 250px;
+  width: 100%;
+}
+
+[data-theme='dark'] .notification-dropdown {
+  background-color: #111;
+  color: #eee;
+  border-color: #444;
+}
+
+[data-theme='dark'] .view-req-btn {
+  background-color: #ffcc00;
+  color: #000;
+}
+
+
+
+
+
+
+
+/* Floating Back Button Style 
+[data-theme='light'] .floating-back-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 1000;
+  padding: 12px 30px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.2); 
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); 
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  font-size: 1rem;
+  font-weight: bold;
+  color: rgb(177, 25, 25);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+}
+[data-theme='dark'] .floating-back-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 1000;
+  padding: 12px 30px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.2); 
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); 
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+[data-theme='dark'] .floating-back-btn:hover {
+  background: #001529;
+  transform: translateY(-3px); 
+  box-shadow: 0 12px 40px rgba(0, 210, 255, 0.4);
+}
+
+.floating-back-btn:active {
+  transform: translateY(0); 
+}
+
+*/
+
+
+
+
+
+
+
+
+.action-button-group {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  backdrop-filter: blur(8px);
+}
+
+.modal-content {
+  width: 90%;
+  max-width: 450px;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.modal-title {
+  color: #ffcc00;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.detail-row {
+  margin-bottom: 15px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 8px;
+}
+
+.input-group {
+  text-align: left;
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.modal-input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.2);
+  color: white;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.cancel-btn {
+  flex: 1;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Delete Modal Specifics */
+.delete-title { color: #ff4b2b; }
+.delete-desc { margin-bottom: 25px; opacity: 0.9; }
+
+.confirm-delete-btn {
+  flex: 1;
+  background: linear-gradient(45deg, #ff4b2b, #ff416c);
+  border: none;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.loading-text { text-align: center; padding: 50px; color: #ffcc00; }
+
+/* Buttons in Table */
+.btn-view { background-color: #00d2ff; }
+.btn-edit { background-color: #00d2ff; }
+.btn-delete { background-color: #00d2ff; }
+.btn-progress { background-color: #00d2ff; }
+
+
+
+
+
+
+
+
+
+
+
+/*courses-*/
+.course-view-btn{
+  padding: 8px 18px;
+  border-radius: 25px;
+  border: 1px solid rgba(0,0,0,0.1);
+  cursor: pointer;
+  font-weight: 600;
+  color: white;
+  transition: all 0.3s ease;
+  background: #002347;
+  text-transform: capitalize;
+}
+.course-view-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  filter: brightness(1.1);
+
+}
+[data-theme='light'] .course-view-btn{
+  padding: 8px 18px;
+  border-radius: 25px;
+  border: 1px solid rgba(0,0,0,0.1);
+  cursor: pointer;
+  font-weight: 600;
+  color: white;
+  transition: all 0.3s ease;
+  background: #bec0c0;
+  text-transform: capitalize;
+}
+[data-theme='light'] .course-view-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  filter: brightness(1.1);
+
+}
+
+
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.course-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 25px;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.course-card:hover {
+  transform: translateY(-10px);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  border-color: #00d2ff;
 }
