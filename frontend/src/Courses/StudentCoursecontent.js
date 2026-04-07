@@ -3,12 +3,12 @@ import API from "../API";
 import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import "./CourseContent.css";
-
+ 
 export default function CourseContent() {
   const { course_code } = useParams();
   const navigate = useNavigate();
   const [userName, setUserName] = useState("Student");
-  const [searchTerm, setSearchTerm] = useState(""); // මේක අලුතින් එකතු කරන්න
+  const [searchTerm, setSearchTerm] = useState(""); 
 
   const [contents, setContents] = useState([]);
   const [quizzes, setQuizzes] = useState([]);
@@ -17,11 +17,11 @@ export default function CourseContent() {
   const [loading, setLoading] = useState(true);
   const [enrollmentStatus, setEnrollmentStatus] = useState(null);
   const [currentUserID, setCurrentUserID] = useState(null);
-  const [studentStatus, setStudentStatus] = useState("Active"); // Default active ලෙස තබා ගන්න
+  const [studentStatus, setStudentStatus] = useState("Active"); // Default active 
 
   // Sidebar states
   const [isSidebarMinimized, setIsSidebarMinimized] = useState(false);
-  const [selectedItemId, setSelectedItemId] = useState("all"); // අලුතින් එකතු කළා
+  const [selectedItemId, setSelectedItemId] = useState("all"); 
 
   useEffect(() => {
     const id = localStorage.getItem("userID");
@@ -59,20 +59,7 @@ export default function CourseContent() {
       })
       .catch((err) => console.error("Error fetching course details:", err));
   };
-  /*
-  const checkEnrollmentStatus = (userId, courseId) => {
-    API.get(`/enroll/my-dashboard/${userId}`)
-      .then((res) => {
-        const currentEnroll = res.data.find(
-          (e) => e.course_code === course_code,
-        );
-        setEnrollmentStatus(
-          currentEnroll ? currentEnroll.payment_status.toLowerCase() : null,
-        );
-      })
-      .catch(() => setEnrollmentStatus(null));
-  };
-*/
+
   const fetchContent = () => {
     setLoading(true);
     API.get(`/content/course/${course_code}`)
@@ -85,33 +72,11 @@ export default function CourseContent() {
         setLoading(false);
       });
   };
-  /*
-  const handleEnrollRequest = () => {
-    if (!currentUserID || !courseData) return;
-    if (enrollmentStatus === "pending") {
-      Swal.fire({
-        title: "Payment Pending!",
-        text: "Please wait for admin approval.",
-        icon: "info",
-        background: "#1f2937",
-        color: "#fff",
-      });
-      return;
-    }
-    navigate(`/payment`, {
-      state: {
-        courseId: courseData.id,
-        courseName: courseData.title || courseData.course_name,
-        price: courseData.price,
-        type: "COURSE",
-      },
-    });
-  };
-*/
+
   const handleEnrollRequest = () => {
     if (!currentUserID || !courseData) return;
 
-    // ශිෂ්‍යයා Deactive ද නැද්ද කියා මුලින්ම බලන්න
+    // checck student's active/ Deactive status
     if (studentStatus === "Deactive") {
       Swal.fire({
         title: "Account Suspended!",
@@ -120,7 +85,7 @@ export default function CourseContent() {
         background: "#1f2937",
         color: "#fff",
       });
-      return; // මෙතනින් function එක නතර වෙනවා, payment page එකට navigate වෙන්නේ නැහැ
+      return; // stop function ,not navigate to payment page 
     }
 
     if (enrollmentStatus === "pending") {
@@ -143,34 +108,9 @@ export default function CourseContent() {
       },
     });
   };
-  /*
-  const handleQuizPayment = (quiz) => {
-    const paymentRecord = enrolledQuizzes.find(
-      (p) => p.quiz_name === quiz.title,
-    );
-    if (paymentRecord?.status.toLowerCase() === "pending") {
-      Swal.fire({
-        title: "Payment Pending!",
-        text: "Wait for verification.",
-        icon: "info",
-        background: "#1f2937",
-        color: "#fff",
-      });
-      return;
-    }
-    navigate(`/qpayment`, {
-      state: {
-        title: quiz.title,
-        price: quiz.price,
-        id: quiz.id,
-        type: "QUIZ",
-      },
-    });
-  };
-*/
 
   const handleQuizPayment = (quiz) => {
-    // ශිෂ්‍යයා Deactive ද නැද්ද කියා මුලින්ම බලන්න
+    // checck student's active/ Deactive status
     if (studentStatus === "Deactive") {
       Swal.fire({
         title: "Action Blocked!",
@@ -206,7 +146,7 @@ export default function CourseContent() {
       },
     });
   };
-  // Sidebar එකේ click කරද්දී Scroll වෙන්න මේ function එක පාවිච්චි කරන්න
+  // Scroll when click material,quiz in sidebar  
   const handleSidebarClick = (id) => {
     setSelectedItemId(id);
     const element = document.getElementById(id);
@@ -218,10 +158,10 @@ export default function CourseContent() {
   const checkEnrollmentStatus = (userId, courseId) => {
     API.get(`/enroll/my-dashboard/${userId}`)
       .then((res) => {
-        console.log("Response data:", res.data); // මෙතනින් student_account_status එක එනවාදැයි පරීක්ෂා කරන්න
+        console.log("Response data:", res.data); // check student_account_status recieve from backend
 
         if (res.data.length > 0) {
-          // DB එකේ "Active" / "Deactive" කියලා තිබුණොත් ඒ විදිහටම set වෙනවා
+          // DB  "Active" / "Deactive" state set as itis
           setStudentStatus(res.data[0].student_account_status);
         }
 
@@ -236,7 +176,7 @@ export default function CourseContent() {
   };
 
   const markAsCompleted = (contentId) => {
-    const studentId = localStorage.getItem("userID"); // දැනට ලොග් වී සිටින ශිෂ්‍යයාගේ ID එක
+    const studentId = localStorage.getItem("userID"); // logged student id
 
     if (!studentId || !contentId) return;
 
@@ -253,7 +193,7 @@ export default function CourseContent() {
   };
 
   return (
-    // layout එක මුලින්ම එන්න ඕනේ
+    // layout 
     <div
       className={`course-page-layout ${isSidebarMinimized ? "sidebar-minimized" : ""}`}
     >
@@ -274,7 +214,7 @@ export default function CourseContent() {
               className={`sidebar-header ${selectedItemId === "all" ? "active-all" : ""}`}
               onClick={() => {
                 setSelectedItemId("all");
-                window.scrollTo({ top: 0, behavior: "smooth" }); // මුලටම scroll වෙන්න
+                window.scrollTo({ top: 0, behavior: "smooth" }); // scroll to top 
               }}
               style={{ cursor: "pointer" }}
             >
@@ -308,7 +248,7 @@ export default function CourseContent() {
                       className={
                         selectedItemId === `quiz-${q.id}` ? "active-link" : ""
                       }
-                      onClick={() => handleSidebarClick(`quiz-${q.id}`)} // Scroll වෙන්න handleSidebarClick පාවිච්චි කරන්න
+                      onClick={() => handleSidebarClick(`quiz-${q.id}`)} // Scroll  
                       style={{ cursor: "pointer" }}
                     >
                       • {q.title}
@@ -372,7 +312,7 @@ export default function CourseContent() {
               type="text"
               placeholder="Search for materials, lessons, or quizzes"
               className="simple-search-input"
-              onChange={(e) => setSearchTerm(e.target.value)} // Search filter එකට
+              onChange={(e) => setSearchTerm(e.target.value)} // Search filter 
             />
           </div>
           {/* --- Search Bar End --- */}
@@ -410,10 +350,7 @@ export default function CourseContent() {
                       <div className="content-type-badge">
                         {item.content_type}
                       </div>
-                      {/* <h3 className="course-content-card-title">
-                        {item.title} {isLocked ? "🔒" : "✅"}
-                      </h3>*/}
-                      {/* පරණ h3 එක වෙනුවට මේ කොටස දාන්න */}
+                      
                       <div
                         style={{
                           display: "flex",
@@ -443,17 +380,7 @@ export default function CourseContent() {
                           {isLocked ? "🔒" : "✅"}
                         </div>
                       </div>
-                      {/*<button
-                        className={
-                          isLocked ? "view-btn-locked" : "view-btn-active"
-                        }
-                        disabled={isLocked}
-                        onClick={() =>
-                          !isLocked && window.open(item.external_link, "_blank")
-                        }
-                      >
-                        {isLocked ? "Unlock to View" : "View Resource"}
-                      </button> */}
+                      
                       <button
                         className={
                           isLocked ? "view-btn-locked" : "view-btn-active"
@@ -461,10 +388,10 @@ export default function CourseContent() {
                         disabled={isLocked}
                         onClick={() => {
                           if (!isLocked) {
-                            // 1. Backend එකට progress එක යවන්න
+                            // progress  ->  Backend
                             markAsCompleted(item.id);
 
-                            // 2. Resource එක අලුත් tab එකක open කරන්න
+                            // pen resource in new tab
                             window.open(item.external_link, "_blank");
                           }
                         }}
@@ -497,12 +424,7 @@ export default function CourseContent() {
                   const paymentRecord = enrolledQuizzes.find(
                     (p) => p.quiz_name === quiz.title,
                   );
-                  {
-                    /*const isApproved =
-                    paymentRecord?.status.toLowerCase() === "approved";
-                  const isPending =
-                    paymentRecord?.status.toLowerCase() === "pending"; */
-                  }
+                  
                   const isApproved =
                     paymentRecord?.status.toLowerCase() === "approved" &&
                     studentStatus === "Active";
@@ -557,19 +479,7 @@ export default function CourseContent() {
                 ? "Your request is pending admin approval."
                 : "Get full access to all materials."}
             </p>
-            {/* <button
-              className="enroll-request-btn-primary"
-              onClick={handleEnrollRequest}
-              style={{
-                background:
-                  enrollmentStatus === "pending" ? "#4b5563" : "#facc15",
-              }}
-              disabled={enrollmentStatus === "pending"}
-            >
-              {enrollmentStatus === "pending"
-                ? "Pending Approval ⏳"
-                : "Enroll Now"}
-            </button> */}
+            
             <button
               className="enroll-request-btn-primary"
               onClick={handleEnrollRequest}

@@ -2,16 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import API from "../API";
 //student profile - progress,enrolmnts,paymnts,personl details
+
 export default function StudentProfile() {
   const { name: urlName } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-
   const [stats, setStats] = useState({ enrolledCourses: [], quizActivity: [] });
   const [activeTab, setActiveTab] = useState("profile");
-
-  const [overallProgress, setOverallProgress] = useState(0); // Aluth state eka
-  const [courseOverallProgress, setCourseOverallProgress] = useState(0); // Aluth state eka
+  const [overallProgress, setOverallProgress] = useState(0); 
+  const [courseOverallProgress, setCourseOverallProgress] = useState(0); 
 
   const [studentData, setStudentData] = useState({
     full_name:
@@ -41,25 +40,7 @@ export default function StudentProfile() {
     };
     if (studentData.full_name) fetchStudentDetails();
   }, [studentData.full_name]);
-  /*
-  useEffect(() => {
-    const fetchDashboardData = async () => {
-      const sID = localStorage.getItem("userID");
-      if (!sID) return;
 
-      try {
-        const res = await API.get(`/students/student-stats/${sID}`);
-        setStats(res.data);
-      } catch (err) {
-        console.error("Error fetching dashboard data:", err);
-      }
-    };
-
-    if (activeTab === "courses" || activeTab === "requests") {
-      fetchDashboardData();
-    }
-  }, [activeTab]);
-*/
   
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -67,12 +48,10 @@ export default function StudentProfile() {
       if (!sID) return;
 
       try {
-        // Kalin thibba stats ganna eka
         const res = await API.get(`/students/student-stats/${sID}`);
         setStats(res.data);
 
-        // Aluthin hadapu progress percentage route eka call kireema
-        // (Meka api kalin katha karapu API route eka)
+        // progress percentage route  call 
         const progRes = await API.get(`/quiz/total-progress/${sID}`);
         setOverallProgress(progRes.data.overall_progress);
 
@@ -94,38 +73,6 @@ export default function StudentProfile() {
   }, [activeTab]);
   
 
-  /*
-  useEffect(() => {
-    const fetchDashboardData = async () => {
-      const sID = localStorage.getItem("userID");
-      if (!sID) return;
-
-      try {
-        const res = await API.get(`/students/student-stats/${sID}`);
-        setStats(res.data);
-
-        // Quiz Progress
-        const progRes = await API.get(`/students/mark-completed/${sID}`);
-        setOverallProgress(progRes.data.overall_progress);
-
-        // --- Aluth: Course Progress ---
-        // Note: Backend eke course progress calculate karana route eka '/content/average-progress/:sID' kiyala hithamu
-        const courseRes = await API.get(`/content/average-progress/${sID}`);
-        setCourseOverallProgress(courseRes.data.average_percentage);
-      } catch (err) {
-        console.error("Error fetching dashboard data:", err);
-      }
-    };
-
-    if (
-      activeTab === "courses" ||
-      activeTab === "requests" ||
-      activeTab === "progress"
-    ) {
-      fetchDashboardData();
-    }
-  }, [activeTab]);
-*/
   if (studentData.loading)
     return (
       <div className="register-page">
@@ -396,86 +343,7 @@ export default function StudentProfile() {
                 )}
               </div>
             </div>
-          )}
-
-          {/* ---  Overall Progress Tab Content  --- */}
-          {/*
-          {activeTab === "progress" && (
-            <div
-              className="tab-pane"
-              style={{ textAlign: "center", padding: "20px" }}
-            >
-              <h2 style={{ color: "#fff" }}>Overall Quiz Completion 🏆</h2>
-
-              <div
-                style={{
-                  margin: "30px auto",
-                  position: "relative",
-                  width: "150px",
-                  height: "150px",
-                }}
-              >
-                {/* Simple Circle Progress Design 
-                <svg width="150" height="150">
-                  <circle
-                    cx="75"
-                    cy="75"
-                    r="65"
-                    stroke="rgba(255,255,255,0.1)"
-                    strokeWidth="10"
-                    fill="transparent"
-                  />
-                  <circle
-                    cx="75"
-                    cy="75"
-                    r="65"
-                    stroke="#4caf50"
-                    strokeWidth="10"
-                    fill="transparent"
-                    strokeDasharray={408}
-                    strokeDashoffset={408 - (408 * overallProgress) / 100}
-                    strokeLinecap="round"
-                    style={{ transition: "stroke-dashoffset 1s ease" }}
-                  />
-                </svg>
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    fontSize: "28px",
-                    fontWeight: "bold",
-                    color: "#fff",
-                  }}
-                >
-                  {overallProgress}%
-                </div>
-              </div>
-
-              <p style={{ color: "#eee", fontSize: "14px" }}>
-                You have completed <strong>{overallProgress}%</strong> of your
-                enrolled quizzes and courses.
-              </p>
-
-              {/* Progress Message *
-              <div
-                style={{
-                  marginTop: "20px",
-                  padding: "15px",
-                  background: "rgba(255,255,255,0.1)",
-                  borderRadius: "10px",
-                  color: "#fff",
-                }}
-              >
-                {overallProgress === 100
-                  ? "Amazing! You've finished everything! 🎉"
-                  : overallProgress > 50
-                    ? "You are halfway there! Keep going! 💪"
-                    : "Starting is the hardest part. Let's learn more! 📖"}
-              </div>
-            </div>
-          )} */}
+          )}          
 
           {/* --- Overall Progress Tab Content --- */}
           {activeTab === "progress" && (
@@ -521,7 +389,7 @@ export default function StudentProfile() {
                         cx="60"
                         cy="60"
                         r="50"
-                        stroke="#2196f3" /* Blue color for courses */
+                        stroke="#2196f3" 
                         strokeWidth="8"
                         fill="transparent"
                         strokeDasharray={314}

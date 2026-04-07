@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import API from "../API";
 import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2"; // 1. Import SweetAlert2
-//import "./Admin2.css";
+import Swal from "sweetalert2";
 import "./cours.css";
 
 const AQuiz = () => {
@@ -21,7 +20,7 @@ const AQuiz = () => {
       console.error("Error fetching quizzes", err);
       setQuizzes([]);
     }
-  };
+  }; 
 
   const fetchTotalCount = async () => {
     try {
@@ -36,7 +35,7 @@ const AQuiz = () => {
     fetchQuizzes();
     fetchTotalCount();
   }, []);
-  // 2. Updated Advanced Delete Function
+  //   Advanced Delete Function
   const handleDeleteQuiz = async (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -52,7 +51,7 @@ const AQuiz = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          // Deleting state pennanna loading ekak danna puluwan
+          // Deleting state -loading
           Swal.fire({
             title: "Deleting...",
             allowOutsideClick: false,
@@ -61,7 +60,7 @@ const AQuiz = () => {
             },
           });
 
-          await API.delete(`/admin/delete-quiz/${id}`);
+          await API.delete(`/quiz/delete-quiz/${id}`);
 
           // Success message
           Swal.fire({
@@ -89,19 +88,18 @@ const AQuiz = () => {
     q.title.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
+  const handleEditQuiz = async (quiz) => {
+    // url for disply exist image
+    const currentImageUrl = quiz.Quiz_IMG?.startsWith("http")
+      ? quiz.Quiz_IMG
+      : `${BASE_URL}/uploads/${quiz.Quiz_IMG}`;
 
-const handleEditQuiz = async (quiz) => {
-  // දැනට තියෙන image එක පෙන්වන්න URL එක හදාගැනීම
-  const currentImageUrl = quiz.Quiz_IMG?.startsWith("http")
-    ? quiz.Quiz_IMG
-    : `${BASE_URL}/uploads/${quiz.Quiz_IMG}`;
-
-  const { value: formValues } = await Swal.fire({
-    title: `<span style="color: #00d2ff">Edit Quiz: ${quiz.title}</span>`,
-    background: "#1e1e2f",
-    color: "#fff",
-    width: '450px',
-    html: `
+    const { value: formValues } = await Swal.fire({
+      title: `<span style="color: #00d2ff">Edit Quiz: ${quiz.title}</span>`,
+      background: "#1e1e2f",
+      color: "#fff",
+      width: "450px",
+      html: `
       <div style="text-align: left; font-family: sans-serif; display: flex; flex-direction: column; gap: 8px;">
         
         <div style="text-align: center; margin-bottom: 10px;">
@@ -139,88 +137,87 @@ const handleEditQuiz = async (quiz) => {
         </div>
       </div>
     `,
-    focusConfirm: false,
-    showCancelButton: true,
-    confirmButtonText: "UPDATE",
-    confirmButtonColor: "#00d2ff",
-    cancelButtonColor: "#444",
-    preConfirm: () => {
-      return {
-        title: document.getElementById("swal-title").value,
-        qdescription: document.getElementById("swal-desc").value,
-        time_limit_minutes: document.getElementById("swal-time").value,
-        price: document.getElementById("swal-price").value,
-        course_id: document.getElementById("swal-courseid").value,
-        image_url: document.getElementById("swal-imgurl").value,
-        image_file: document.getElementById("swal-file").files[0],
-      };
-    },
-  });
+      focusConfirm: false,
+      showCancelButton: true,
+      confirmButtonText: "UPDATE",
+      confirmButtonColor: "#00d2ff",
+      cancelButtonColor: "#444",
+      preConfirm: () => {
+        return {
+          title: document.getElementById("swal-title").value,
+          qdescription: document.getElementById("swal-desc").value,
+          time_limit_minutes: document.getElementById("swal-time").value,
+          price: document.getElementById("swal-price").value,
+          course_id: document.getElementById("swal-courseid").value,
+          image_url: document.getElementById("swal-imgurl").value,
+          image_file: document.getElementById("swal-file").files[0],
+        };
+      },
+    });
 
-  if (formValues) {
-    try {
-      // Loading spinner එකක් පෙන්වීම
-      Swal.fire({
-        title: "Updating...",
-        background: "#1e1e2f",
-        color: "#fff",
-        allowOutsideClick: false,
-        didOpen: () => Swal.showLoading(),
-      });
-
-      const formData = new FormData();
-      formData.append("title", formValues.title);
-      formData.append("qdescription", formValues.qdescription);
-      formData.append("time_limit_minutes", formValues.time_limit_minutes);
-      formData.append("price", formValues.price);
-      formData.append("course_id", formValues.course_id);
-
-      // File එකක් තෝරලා තියෙනවා නම් ඒක යවනවා, නැත්නම් URL එක හෝ පරණ නම යවනවා
-      if (formValues.image_file) {
-        formData.append("Quiz_IMG", formValues.image_file);
-      } else if (formValues.image_url) {
-        formData.append("image_url", formValues.image_url);
-      } else {
-        formData.append("Quiz_IMG", quiz.Quiz_IMG);
-      }
-
-      // Backend route එකට PUT request එක යැවීම
-      const res = await API.put(`/quiz/update-quiz/${quiz.id}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
-      if (res.status === 200) {
+    if (formValues) {
+      try {
+        // Loading spinner
         Swal.fire({
-          icon: "success",
-          title: "Updated!",
-          text: "Quiz updated successfully.",
+          title: "Updating...",
           background: "#1e1e2f",
           color: "#fff",
-          timer: 2000,
-          showConfirmButton: false,
+          allowOutsideClick: false,
+          didOpen: () => Swal.showLoading(),
         });
-        fetchQuizzes(); // List එක refresh කිරීම
+
+        const formData = new FormData();
+        formData.append("title", formValues.title);
+        formData.append("qdescription", formValues.qdescription);
+        formData.append("time_limit_minutes", formValues.time_limit_minutes);
+        formData.append("price", formValues.price);
+        formData.append("course_id", formValues.course_id);
+
+        // if select file send it or keep exist one
+        if (formValues.image_file) {
+          formData.append("Quiz_IMG", formValues.image_file);
+        } else if (formValues.image_url) {
+          formData.append("image_url", formValues.image_url);
+        } else {
+          formData.append("Quiz_IMG", quiz.Quiz_IMG);
+        }
+
+        // Backend route -> PUT request
+        const res = await API.put(`/quiz/update-quiz/${quiz.id}`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+
+        if (res.status === 200) {
+          Swal.fire({
+            icon: "success",
+            title: "Updated!",
+            text: "Quiz updated successfully.",
+            background: "#1e1e2f",
+            color: "#fff",
+            timer: 2000,
+            showConfirmButton: false,
+          });
+          fetchQuizzes(); // List refresh
+        }
+      } catch (err) {
+        console.error(err);
+        Swal.fire({
+          icon: "error",
+          title: "Update Failed",
+          text: err.response?.data?.error || "Something went wrong.",
+          background: "#1e1e2f",
+          color: "#fff",
+        });
       }
-    } catch (err) {
-      console.error(err);
-      Swal.fire({
-        icon: "error",
-        title: "Update Failed",
-        text: err.response?.data?.error || "Something went wrong.",
-        background: "#1e1e2f",
-        color: "#fff",
-      });
     }
-  }
-};
-
-
-
+  };
 
   return (
     <div className="admin-main-content">
-      <h1 className="dashboard-title-text"
-        style={{ marginTop: "40px", paddingBottom: "30px" }}>
+      <h1
+        className="dashboard-title-text"
+        style={{ marginTop: "40px", paddingBottom: "30px" }}
+      >
         All Quizes
       </h1>
       <div
@@ -291,7 +288,7 @@ const handleEditQuiz = async (quiz) => {
             </div>
 
             <div className="card-body">
-              <div className="course-meta" style={{marginTop:"20px"}}>
+              <div className="course-meta" style={{ marginTop: "20px" }}>
                 <span>⭐ 4.8</span>
                 <span>👥 1.2k Students</span>
               </div>
@@ -299,10 +296,11 @@ const handleEditQuiz = async (quiz) => {
               <h3>{quiz.title}</h3>
               <p className="course-id-text">Course ID: {quiz.course_id}</p>
 
-              <div className="course-footer" >
-                <span className="course-price" style={{marginLeft:"6px"}}>LKR {quiz.price}</span>
+              <div className="course-footer">
+                <span className="course-price" style={{ marginLeft: "6px" }}>
+                  LKR {quiz.price}
+                </span>
                 <div className="action-buttons">
-                
                   <button
                     className="edit-icon-btn"
                     onClick={() => handleEditQuiz(quiz)}
@@ -310,7 +308,8 @@ const handleEditQuiz = async (quiz) => {
                     ✏️
                   </button>
                   <button
-                    className="course-view-btn" style={{marginBottom:"10px", marginRight: "5px"}}
+                    className="course-view-btn"
+                    style={{ marginBottom: "10px", marginRight: "5px" }}
                     onClick={() => navigate(`/a-updatequiz/${quiz.id}`)}
                   >
                     Edit

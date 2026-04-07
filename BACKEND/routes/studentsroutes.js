@@ -127,8 +127,8 @@ router.delete("/email/:email", (req, res) => {
 router.get("/student-stats/:studentId", (req, res) => {
     const studentId = req.params.studentId;
 
-    // 1. ශිෂ්‍යයාගේ නම සහ Course Progress ලබාගැනීම
-    // මෙහිදී students table එක JOIN කර full_name ලබාගෙන ඇත.
+    // student name + Course Progress 
+    //  students table - JOIN-  full_name  ඇ.
     const courseSql = `
         SELECT 
             s.full_name,
@@ -142,7 +142,7 @@ router.get("/student-stats/:studentId", (req, res) => {
         LEFT JOIN courses c ON e.course_id = c.id
         WHERE s.id = ?`;
 
-    // 2. Quiz Attempts ලබාගැනීම
+    // Quiz Attempts 
     const quizSql = `
         SELECT 
             q.title AS quiz_name,
@@ -159,8 +159,7 @@ router.get("/student-stats/:studentId", (req, res) => {
     db.query(courseSql, [studentId], (err, courses) => {
         if (err) return res.status(500).json(err);
 
-        // ශිෂ්‍යයාගේ නම ලබාගැනීම (පළමු row එකෙන්)
-        // කිසිම course එකකට enroll වෙලා නැති වුණත් නම ලැබෙන පරිදි LEFT JOIN භාවිතා කර ඇත.
+       
         const studentName = courses.length > 0 ? courses[0].full_name : "Unknown Student";
 
         db.query(quizSql, [studentId, studentId, studentId, studentId, studentId], (err, quizzes) => {
@@ -168,8 +167,8 @@ router.get("/student-stats/:studentId", (req, res) => {
 
             res.json({
                 studentId: studentId,
-                full_name: studentName, // මෙතැනින් නම Frontend එකට යවයි
-                enrolledCourses: courses[0]?.course_id ? courses : [], // Enrollments නැතිනම් හිස් array එකක් යවන්න
+                full_name: studentName, //  send to Frontend  
+                enrolledCourses: courses[0]?.course_id ? courses : [], // have not ay enrollmnts- send empty arry
                 quizActivity: quizzes
             });
         });
@@ -228,7 +227,7 @@ router.get("/student-stats/:studentId", (req, res) => {
 
 
 // http://localhost:5000/api/students/student-progress/:studentId
-// ශිෂ්‍යයෙකුට අදාළ සියලුම කෝස් වල ප්‍රගතිය බැලීම
+// progress for all courses
 router.get('/student-progress/:studentId', (req, res) => {
     const studentId = req.params.studentId;
 
@@ -247,7 +246,6 @@ router.get('/student-progress/:studentId', (req, res) => {
         GROUP BY c.id;
     `;
 
-    // db.execute වෙනුවට db.query භාවිතා කරන්න (Callbacks සමග)
     db.query(sql, [studentId], (err, results) => {
         if (err) {
             console.error(err);
@@ -261,7 +259,7 @@ router.get('/student-progress/:studentId', (req, res) => {
 });
 
 // http://localhost:5000/api/students/mark-completed
-// පාඩමක් සම්පූර්ණ කළ විට update කිරීමට (Mark as Completed)
+// mark lesson as complete (Mark as Completed)
 router.post('/mark-completed', (req, res) => {
     const { student_id, content_id } = req.body;
 
@@ -271,7 +269,6 @@ router.post('/mark-completed', (req, res) => {
         ON DUPLICATE KEY UPDATE status = 'Completed', completed_at = CURRENT_TIMESTAMP
     `;
 
-    // db.execute වෙනුවට db.query භාවිතා කරන්න
     db.query(sql, [student_id, content_id], (err, result) => {
         if (err) {
             console.error(err);
@@ -403,57 +400,8 @@ router.delete("/email/:email", (req, res) => {
 
 
 
-// http://localhost:5000/api/students/student-stats/1
-/*
-//student prgress
-router.get("/student-stats/:studentId", (req, res) => {
-    const studentId = req.params.studentId;
-
-    // (Course Progress & Payments)
-    const courseSql = `
-        SELECT 
-            c.id AS course_id,
-            c.title AS course_name,
-            e.payment_status,
-            e.progress AS course_progress_percentage,
-            e.enroll_date
-        FROM enrollments e
-        JOIN courses c ON e.course_id = c.id
-        WHERE e.student_id = ?`;
-
-    //(Quiz Attempts & Payments)
-    const quizSql = `
-        SELECT 
-            q.title AS quiz_name,
-            qp.status AS payment_status,
-            qa.score,
-            qa.total_questions,
-            qa.attempt_date,
-            (SELECT COUNT(*) FROM Quiz_Attempts WHERE student_id = ? AND quiz_id = q.id) AS attempt_count
-        FROM Quizzes q
-        LEFT JOIN Quiz_Payments qp ON q.id = qp.quiz_id AND qp.student_id = ?
-        LEFT JOIN Quiz_Attempts qa ON q.id = qa.quiz_id AND qa.student_id = ?
-        WHERE qp.student_id = ? OR qa.student_id = ?`;
-
-    db.query(courseSql, [studentId], (err, courses) => {
-        if (err) return res.status(500).json(err);
-
-        db.query(quizSql, [studentId, studentId, studentId, studentId, studentId], (err, quizzes) => {
-            if (err) return res.status(500).json(err);
-
-            res.json({
-                studentId: studentId,
-                enrolledCourses: courses,
-                quizActivity: quizzes
-            });
-        });
-    });
-});
-*/
-// ... (මීට පෙර තිබූ routes එලෙසම පවතී)
-
 // http://localhost:5000/api/students/student-progress/:studentId
-// ශිෂ්‍යයෙකුට අදාළ සියලුම කෝස් වල ප්‍රගතිය බැලීම
+// progress fro all course(student's)
 router.get('/student-progress/:studentId', (req, res) => {
     const studentId = req.params.studentId;
 
@@ -472,7 +420,6 @@ router.get('/student-progress/:studentId', (req, res) => {
         GROUP BY c.id;
     `;
 
-    // db.execute වෙනුවට db.query භාවිතා කරන්න (Callbacks සමග)
     db.query(sql, [studentId], (err, results) => {
         if (err) {
             console.error(err);
@@ -486,7 +433,7 @@ router.get('/student-progress/:studentId', (req, res) => {
 });
 
 // http://localhost:5000/api/students/mark-completed
-// පාඩමක් සම්පූර්ණ කළ විට update කිරීමට (Mark as Completed)
+// Mark as Completed
 router.post('/mark-completed', (req, res) => {
     const { student_id, content_id } = req.body;
 
@@ -496,7 +443,6 @@ router.post('/mark-completed', (req, res) => {
         ON DUPLICATE KEY UPDATE status = 'Completed', completed_at = CURRENT_TIMESTAMP
     `;
 
-    // db.execute වෙනුවට db.query භාවිතා කරන්න
     db.query(sql, [student_id, content_id], (err, result) => {
         if (err) {
             console.error(err);

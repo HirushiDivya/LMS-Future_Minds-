@@ -59,7 +59,7 @@ const Navbar = () => {
               Courses
             </NavLink>
             <NavLink to="/s-allquiz" className={({ isActive }) => (isActive ? "active" : "")} onClick={closeMenu}>
-              Quizes
+              Quizzes
             </NavLink>
             <NavLink to="/about" className={({ isActive }) => (isActive ? "active" : "")} onClick={closeMenu}>
               About

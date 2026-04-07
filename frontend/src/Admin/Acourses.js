@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 //import "../Admin/css/Coursecontent.css";
 import "./cours.css";
 import Swal from "sweetalert2";
-
+ 
 export default function Coursepage() {
   const [courses, setCourses] = useState([]);
   const [search, setSearch] = useState("");
@@ -13,7 +13,7 @@ export default function Coursepage() {
   const navigate = useNavigate();
   const BASE_URL = "http://localhost:5000";
   const [totalCourses, setTotalCourses] = useState(0);
-
+ 
   const fetchCourses = async () => {
     try {
       let url = "/courses";
@@ -82,6 +82,8 @@ export default function Coursepage() {
            <span style="font-size: 12px; color: #00d2ff;">Or Upload File:</span>
            <input id="swal-file" type="file" accept="image/*" style="font-size: 12px; margin-top: 5px; color: #ccc;">
         </div>
+
+        
       </div>
     `,
       focusConfirm: false,
@@ -294,7 +296,7 @@ export default function Coursepage() {
                           }
                           className="course-view-btn"
                         >
-                          View
+                          Edit
                         </button>
 
                         <button

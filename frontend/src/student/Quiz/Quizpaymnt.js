@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import API from "../../API"; // ඔබේ folder structure එකට අනුව path එක නිවැරදි කරගන්න
+import API from "../../API"; 
 import "../StudentRegister.css";
-//import "./ViewQuiz.css";
 
 
 export default function QuizPayment() {
@@ -19,7 +18,7 @@ export default function QuizPayment() {
     const id = localStorage.getItem("userID");
     setCurrentUserID(id);
 
-    // වැරදි විදිහට page එකට ආවොත් back කරනවා
+    // if come ti page wrong way- back 
     if (!state || !state.id) {
       alert("Invalid Access. Redirecting back...");
       navigate(-1);
@@ -30,7 +29,7 @@ export default function QuizPayment() {
 
   // Destructure data from state
   const { id, title, price, type } = state;
-  const isQuiz = type === "QUIZ" || !type; // Default quiz ලෙස සලකයි
+  const isQuiz = type === "QUIZ" || !type; // Default quiz 
   const displayName = title;
 
   // --- Stripe Payment Handler ---
@@ -41,7 +40,7 @@ export default function QuizPayment() {
         student_id: currentUserID,
         amount: price,
         quiz_id: id,
-        course_id: null, // මෙය Quiz Payment එකක් නිසා
+        course_id: null, // bcz Quiz Payment 
       });
 
       if (response.data.url) {
@@ -49,7 +48,7 @@ export default function QuizPayment() {
       }
     } catch (error) {
       console.error("Stripe Checkout failed:", error);
-      alert("ගෙවීම් පද්ධතියට සම්බන්ධ වීමට නොහැකි විය.");
+      alert("Could not connect to the payment system");
     } finally {
       setIsSubmitting(false);
     }
@@ -67,13 +66,13 @@ export default function QuizPayment() {
 
 const handleBankSlipSubmit = async () => {
   if (!selectedFile) {
-    alert("කරුණාකර බැංකු රිසිට්පත (Slip) ලබා දෙන්න.");
+    alert("Please provide the bank slip.");
     return;
   }
 
   setIsSubmitting(true);
   
-  // ✅ 1. Invoice Number එක මෙතැනදී සාදා ගන්න
+  //  Invoice Number create
   const datePart = Date.now().toString().slice(-6);
   const generatedInvoiceNo = `INV-QZ-${id}-${datePart}`;
 

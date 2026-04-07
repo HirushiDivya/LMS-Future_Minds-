@@ -7,7 +7,7 @@ const db = require("../index");
 
 //file -> upload folder
 const upload = multer({ dest: 'uploads/' });
- 
+  
 const checkQuizAccess = (req, res, next) => {
     // quizId-> URL path 
     const quizId = req.params.quizId; 
@@ -220,7 +220,7 @@ router.post("/upload-questions/:quizId", upload.single("file"), (req, res) => {
 
 
 // http://localhost:5000/api/quiz/student-enrolled-count/:studentId
-// ශිෂ්‍යයෙක් enroll වී ඇති මුළු quiz ගණන ලබා ගැනීම
+// all quizes enrolled by student(count)
 router.get("/student-enrolled-count/:studentId", (req, res) => {
     const studentId = req.params.studentId;
 
@@ -496,11 +496,11 @@ router.delete("/delete-question/:id", (req, res) => {
 });
 
 // http://localhost:5000/api/quiz/progress/:studentId/:quizId
-// Quiz ekakata adala student progress percentage eka ganna
+// progress presentation for quiz 
 router.get("/progress/:studentId/:quizId", (req, res) => {
     const { studentId, quizId } = req.params;
 
-    // Student me quiz eka attempt karala thiyenawada kiyala balanawa
+    // check student attemp to that quiz or not
     const sql = "SELECT id FROM Quiz_Attempts WHERE student_id = ? AND quiz_id = ?";
 
     db.query(sql, [studentId, quizId], (err, results) => {
@@ -508,7 +508,7 @@ router.get("/progress/:studentId/:quizId", (req, res) => {
             return res.status(500).json({ error: err.message });
         }
 
-        // Record ekak thiyenawanam progress eka 100%, nattnam 0%
+        // Record have - progess 100%, or 0%
         const progress = results.length > 0 ? 100 : 0;
 
         res.json({
@@ -524,10 +524,10 @@ router.get("/progress/:studentId/:quizId", (req, res) => {
 router.get("/total-progress/:studentId", (req, res) => {
     const studentId = req.params.studentId;
 
-    // 1. Approved enrollments (Ganna thiyena total quizzes)
+    // Approved enrollments (  total quizzes)
     const sqlEnrolled = "SELECT COUNT(*) AS total FROM Quiz_Payments WHERE student_id = ? AND status = 'Approved'";
     
-    // 2. Already attempted quizzes (Iwara karapu quizzes)
+    // Already attempted quizzes (completed  quizzes)
     const sqlAttempted = "SELECT COUNT(DISTINCT quiz_id) AS completed FROM Quiz_Attempts WHERE student_id = ?";
 
     db.query(sqlEnrolled, [studentId], (err, enrolledRes) => {

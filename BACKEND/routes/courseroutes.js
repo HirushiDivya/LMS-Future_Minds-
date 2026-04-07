@@ -4,20 +4,19 @@ const db = require('../index')
 const multer = require('multer');
 const path = require('path');
 
-// --- Multer Configuration ආරම්භය ---
+// --- Multer Configuration  ---
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // පින්තූර save වෙන්නේ මේ folder එකට
+    cb(null, 'uploads/'); 
   },
   filename: (req, file, cb) => {
-    // File එකට unique නමක් දීම (උදා: 171216500.jpg)
     cb(null, Date.now() + path.extname(file.originalname));
   }
 });
  
 const upload = multer({ storage: storage });
 
-// --- සියලුම පාඨමාලා වල මුළු එකතුව (Count) ලබා ගැනීම ---
+// --- all course Count ---
 // http://localhost:5000/api/courses/count-all
 router.get("/count-all", (req, res) => {
     const sql = "SELECT COUNT(*) AS total_courses FROM courses";
@@ -28,7 +27,6 @@ router.get("/count-all", (req, res) => {
             return res.status(500).json(err);
         }
 
-        // result[0].total_courses මගින් මුළු ගණන ලැබේ
         res.json({
             total_courses: result[0].total_courses
         });
@@ -85,7 +83,7 @@ router.get("/average-progress/:studentId", (req, res) => {
 });
  
 // http://localhost:5000/api/courses/student-enrolled-count/:studentId
-// ශිෂ්‍යයෙක් enroll වී ඇති මුළු පාඨමාලා ගණන ලබා ගැනීම (Approved පමණි)
+// student - enrolled all courses count (Approved පමණි)
 router.get("/student-enrolled-count/:studentId", (req, res) => {
     const studentId = req.params.studentId;
 
@@ -128,69 +126,7 @@ router.get("/technology", (req, res) => {
     });
 });
 
-
-/*
-// http://localhost:5000/api/courses/add
-// 5. Add Course (Updated with Image)
-router.post("/add", (req, res) => {
-    // 1. req.body එකට 'course_img' ඇතුළත් කරන්න
-    const { title, descriptions, price, category, course_img } = req.body;
-
-    const sql = `
-    INSERT INTO courses (course_code, title, descriptions, price, category, course_img)
-    SELECT
-    CONCAT(
-        LEFT(?, 1),
-        LPAD(IFNULL(MAX(CAST(SUBSTRING(course_code, 2) AS UNSIGNED)), 0) + 1, 3, '0')
-    ),
-    ?, ?, ?, ?, ?
-    FROM courses
-    WHERE category = ?;
-    `;
-
-    // 2. Parameters array එකට 'course_img' අගය (6 වැනි අගය ලෙස) එක් කරන්න
-    db.query(
-        sql,
-        [category, title, descriptions, price, category, course_img, category],
-        (err, result) => {
-            if (err) {
-                console.error("SQL Error:", err);
-                return res.status(500).json(err);
-            }
-            res.json({ message: "Course Added Successfully" });
-        }
-    );
-});
-*/
-/*
-// Add Course Route (Local Upload + Link Support)
-router.post("/add", upload.single('course_img'), (req, res) => {
-    const { title, descriptions, price, category, image_url } = req.body;
-    
-    // 1. පින්තූරයක් upload කර ඇත්නම් එහි නම ගනිමු. 
-    // 2. නැතිනම් image_url එකක් ඇත්නම් එය ගනිමු. 
-    // 3. දෙකම නැත්නම් default-image.jpg යොදමු.
-    let final_img = 'default-image.jpg';
-
-    if (req.file) {
-        final_img = req.file.filename; // Local machine upload
-    } else if (image_url) {
-        final_img = image_url; // Direct Web Link
-    }
-
-    const sql = `
-    INSERT INTO courses (course_code, title, descriptions, price, category, course_img)
-    SELECT CONCAT(LEFT(?, 1), LPAD(IFNULL(MAX(CAST(SUBSTRING(course_code, 2) AS UNSIGNED)), 0) + 1, 3, '0')),
-    ?, ?, ?, ?, ?
-    FROM courses WHERE category = ?;
-    `;
-
-    db.query(sql, [category, title, descriptions, price, category, final_img, category], (err, result) => {
-        if (err) return res.status(500).json(err);
-        res.json({ message: "Course Added Successfully", fileName: final_img });
-    });
-});
-*/
+//5
 router.post("/add", upload.single('course_img'), (req, res) => {
     const { title, descriptions, price, category, image_url } = req.body;
     
@@ -202,7 +138,6 @@ router.post("/add", upload.single('course_img'), (req, res) => {
         final_img = image_url; 
     }
 
-    // වඩාත් ආරක්‍ෂිත සහ ඕනෑම අවස්ථාවක වැඩ කරන SQL Query එක
     const sql = `
     INSERT INTO courses (course_code, title, descriptions, price, category, course_img)
     VALUES (
@@ -212,46 +147,17 @@ router.post("/add", upload.single('course_img'), (req, res) => {
     );
     `;
 
-    // අවධානයට: මෙහි පරාමිතීන් (parameters) 7ක් ඇත.
     db.query(sql, [category, category, title, descriptions, price, category, final_img], (err, result) => {
         if (err) {
-            console.error("Database Error:", err); // Error එක console එකේ බලාගන්න
+            console.error("Database Error:", err); // Error - console 
             return res.status(500).json(err);
         }
         res.json({ message: "Course Added Successfully", fileName: final_img });
     });
 });
-/*
-//http://localhost:5000/api/courses/add
-// 5.Add Course
-router.post("/add", (req,res) => {
-    const { title, descriptions, price, category} = req.body;
 
-    const sql = `
-    INSERT INTO courses (course_code, title, descriptions, price, category)
-    SELECT
-    CONCAT(
-    LEFT(?,1),
-    LPAD(IFNULL(MAX(CAST(SUBSTRING(course_code,2)AS UNSIGNED)),0)+1,3, '0')
-    ),
-    ?,?,?,?
-    FROM courses
-    WHERE category = ?;
-    `;
 
-    db.query(
-        sql,
-        [category, title, descriptions, price, category, category],
-        (err,result) => {
-            if(err)
-                return res.status(500).json(err);
-            res.json({message: "Course Added Successfully"});
-        }
-    );
-});
-*/
-
-// 6. get 1 course
+// 6 get 1 course
 router.get("/:course_code" , (req,res) =>{
     const {course_code} = req.params;
 
@@ -366,79 +272,6 @@ router.get("/course/:course_code", (req, res) => {
   });
 });
 
-
-/*
-// http://localhost:5000/api/courses/update/S001
-// Edit/Update course details
-router.put("/update/:course_code", (req, res) => {
-    const { course_code } = req.params;
-    const { title, descriptions, price, category } = req.body;
-
-    // fields update
-    const sql = `
-        UPDATE courses 
-        SET title = ?, descriptions = ?, price = ?, category = ? 
-        WHERE course_code = ?
-    `;
- 
-    db.query(
-        sql, 
-        [title, descriptions, price, category, course_code], 
-        (err, result) => {
-            if (err) {
-                
-                if (err.code === 'ER_DUP_ENTRY') {
-                    return res.status(400).json({ message: "This course title already exists in the system." });
-                }
-                return res.status(500).json(err);
-            }
-
-            if (result.affectedRows === 0) {
-                return res.status(404).json({ message: "Course not found" });
-            }
-
-            res.json({ message: "Course updated successfully" });
-        }
-    );
-});
-*/
-
-// http://localhost:5000/api/courses/update/S001
-// Edit/Update course details
-/*
-router.put("/update/:course_code", (req, res) => {
-    const { course_code } = req.params;
-    const { title, descriptions, price, category, course_img } = req.body;
-
-    // fields update
-    const sql = `
-        UPDATE courses 
-        SET title = ?, descriptions = ?, price = ?, category = ?, course_img= ?
-        WHERE course_code = ?
-    `;
-
-    db.query(
-        sql, 
-        [title, descriptions, price, category, course_img,  course_code], 
-        (err, result) => {
-            if (err) {
-                
-                if (err.code === 'ER_DUP_ENTRY') {
-                    return res.status(400).json({ message: "This course title already exists in the system." });
-                }
-                return res.status(500).json(err);
-            }
-
-            if (result.affectedRows === 0) {
-                return res.status(404).json({ message: "Course not found" });
-            }
-
-            res.json({ message: "Course updated successfully" });
-        }
-    );
-});
-*/
-
 router.put("/update/:course_code", upload.single('course_img'), (req, res) => {
     const { course_code } = req.params;
     const { title, descriptions, price, category, image_url, course_img } = req.body;
@@ -492,7 +325,7 @@ router.get("/count-students/:course_id", (req, res) => {
 router.post("/update-progress", (req, res) => {
     const { studentId, contentId, status } = req.body;
     
-    // Progress eka update karanawa (Insert or Update on Duplicate)
+    // Progress  update  (Insert or Update on Duplicate)
     const sql = `
         INSERT INTO content_progress (student_id, content_id, status) 
         VALUES (?, ?, ?) 
@@ -505,31 +338,6 @@ router.post("/update-progress", (req, res) => {
     });
 });
 
-/*
-// http://localhost:5000/api/content/average-progress/:studentId/:courseCode
-router.get("/average-progress/:studentId/:courseCode", (req, res) => {
-    const { studentId, courseCode } = req.params;
-
-    // Course ekata adala total content count eka saha student iwara karapu content count eka gannawa
-    const sql = `
-        SELECT 
-            (SELECT COUNT(*) FROM coursecontent WHERE course_code = ?) AS total_content,
-            (SELECT COUNT(*) FROM content_progress cp 
-             JOIN coursecontent cc ON cp.content_id = cc.id 
-             WHERE cp.student_id = ? AND cc.course_code = ? AND cp.status = 'Completed') AS completed_count
-    `;
-
-    db.query(sql, [courseCode, studentId, courseCode], (err, result) => {
-        if (err) return res.status(500).json({ error: err.message });
-        
-        const total = result[0].total_content || 0;
-        const completed = result[0].completed_count || 0;
-        const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
-
-        res.json({ average_percentage: percentage });
-    });
-});
-*/
 
 // http://localhost:5000/api/content/average-progress/:studentId
 router.get("/average-progress/:studentId", (req, res) => {

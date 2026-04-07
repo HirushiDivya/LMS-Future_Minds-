@@ -34,33 +34,6 @@ router.post('/enroll-request', (req, res) => {
 });
 
 
- 
-//http://localhost:5000/api/enroll/my-dashboard/1
-//student's enrollement request,approve,pending or rejected
-/*
-router.get("/my-dashboard/:studentId", (req, res) => {
-    const studentId = req.params.studentId;
-
-    const sql = `
-        SELECT 
-            c.course_code,
-            c.title, 
-            c.price, 
-            e.payment_status, 
-            CASE 
-                WHEN e.payment_status = 'Approved' THEN c.materials_link 
-                ELSE 'Locked: Please Complete Payment' 
-            END AS student_access
-        FROM enrollments e
-        JOIN courses c ON e.course_id = c.id
-        WHERE e.student_id = ?`;
-
-    db.query(sql, [studentId], (err, results) => {
-        if (err) return res.status(500).json(err);
-        res.json(results);
-    });
-});
-*/
 
 router.get("/my-dashboard/:studentId", (req, res) => {
     const studentId = req.params.studentId;

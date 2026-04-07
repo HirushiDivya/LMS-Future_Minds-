@@ -71,7 +71,7 @@ const AdminNavbar = () => {
               isActive ? "nav-item active" : "nav-item"
             }
           >
-            <BookOpen size={20} /> <span>Quizes</span>
+            <BookOpen size={20} /> <span>Quizzes</span>
           </NavLink>
 
           <NavLink

@@ -21,39 +21,27 @@ export default function StudentProgress() {
   const [overallCourseProgress, setOverallCourseProgress] = useState(0);
   const [overallQuizProgress, setOverallQuizProgress] = useState(0);
 
-  /* useEffect(() => {
-    API.get(`/students/student-stats/${id}`)
-      .then((res) => {
-        setStats(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("API Error:", err);
-        setLoading(false);
-      });
-  }, [id]); */
+  const [courseProgressList, setCourseProgressList] = useState([]);
 
-  
   useEffect(() => {
     const fetchAllStats = async () => {
       try {
-        // API request තුනම එකවර යැවීම
-        const [statsRes, courseRes, quizRes] = await Promise.all([
-          API.get(`/students/student-stats/${id}`),
-          API.get(`/students/course-progress/${id}`),
-          
-          API.get(`/quiz/total-progress/${id}`),
+        const [statsRes, courseRes, quizRes, progressRes] = await Promise.all([
+          API.get(`/students/student-stats/${id}`), // stuudentstatus
+          API.get(`/students/course-progress/${id}`), //course progress bar
+          API.get(`/quiz/total-progress/${id}`), // circle
+          API.get(`/students/student-progress/${id}`),
         ]);
 
-        console.log("Stats Data:", statsRes.data);
-
         setStats(statsRes.data);
-        // Backend එකෙන් එන key names (course_completion_percentage, overall_progress) මෙහිදී භාවිතා කරන්න
         setOverallCourseProgress(
           courseRes.data.course_completion_percentage || 0,
         );
         setOverallQuizProgress(quizRes.data.overall_progress || 0);
 
+        // progress list  save
+        setCourseProgressList(progressRes.data.data || []);
+
         setLoading(false);
       } catch (err) {
         console.error("API Error:", err);
@@ -64,100 +52,9 @@ export default function StudentProgress() {
     fetchAllStats();
   }, [id]);
 
-
-
-/*
-  useEffect(() => {
-    const fetchAllStats = async () => {
-      try {
-        const [statsRes, courseProgressRes, quizRes] = await Promise.all([
-          API.get(`/students/student-stats/${id}`),
-          API.get(`/students/student-progress/${id}`), // අලුත් API එක
-          API.get(`/quiz/total-progress/${id}`),
-        ]);
-
-        setStats(statsRes.data);
-
-        // --- Overall Course Progress ගණනය කිරීම ---
-        const progressData = courseProgressRes.data.data; // Backend එකෙන් එන Array එක
-        if (progressData && progressData.length > 0) {
-          const totalProgress = progressData.reduce(
-            (sum, item) => sum + parseFloat(item.progress_percentage),
-            0,
-          );
-          const averageProgress = totalProgress / progressData.length;
-          setOverallCourseProgress(Math.round(averageProgress)); // සාමාන්‍ය අගය Set කිරීම
-        } else {
-          setOverallCourseProgress(0);
-        }
-
-        setOverallQuizProgress(quizRes.data.overall_progress || 0);
-        setLoading(false);
-      } catch (err) {
-        console.error("API Error:", err);
-        setLoading(false);
-      }
-    };
-
-    fetchAllStats();
-  }, [id]);
-*/
-  /*
   const downloadPDF = () => {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
-
-    // PDF Header
-    doc.setFillColor(0, 21, 41);
-    doc.rect(0, 0, pageWidth, 40, "F");
-    doc.setTextColor(255, 204, 0);
-    doc.setFontSize(22);
-    doc.setFont("helvetica", "bold");
-    doc.text("STUDENT PROGRESS REPORT", pageWidth / 2, 25, { align: "center" });
-
-    // Student Info
-    doc.setTextColor(40, 40, 40);
-    doc.setFontSize(11);
-    doc.text(`Student ID: ${id}`, 15, 50);
-    doc.text(`Report Date: ${new Date().toLocaleDateString()}`, 15, 57);
-
-    // Courses Table
-    autoTable(doc, {
-      startY: 65,
-      head: [["Course Name", "Enroll Date", "Payment", "Progress"]],
-      body: stats.enrolledCourses?.map((c) => [
-        c.course_name,
-        new Date(c.enroll_date).toLocaleDateString(),
-        c.payment_status,
-        `${c.course_progress_percentage}%`,
-      ]),
-      headStyles: { fillColor: [0, 35, 71], textColor: [255, 204, 0] },
-    });
-
-    doc.text(`Overall Course Progress: ${overallCourseProgress}%`, 15, 60);
-    doc.text(`Overall Quiz Performance: ${overallQuizProgress}%`, 15, 67);
-
-    // Quiz Table
-    autoTable(doc, {
-      startY: doc.lastAutoTable.finalY + 15,
-      head: [["Quiz Name", "Date", "Score", "Attempts"]],
-      body: stats.quizActivity?.map((q) => [
-        q.quiz_name,
-        q.attempt_date ? new Date(q.attempt_date).toLocaleDateString() : "N/A",
-        `${q.score || 0} / ${q.total_questions || 0}`,
-        q.attempt_count,
-      ]),
-      headStyles: { fillColor: [0, 35, 71], textColor: [255, 204, 0] },
-    });
-
-    doc.save(`Progress_Report_${id}.pdf`);
-  };
-*/
-
-  const downloadPDF = () => {
-    const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.getWidth();
-    // නම ලබා ගැනීම
     const studentName =
       stats?.full_name || stats?.enrolledCourses?.[0]?.full_name || "N/A";
 
@@ -194,13 +91,13 @@ export default function StudentProgress() {
     const courseCircleX = pageWidth / 4;
     const quizCircleX = (pageWidth / 4) * 3;
 
-    // Background Circles (අළු පැහැති රවුම්)
+    // Background Circles
     doc.setLineWidth(1.5);
     doc.setDrawColor(220, 220, 220);
     doc.circle(courseCircleX, circleY, 12, "S");
     doc.circle(quizCircleX, circleY, 12, "S");
 
-    // Progress Indicators (ප්‍රතිශතය පෙන්වන පෙළ)
+    // Progress Indicators presentge
     doc.setFontSize(10);
     doc.setFont("helvetica", "bold");
 
@@ -269,13 +166,18 @@ export default function StudentProgress() {
       <main className="admin-main-content">
         {/* Header Section */}
         <div className="dashboard-header-flex">
-          <h2 className="dashboard-title-text" style={{marginTop: "30px"}}>Student Progress Analysis</h2>
-          <div className="notification-containrer" style={{flexDirection: "row", marginRight: "20px"}}>
+          <h2 className="dashboard-title-text" style={{ marginTop: "30px" }}>
+            Student Progress Analysis
+          </h2>
+          <div
+            className="notification-containrer"
+            style={{ flexDirection: "row", marginRight: "20px" }}
+          >
             <span
               className="student-name"
               style={{ marginRight: "20px", fontWeight: "bold" }}
             >
-              {/* මුලින්ම කෙලින්ම එන full_name බලනවා, නැත්නම් array එක ඇතුළේ තියෙන එක බලනවා */}
+              {/* 1st- full_name ,then array  */}
               Name:{" "}
               {stats?.full_name ||
                 stats?.enrolledCourses?.[0]?.full_name ||
@@ -319,46 +221,68 @@ export default function StudentProgress() {
                   <th>Payment Status</th>
                   <th>Overall Progress</th>
                 </tr>
-              </thead>
+              </thead>{" "}
               <tbody>
-                {stats.enrolledCourses?.map((course, index) => (
-                  <tr key={index} className="table-row-hover">
-                    <td>
-                      <span className="student-name">{course.course_name}</span>
-                    </td>
-                    <td>{new Date(course.enroll_date).toLocaleDateString()}</td>
-                    <td>
-                      <span
-                        className={`status-badge ${course.payment_status === "Paid" ? "status-approved" : "status-pending"}`}
-                      >
-                        {course.payment_status}
-                      </span>
-                    </td>
-                    <td>
-                      <div
-                        style={{
-                          width: "100%",
-                          background: "rgba(255,255,255,0.1)",
-                          borderRadius: "10px",
-                          height: "8px",
-                        }}
-                      >
+                {stats.enrolledCourses?.map((course, index) => {
+                  // course progress find from progress list
+                  const specificProgress = courseProgressList.find(
+                    (p) =>
+                      p.course_id === course.course_id ||
+                      p.course_title === course.course_name,
+                  );
+
+                  const progressValue = specificProgress
+                    ? specificProgress.progress_percentage
+                    : 0;
+
+                  return (
+                    <tr key={index} className="table-row-hover">
+                      <td>
+                        <span className="student-name">
+                          {course.course_name}
+                        </span>
+                      </td>
+                      <td>
+                        {new Date(course.enroll_date).toLocaleDateString()}
+                      </td>
+                      <td>
+                        <span
+                          className={`status-badge ${
+                            course.payment_status === "Approved" ||
+                            course.payment_status === "Paid"
+                              ? "status-approved"
+                              : "status-pending"
+                          }`}
+                        >
+                          {course.payment_status}
+                        </span>
+                      </td>
+                      <td>
                         <div
                           style={{
-                            width: `${course.course_progress_percentage}%`,
-                            background: "#ffcc00",
-                            height: "100%",
+                            width: "100%",
+                            background: "rgba(255,255,255,0.1)",
                             borderRadius: "10px",
-                            boxShadow: "0 0 10px rgba(255, 204, 0, 0.5)",
+                            height: "8px",
+                            marginBottom: "5px",
                           }}
-                        ></div>
-                      </div>
-                      <small>
-                        {course.course_progress_percentage}% Completed
-                      </small>
-                    </td>
-                  </tr>
-                ))}
+                        >
+                          <div
+                            style={{
+                              width: `${progressValue}%`,
+                              background: "#ffcc00",
+                              height: "100%",
+                              borderRadius: "10px",
+                              transition: "width 0.5s ease-in-out",
+                              boxShadow: "0 0 10px rgba(255, 204, 0, 0.5)",
+                            }}
+                          ></div>
+                        </div>
+                        <small>{progressValue}% Completed</small>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -446,7 +370,7 @@ export default function StudentProgress() {
                   strokeWidth="10"
                   fill="transparent"
                   strokeDasharray="314"
-                  strokeDashoffset={314 - (314 * overallCourseProgress) / 100} // නිවැරදියි
+                  strokeDashoffset={314 - (314 * overallCourseProgress) / 100}
                   strokeLinecap="round"
                   style={{ transition: "stroke-dashoffset 1s ease" }}
                 />
@@ -462,7 +386,7 @@ export default function StudentProgress() {
                   color: "#868484",
                 }}
               >
-                {overallCourseProgress}% {/* මෙතැන වෙනස් කළා */}
+                {overallCourseProgress}%
               </div>
             </div>
           </div>
@@ -507,7 +431,7 @@ export default function StudentProgress() {
                   strokeWidth="10"
                   fill="transparent"
                   strokeDasharray="314"
-                  strokeDashoffset={314 - (314 * overallQuizProgress) / 100} // නිවැරදියි
+                  strokeDashoffset={314 - (314 * overallQuizProgress) / 100}
                   strokeLinecap="round"
                   style={{ transition: "stroke-dashoffset 1s ease" }}
                 />
@@ -523,7 +447,7 @@ export default function StudentProgress() {
                   color: "#868484",
                 }}
               >
-                {overallQuizProgress}% {/* මෙතැන වෙනස් කළා */}
+                {overallQuizProgress}%
               </div>
             </div>
           </div>

@@ -10,7 +10,6 @@ import AdminEnrollmentRequests from "./Admin/Enrollmentrequests";   //course enr
 import ACourses from "./Admin/Acourses";
 import CourseContent from "./Admin/Coursecontent";
 import AddCourse from "./Admin/AddCourse";
-import QuizEnrollmntReq from "./Admin/QuizEnrollmntReq";
 import AQuiz from "./Admin/Quiz";
 import AddQuiz from "./Admin/AddQuiz";
 import AUpdateQuiz from "./Admin/UpdateQuiz";
@@ -35,10 +34,8 @@ import Questions from "./student/Quiz/Questions";
 import Payment from "./Payments/Paymnt";
 import QuizPayment from "./student/Quiz/Quizpaymnt";
 
-import PaymentSuccess from "./Payments/PaymentSuccess";
 import PaymentFailed from "./Payments/PaymentFailed";
 import Success from "./Payments/Success";
-import ViewContent from "./Courses/ViewContent";
 
 //courses
 import Coursepage from "./Courses/CoursePage";
@@ -63,7 +60,6 @@ function AppContent() {
     location.pathname.startsWith("/a-quiz") ||
     location.pathname.startsWith("/a-updatequiz") ||
     location.pathname.startsWith("/a-viewquiz") ||
-    location.pathname.startsWith("/quizenrollment-req") ||
     location.pathname.startsWith("/add-course") ||
     location.pathname.startsWith("/sprogress") ||
     location.pathname.startsWith("/all-payments") ||
@@ -83,11 +79,9 @@ function AppContent() {
     location.pathname.startsWith("/qpayment") ||
     location.pathname.startsWith("/science-page") ||
     location.pathname.startsWith("/math-page") ||
-    location.pathname.startsWith("/tech-page");
-    location.pathname.startsWith("/payment-success");
+    location.pathname.startsWith("/tech-page") ||
     location.pathname.startsWith("/payment-fail") ||
-    location.pathname.startsWith("/success") ||
-    location.pathname.startsWith("/view-content");
+    location.pathname.startsWith("/success");
 
   return (
     <div
@@ -105,7 +99,6 @@ function AppContent() {
           <Route path="/a-quiz" element={<AQuiz />} />
           <Route path="/a-updatequiz/:id" element={<AUpdateQuiz />} />
           <Route path="/a-viewquiz/:id" element={<ViewQuiz />} />
-          <Route path="/quizenrollment-req" element={<QuizEnrollmntReq />} />
           <Route path="/add-course" element={<AddCourse />} />
           <Route path="/all-payments" element={<AllPayments />} />
           <Route path="/sprogress/:id" element={<StudentProgress />} />
@@ -131,7 +124,6 @@ function AppContent() {
           <Route path="/science-page" element={<SciencePage />} />
           <Route path="/math-page" element={<MathsPage />} />
           <Route path="/tech-page" element={<TechPage />} />
-          <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/payment-fail" element={<PaymentFailed />} />
           <Route path="/success" element={<Success />} />
           <Route
@@ -147,7 +139,6 @@ function AppContent() {
           <Route path="/about" element={<About />} />
           <Route path="/payment" element={<Payment />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/view-content/:id" element={<ViewContent />} />
         </Routes>
       </main>
       {isStudentRoute && <Footer />}

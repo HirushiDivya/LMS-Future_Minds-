@@ -1,3 +1,4 @@
+/*
 const nodemailer = require('nodemailer');
 const express = require("express"); 
 const router = express.Router();    
@@ -20,3 +21,4 @@ const sendInvoice = (studentEmail, amount, quizTitle) => {
 
 
 module.exports = router;
+*/

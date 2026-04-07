@@ -1,5 +1,5 @@
-.dashboard-page {
-    background-color: #f4f7fe; /* ලා අළු පැහැති පසුබිම */
+/*.dashboard-page {
+    background-color: #f4f7fe; 
     padding: 40px 20px;
     min-height: 100vh;
 }
@@ -11,7 +11,6 @@
     padding: 20px 0;
 }
 
-/* Card Styling */
 .course-card {
     background: #ffffff;
     border-radius: 24px;
@@ -28,7 +27,6 @@
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
-/* Image Section */
 .image-container {
     position: relative;
     width: 100%;
@@ -54,7 +52,6 @@
     z-index: 1;
 }
 
-/* Body Section */
 .card-body {
     padding: 20px;
 }
@@ -80,7 +77,6 @@
     margin-bottom: 20px;
 }
 
-/* Footer Section */
 .course-footer {
     display: flex;
     justify-content: space-between;
@@ -109,7 +105,6 @@
     background: #2d3748;
 }
 
-/* Icons for Admin */
 .action-buttons {
     display: flex;
     gap: 8px;
@@ -124,7 +119,6 @@
     cursor: pointer;
 }
 
-/* Add New Card */
 .add-new-card {
     border: 2px dashed #cbd5e0;
     display: flex;
@@ -140,3 +134,5 @@
     color: #5d5dff;
     margin-bottom: 10px;
 }
+
+*/

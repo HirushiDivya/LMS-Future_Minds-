@@ -1,14 +1,12 @@
-course-grid {
+/*course-grid {
     display: grid;
-    /* 1fr බැගින් සමාන කොටස් 4කට බෙදීම */
     grid-template-columns: repeat(4, 1fr); 
-    gap: 20px; /* කාඩ් අතර පරතරය */
+    gap: 20px; 
     max-width: 1300px; 
     margin: 40px auto;
     padding: 0 20px;
 }
 
-/* Card එකේ ප්‍රධාන රාමුව */
 .course-card {
     background: #fff;
     border-radius: 18px;
@@ -25,10 +23,9 @@ course-grid {
     box-shadow: 0 15px 30px rgba(99, 102, 241, 0.12);
 }
 
-/* රූපයේ උස (Height) */
 .quiz-card-img {
     width: 100%;
-    height: 160px; /* Card 4ක් ඇති විට ගැලපෙන උස */
+    height: 160px; 
     object-fit: cover;
     display: block;
 }
@@ -38,7 +35,6 @@ course-grid {
     gap: 8px;
 }
 
-/* අකුරු වල ප්‍රමාණයන් (Standard sizes for 4-card layout) */
 .course-card h3 {
     font-size: 1.15rem;
     color: #1e293b;
@@ -60,7 +56,6 @@ course-grid {
     color: #64748b;
 }
 
-/* මිල සහ බොත්තම */
 .quiz-footer {
     display: flex;
     justify-content: space-between;
@@ -92,15 +87,16 @@ course-grid {
     background: #6366f1;
 }
 
-/* Responsive: තිරය කුඩා වන විට Card ගණන වෙනස් කිරීම */
 @media (max-width: 1024px) {
     .course-grid {
-        grid-template-columns: repeat(2, 1fr); /* Tablet වලදී 2ක් */
+        grid-template-columns: repeat(2, 1fr); 
     }
 }
 
 @media (max-width: 600px) {
     .course-grid {
-        grid-template-columns: repeat(1, 1fr); /* Mobile වලදී 1ක් */
+        grid-template-columns: repeat(1, 1fr); 
     }
 }
+    */
+    

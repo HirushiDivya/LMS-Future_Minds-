@@ -27,7 +27,6 @@ const Home = () => {
     }
     API.get(`/courses/student-enrolled-count/${studentId}`)
       .then((res) => {
-        // මෙහිදී setEnrolledCourseCount වැනි ඔබ හදාගත් state එකක් භාවිතා කරන්න
         setEnrolledCourseCount(res.data.enrolled_courses_count);
       })
       .catch((err) => console.error("Error fetching course count:", err));

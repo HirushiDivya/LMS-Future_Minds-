@@ -12,34 +12,34 @@ export default function AddCourse() {
     category: "Science",
   });
 
-  // Image file එක සහ preview එක සඳහා වෙනම states
+  // Image file + preview  states
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  // State එකක් තබා ගන්න link එක සඳහා
+  // State for image link 
   const [imageUrl, setImageUrl] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // File එකක් තෝරාගත් විට ක්‍රියාත්මක වන function එක
+  // when select new file/link
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setSelectedFile(file);
-      setImageUrl(""); // File එකක් තෝරන විට කලින් තිබූ link එක අයින් කරන්න
+      setImageUrl(""); // remove exist file/image
       setPreviewUrl(URL.createObjectURL(file));
     }
   };
 
-  // URL එකක් ඇතුළත් කළ විට ක්‍රියාත්මක වන function එක
+  // when enter url
   const handleLinkChange = (e) => {
     const link = e.target.value;
     setImageUrl(link);
-    setSelectedFile(null); // Link එකක් දෙන විට කලින් තෝරාගත් file එක අයින් කරන්න
-    setPreviewUrl(link); // Preview එකට කෙලින්ම link එක දෙන්න
+    setSelectedFile(null); // remove exist link
+    setPreviewUrl(link); // Preview -> direct link 
   };
 
   const handleSubmit = async (e) => {
@@ -55,19 +55,19 @@ export default function AddCourse() {
       "https://cdn.pixabay.com/photo/2022/11/19/14/42/e-learning-7602249_1280.jpg";
 
     if (selectedFile) {
-      // 1. පරිශීලකයා File එකක් තෝරා ඇත්නම් එය යවන්න
+      // if select new image(file) send it
       data.append("course_img", selectedFile);
     } else if (imageUrl && imageUrl.trim() !== "") {
-      // 2. පරිශීලකයා Link එකක් ඇතුළත් කර ඇත්නම් එය 'image_url' ලෙස යවන්න
+      // if select new image(link) send it
       data.append("image_url", imageUrl);
     } else {
-      // 3. දෙකම නැතිනම් Default Link එක 'image_url' ලෙස යවන්න
+      // if not select new image keep exist one
       data.append("image_url", defaultImage);
     }
 
     try {
       const response = await API.post("/courses/add", data);
-      // API එකට POST request එක යැවීම
+      // API -> POST request 
 
       if (response.status === 200) {
         Swal.fire({
@@ -83,7 +83,7 @@ export default function AddCourse() {
       }
     } catch (err) {
       console.error("Error adding course:", err);
-      // Error එකක් ආ විට පෙන්වන පණිවිඩය
+      // Error 
       Swal.fire({
         title: "Error!",
         text: "Failed to add course. Please check your connection or backend.",
@@ -161,7 +161,7 @@ export default function AddCourse() {
               - OR -
             </div>
 
-            {/* File Upload කොටස */}
+            {/* File Upload */}
             <div
               className="image-upload-box"
               style={{
@@ -189,7 +189,7 @@ export default function AddCourse() {
                   : "Click to Upload Image"}
               </label>
 
-              {/* Preview එක පෙන්වීම (File එකක වුණත්, Link එකක වුණත්) */}
+              {/* Preview  */}
               {previewUrl && (
                 <div style={{ marginTop: "15px" }}>
                   <p style={{ fontSize: "12px", color: "#888" }}>

@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import API from "../API";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-//import "../Admin/css/Coursecontent.css";
-//import "./Admin.css";
 import "./cours.css";
 
 const AddQuiz = () => {
@@ -19,9 +17,9 @@ const AddQuiz = () => {
     course_id: "",
   });
 
-  const [csvFile, setCsvFile] = useState(null); // CSV (Questions) සඳහා
-  const [imageFile, setImageFile] = useState(null); // Image File එක සඳහා
-  const [imageUrl, setImageUrl] = useState(""); // Image URL එක සඳහා
+  const [csvFile, setCsvFile] = useState(null); // CSV (Questions)
+  const [imageFile, setImageFile] = useState(null); // Image File 
+  const [imageUrl, setImageUrl] = useState(""); // Image URL 
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -53,7 +51,7 @@ const AddQuiz = () => {
     setLoading(true);
 
     try {
-      // 1. Course ID එක පරීක්ෂා කිරීම
+      //  Course ID check
       try {
         await API.get(`/courses/${quizData.course_id}`);
       } catch (err) {
@@ -62,7 +60,7 @@ const AddQuiz = () => {
         return;
       }
 
-      // 2. FormData සකස් කිරීම (Quiz දත්ත සහ Image සඳහා)
+      //  FormData (Quiz +  Image )
       const formData = new FormData();
       formData.append("title", quizData.title);
       formData.append("qdescription", quizData.qdescription);
@@ -71,19 +69,19 @@ const AddQuiz = () => {
       formData.append("course_id", quizData.course_id);
       
       if (imageFile) {
-        formData.append("Quiz_IMG", imageFile); // File එකක් තිබේ නම්
+        formData.append("Quiz_IMG", imageFile); // if have file(image)
       } else {
-        formData.append("image_url", imageUrl); // නැතිනම් Link එක
+        formData.append("image_url", imageUrl); // or Link 
       }
 
-      // 3. Quiz එක Create කිරීම
+      // Quiz Create 
       const quizRes = await API.post("/quiz/create-quiz", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-
+ 
       const quizId = quizRes.data.quizId;
 
-      // 4. CSV File (Questions) Upload කිරීම
+      // 4. CSV File (Questions) Upload 
       if (quizId && csvFile) {
         const csvFormData = new FormData();
         csvFormData.append("file", csvFile);

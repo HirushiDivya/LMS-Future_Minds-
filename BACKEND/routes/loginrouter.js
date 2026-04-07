@@ -9,7 +9,7 @@ function generateOTP() {
 }
 //nodemailer
 
-// 1. Transporter එක (ෆයිල් එකේ උඩින්ම)
+//  Transporter 
 const transporter = nodemailer.createTransport({
   service: "Gmail",
   auth: {
@@ -18,7 +18,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// 2. මෙන්න මේකයි ඔයාට අමතක වෙලා තියෙන function එක (Define this first)
+//fogotpw
 const sendForgotPWTMail = async (userEmail, otpCode) => {
   const mailOptions = {
     from: '"LearnEase Support" <shadosilva4@gmail.com>',
@@ -96,41 +96,7 @@ router.post("/login", async (req, res) => {
     });
   });
 });
-/*
-//http://localhost:5000/api/login/forgot-password
-//fogot pw
-router.post("/forgot-password", (req, res) => {
-  const { email } = req.body;
 
-  const sql = "SELECT * FROM students WHERE email = ?";
-  db.query(sql, [email], (err, results) => {
-    if (err) return res.status(500).json(err);
-    if (results.length === 0) return res.status(400).json({ message: "No student found with this email" });
-
-    const otp = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
-    const expiry = new Date(Date.now() + 3 * 60 * 1000); // 3 minutes
-
-    // Save OTP in DB
-    const updateSql = "UPDATE students SET forgot_otp = ?, forgot_otp_expiry = ? WHERE email = ?";
-    db.query(updateSql, [otp, expiry, email], (err, result) => {
-      if (err) return res.status(500).json(err);
-
-      // Send email
-      const mailOptions = {
-        from: "your-email@gmail.com",
-        to: email,
-        subject: "Password Reset OTP",
-        text: `Your OTP is ${otp}. It expires in 3 minutes.`,
-      };
-
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) return res.status(500).json({ message: "Error sending OTP", error });
-        res.json({ message: "OTP sent to your email" });
-      });
-    });
-  });
-});
-*/
 router.post("/forgot-password", (req, res) => {
   const { email } = req.body;
 
@@ -146,7 +112,6 @@ router.post("/forgot-password", (req, res) => {
     db.query(updateSql, [otp, expiry, email], async (err, result) => {
       if (err) return res.status(500).json(err);
 
-      // --- මෙතැනදී අලුත් function එක call කරනවා ---
       try {
         await sendForgotPWTMail(email, otp);
         res.json({ message: "OTP sent to your email" });

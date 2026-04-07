@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import API from "../../API";
 import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2"; 
-//import "../StudentRegister.css";
 import "./ViewQuiz.css";
 
 const ViewQuiz = () => {
@@ -23,46 +22,6 @@ const ViewQuiz = () => {
     }
   }, [id]);
 
-  /*
-  const fetchQuizData = async () => {
-    try {
-      setLoading(true);
-      const studentId = localStorage.getItem("userID");
-
-      const detailsRes = await API.get(`/quiz/quiz/${id}`);
-      setQuizData(detailsRes.data);
-
-      if (studentId) {
-        try {
-          const statusRes = await API.get(`/admin/student/quiz-payments/${studentId}`);
-          const currentPayment = statusRes.data.find(
-            (p) => p.quiz_name === detailsRes.data.title
-          );
-
-          if (currentPayment) {
-            setPaymentStatus(currentPayment.status);
-          }
-        } catch (err) {
-          console.log("No payment record.");
-        }
-
-        
-        try {
-          const questionsRes = await API.get(`/quiz/get-questions/${id}?studentId=${studentId}`);
-          setQuestions(questionsRes.data);
-          setIsApproved(true);
-        } catch (err) {
-          setIsApproved(false);
-        }
-      }
-      setLoading(false);
-    } catch (err) {
-      console.error("Error:", err);
-      setLoading(false);
-    }
-  };
-*/
-
 
 const fetchQuizData = async () => {
     try {
@@ -73,7 +32,7 @@ const fetchQuizData = async () => {
       setQuizData(detailsRes.data);
 
       if (studentId) {
-        // --- ශිෂ්‍යයාගේ Account Status එක පරීක්ෂා කිරීම ---
+        // --- check student's Account Status  ---
         try {
           const enrollRes = await API.get(`/enroll/my-dashboard/${studentId}`);
           if (enrollRes.data.length > 0) {
@@ -99,7 +58,7 @@ const fetchQuizData = async () => {
         try {
           const questionsRes = await API.get(`/quiz/get-questions/${id}?studentId=${studentId}`);
           setQuestions(questionsRes.data);
-          // ශිෂ්‍යයා Active නම් පමණක් Approved කරන්න
+          // if student ststus = Active - Approved
           setIsApproved(true); 
         } catch (err) {
           setIsApproved(false);
@@ -196,42 +155,9 @@ const fetchQuizData = async () => {
           </table>
         </div>
  
-        {/*<div style={{ textAlign: "center" }}>
-          {isApproved ? (
-            <button className="view-btn" onClick={() => navigate(`/questions/${id}`)}>
-              🚀 Start Quiz Now
-            </button>
-          ) : (
-            <div className="locked-section" >
-              <div style={{ fontSize: "50px", marginBottom: "15px" }}>
-                {paymentStatus === "Pending" ? "⏳" : "🔒"}
-              </div>
-              <h3 style={{ color: "#facc15" }}>
-                {paymentStatus === "Pending" ? "Approval in Progress" : "Unlock this Quiz"}
-              </h3>
-              <p className="payment-sentsnce" >
-                {paymentStatus === "Pending" 
-                  ? "We're verifying your payment receipt. You'll be notified once access is granted." 
-                  : "To access the questions, please complete the payment and upload your receipt."}
-              </p>
-              <button
-                className="register-btn"
-                onClick={handleEnrollRequest}
-                style={{
-                  background: paymentStatus === "Pending" ? "#4b5563" : "#facc15",
-                  color: "#000",
-                  fontWeight: "bold",
-                  cursor: paymentStatus === "Pending" ? "not-allowed" : "pointer"
-                }}
-              >
-                {paymentStatus === "Pending" ? "Pending Approval" : "Pay Now & Unlock"}
-              </button>
-            </div>
-          )}
-        </div>  */}
 
         <div style={{ textAlign: "center" }}>
-  {/* ශිෂ්‍යයා Active සහ Approved නම් පමණක් Start Quiz පෙන්වන්න */}
+  {/* if only student stats = Active + Approved disply - Start Quiz  */}
   {isApproved && studentStatus === "Active" ? (
     <button className="view-btn" onClick={() => navigate(`/questions/${id}`)}>
       🚀 Start Quiz Now
@@ -252,7 +178,7 @@ const fetchQuizData = async () => {
               : "To access the questions, please complete the payment.")}
       </p>
       
-      {/* Deactive නම් 'Pay Now' button එක හංගන්න හෝ වෙනස් කරන්න */}
+      {/* if student status  = Deactive -> hide  'Pay Now' button  */}
       {studentStatus !== "Deactive" && (
         <button
           className="register-btn"

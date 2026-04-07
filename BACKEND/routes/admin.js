@@ -8,13 +8,13 @@ const fs = require("fs");
 const bcrypt = require('bcrypt'); //for pw hash
 const path = require('path');
 
-// --- Multer Configuration ආරම්භය ---
+// --- Multer Configuration---
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // පින්තූර save වෙන්නේ මේ folder එකට
+    cb(null, 'uploads/'); // imge save  folder 
   },
   filename: (req, file, cb) => {
-    // File එකට unique නමක් දීම (උදා: 171216500.jpg)
+    // File -> unique name ( 171216500.jpg)
     cb(null, Date.now() + path.extname(file.originalname));
   }
 });
@@ -54,37 +54,6 @@ router.get("/", (req, res) => {
   });
 });
 
-/*
-//http://localhost:5000/api/admin/course/all-enrollments
-//All students enrollment requests (course)
-router.get("/course/all-enrollments" , (req, res) => {
-  const sql = `
-        SELECT 
-            e.enrollment_id, 
-            s.full_name AS student_name, 
-            s.email AS student_email,
-            c.title AS course_name, 
-            c.price AS course_price,
-            e.payment_status, 
-            e.payment_method,
-            e.payment_slip,
-            e.enroll_date
-        FROM enrollments e
-        JOIN students s ON e.student_id = s.id
-        JOIN courses c ON e.course_id = c.id
-        ORDER BY e.enroll_date DESC`; //Latest first
-
-  db.query(sql, (err, results) => {
-    if (err) {
-      console.error("Database error:", err);
-      return res
-        .status(500)
-        .json({ error: "An error occurred while fetching data." });
-    }
-    res.json(results);
-  });
-});
-*/
 // http://localhost:5000/api/admin/course/all-enrollments
 // All students enrollment requests (course)
 router.get("/course/all-enrollments", (req, res) => {
@@ -93,7 +62,7 @@ router.get("/course/all-enrollments", (req, res) => {
             e.enrollment_id, 
             s.full_name AS student_name, 
             s.email AS student_email,
-            s.status AS student_account_status, -- මෙන්න මේ කොටස අලුතින් එකතු කළා
+            s.status AS student_account_status,
             c.title AS course_name, 
             c.price AS course_price,
             e.payment_status, 
@@ -115,6 +84,7 @@ router.get("/course/all-enrollments", (req, res) => {
     res.json(results);
   });
 });
+
 //http://localhost:5000/api/admin/course/pending-payments
 //admin - all pending payments(course)
 router.get("/course/pending-payments", (req, res) => {
@@ -175,13 +145,14 @@ router.get("/student/quiz-payments/:studentId", (req, res) => {
 });
 
 
-/*
+
 // http://localhost:5000/api/admin/quiz/all-paymntrequests
 router.get("/quiz/all-paymntrequests", (req, res) => {
     const sql = `
         SELECT 
             qp.id AS payment_id,
             s.full_name AS student_name,
+            s.status AS student_account_status, --  Active/Deactive status 
             q.title AS quiz_name,
             qp.amount,
             qp.payment_method,
@@ -202,36 +173,6 @@ router.get("/quiz/all-paymntrequests", (req, res) => {
         res.json(results);
     });
 });
-*/
-
-// http://localhost:5000/api/admin/quiz/all-paymntrequests
-router.get("/quiz/all-paymntrequests", (req, res) => {
-    const sql = `
-        SELECT 
-            qp.id AS payment_id,
-            s.full_name AS student_name,
-            s.status AS student_account_status, -- ශිෂ්‍යයාගේ Active/Deactive status එක
-            q.title AS quiz_name,
-            qp.amount,
-            qp.payment_method,
-            qp.status,
-            qp.payment_slip,
-            qp.created_at
-        FROM Quiz_Payments qp
-        JOIN students s ON qp.student_id = s.id
-        JOIN Quizzes q ON qp.quiz_id = q.id
-        ORDER BY qp.created_at DESC
-    `;
-
-    db.query(sql, (err, results) => {
-        if (err) {
-            console.error("Database Error:", err);
-            return res.status(500).json({ error: err.message });
-        }
-        res.json(results);
-    });
-});
-
 
 
 
@@ -335,7 +276,7 @@ router.put("/course/verify-payment/:id", (req, res) => {
     if (results.length === 0) {
       return res
         .status(404)
-        .json({ message: "Enrollment ID එක සොයාගත නොහැක." });
+        .json({ message: "Enrollment ID could not found" });
     }
 
     // if have not slip admin can not approve
@@ -368,7 +309,7 @@ router.put("/course/verify-payment/:id", (req, res) => {
 
 
 //quiz
-// 1.fetch all quizzes associated with a specific course code
+//fetch all quizzes associated with a specific course code
 router.get("/quizzes-by-course/:course_code", (req, res) => {
   const { course_code } = req.params;
   const sql = "SELECT * FROM Quizzes WHERE course_id = ?";
@@ -390,7 +331,7 @@ router.get("/my-quizzes/:userId", (req, res) => {
  
  
 
-//4.admin approve,reject quiz paymnt(bank slip upoad)
+//admin approve,reject quiz paymnt(bank slip upoad)
 // http://localhost:5000/api/admin/quiz/verify-payment
 router.put("/quiz/verify-payment", (req, res) => {
   const { paymentId, status } = req.body; // status = 'Approved' / 'Rejected'
@@ -425,12 +366,11 @@ router.put("/quiz/verify-payment", (req, res) => {
   });
 });
 
-// 5.get 1 question
+//get 1 question
 // http://localhost:5000/api/admin/get-questions/:id
 router.get("/get-questions/:id", (req, res) => {
   const quizId = req.params.id;
 
-  // 1. Corrected the column name (assuming it's quiz_id) and added the closing quote
   const sql = "SELECT * FROM Questions WHERE quiz_id = ?";
 
   db.query(sql, [quizId], (err, result) => {
@@ -438,17 +378,17 @@ router.get("/get-questions/:id", (req, res) => {
       return res.status(500).json({ error: err.message });
     }
 
-    // 2. Check if the list is empty
+    // Check if the list is empty
     if (result.length === 0) {
       return res.status(404).json({ error: "No questions found for this quiz." });
     }
 
-    // 3. Return the entire array of questions, not just the first one
+    // Return the entire array of questions, not just the first one
     res.json(result); 
   });
 });
 
-// 6.get all quiz details
+//get all quiz details
 // http://localhost:5000/api/admin/all-quizzes
 router.get("/all-quizzes", (req, res) => {
   const sql = "SELECT * FROM Quizzes";
@@ -469,7 +409,7 @@ router.get("/all-quizzes", (req, res) => {
 
 
 
-//13.get 1 quiz by id
+//get 1 quiz by id
 // http://localhost:5000/api/admin/quiz/:id
 router.get("/quiz/:id", (req, res) => {
   const quizId = req.params.id;

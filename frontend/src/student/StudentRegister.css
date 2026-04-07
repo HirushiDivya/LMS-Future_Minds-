@@ -9,14 +9,6 @@
   transition: background 0.3s ease;
 }
 
-
-
-/*
-/* Dark Mode 
-[data-theme='dark'] .register-page  {
-  background: var(--bg-color); 
-}
-*/
 /* The Glassmorphism Card */
 .register-card {
   background: rgba(255, 255, 255, 0.15);
@@ -117,53 +109,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*GLOBAL THEME & VARIABLES */
 :root {
   --pg-bg-light: linear-gradient(135deg, #74abe2 0%, #5563b1 100%);
@@ -245,70 +190,6 @@
   max-width: 1200px;
 }
 
-/*
-.course-card, 
-.content-card {
-  /* background: var(--card-bg-glass); 
-  background: rgba(255, 255, 255, 0.15) !important; 
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border-radius: 25px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center; 
-  text-align: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.course-card:hover, 
-.content-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
-  border-color: rgba(255, 255, 255, 0.5);
-}
-
-/* Badges (S001 / Content Type) - Positioned Left 
-.course-code, 
-.content-type-badge {
-  align-self: center;
-  font-size: 0.75rem;
-  font-weight: 700;
-  background: rgba(0, 0, 0, 0.25);
-  color: #fff;
-  padding: 6px 14px;
-  border-radius: 10px;
-  margin-bottom: 10px;
-}
-
-/* Titles 
-.course-card h3, 
-.content-card h3 {
-  color: var(--gold-accent);
-  font-size: 1.6rem;
-  margin: 10px 0;
-  font-weight: 800;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-[data-theme='dark'] .course-card h3 {
-  color: var(--text-gold);
-}
-
-/* Description 
-.course-card p,
-.resource-lock-message p {
-  font-size: 0.95rem;
-  margin-bottom: 25px;
-  opacity: 0.9;
-  line-height: 1.4;
-}
-
-
-*/
-
 
 .course-card, 
 .content-card {
@@ -337,7 +218,6 @@
   font-weight: 600;
   z-index: 2;
 }
-
 
 
 /* FOOTER (Price & Button Row) */

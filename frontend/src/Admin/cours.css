@@ -8,7 +8,7 @@
     margin-top: 20px;
         max-width: 1250px;
 
-    
+     
 }
 
 
@@ -232,4 +232,16 @@ background-color: #efedede6;
     .courses-grid {
         grid-template-columns: 1fr; 
     }
+}
+
+
+
+/*course-content-admin*/
+[data-theme='dark'] .link-preview {
+  color: #fff;
+  align-items: center;
+}
+[data-theme='light'] .link-preview {
+  color: #0d0e0f;
+ align-items: center;
 }

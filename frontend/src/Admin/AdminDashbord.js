@@ -14,6 +14,7 @@ import {
   Line,
 } from "recharts";
  
+//direct api - backend
 const Admindashbord = () => {
   const navigate = useNavigate();
   const [counts, setCounts] = useState({
@@ -156,7 +157,7 @@ const Admindashbord = () => {
                 if (item.clickable) {
                   navigate(
                     item.title === "Pending Quiz Approvals"
-                      ? "/quizenrollment-req"
+                      ? "/enrollment-req"
                       : "/enrollment-req",
                   );
                 }

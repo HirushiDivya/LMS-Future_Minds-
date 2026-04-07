@@ -32,10 +32,9 @@ const sendOTPMail = async (userEmail, userName, otpCode) => {
   });
 
   const mailOptions = {
-    from: '"FutureMinds Education" <shadosilva4@gmail.com>', // Sender නම මෙතන දාන්න
+    from: '"FutureMinds Education" <shadosilva4@gmail.com>', 
     to: userEmail,
     subject: "Verify Your Account - OTP Code",
-    // මෙන්න මෙතන තමයි අලුත් design එක හදන්නේ
     html: `
       <div style="font-family: 'Poppins', Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden;">
         <div style="background: linear-gradient(90deg, #6c63ff 0%, #ff6584 100%); padding: 30px; text-align: center;">
@@ -75,57 +74,6 @@ const sendOTPMail = async (userEmail, userName, otpCode) => {
 };
 
 
-/*
-router.post("/register", async (req, res) => {
-  try {
-    const { full_name, email, mobile, password } = req.body;
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Generate OTP and expiry in 3 min
-    const otp = generateOTP();
-    const otpExpiry = new Date(Date.now() + 3 * 60 * 1000); 
-
-    // Insert into DB
-    const sql =
-      "INSERT INTO students (full_name,email,mobile,password,otp,otp_expiry) VALUES (?, ?, ?, ?, ?, ?)";
-    db.query(
-      sql,
-      [full_name, email, mobile, hashedPassword, otp, otpExpiry],
-      async (err, result) => {
-        if (err) {
-          if (err.code === "ER_DUP_ENTRY") {
-            return res.status(400).json({ message: "Email already exists" });
-          }
-          return res.status(500).json(err);
-        }
-
-        // Send OTP email
-        const mailOptions = {
-          from: "your-email@gmail.com",
-          to: email,
-          subject: "Verify your email",
-          text: `Your OTP is ${otp}. It expires in 3 minutes.`,
-        };
-
-        transporter.sendMail(mailOptions, (error, info) => {
-          if (error) {
-            return res.status(500).json({ message: "Error sending OTP", error });
-          } else {
-            res.json({
-              message: "OTP sent to your email. Please verify to activate account",
-              studentID: result.insertId,
-            });
-          }
-        });
-      }
-    );
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error });
-  }
-});
-*/
-
 router.post("/register", async (req, res) => {
   try {
     const { full_name, email, mobile, password } = req.body;
@@ -150,9 +98,8 @@ router.post("/register", async (req, res) => {
           return res.status(500).json(err);
         }
 
-        // --- මෙතැන් සිට වෙනස සිදු වේ ---
         try {
-          // ඔබ කලින් හදාගත් ලස්සන HTML Mail function එක මෙතැනදී call කරයි
+          // call HTML Mail function
           await sendOTPMail(email, full_name, otp);
           
           res.json({
@@ -161,8 +108,7 @@ router.post("/register", async (req, res) => {
           });
         } catch (mailError) {
           console.error("Mail Error:", mailError);
-          // Email එක යැවීමේදී error එකක් ආවත් student record එක වැටිලා තියෙන්නේ. 
-          // නමුත් පරිශීලකයාට දැනුම් දීම වැදගත්.
+          
           res.status(500).json({ message: "Error sending OTP email", error: mailError });
         }
       }

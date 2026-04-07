@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from "react";
-import API from "../../API"; // පියවර දෙකක් පිටතට (Quiz -> student -> src)
-
+import API from "../../API"; //(Quiz -> student -> src)
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
-//import "../StudentRegister.css";
 import "./Quiz.css";
-//C:\Users\hirus\OneDrive\Desktop\FS Intern\Project\LMS\frontend\src\Courses\Course.css
 
 const AllQuiz = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -16,16 +12,7 @@ const AllQuiz = () => {
   const navigate = useNavigate();
 
   const BASE_URL = "http://localhost:5000";
-  /*
- const fetchQuizzes = async () => {
-  try {
-    const res = await axios.get("http://localhost:5000/api/admin/all-quizzes");
-    console.log("Frontend received quizzes:", res.data); // Inspect -> Console 
-    setQuizzes(res.data);
-  } catch (err) {
-    console.error("Error fetching quizzes", err);
-  }
-  };*/
+
   const fetchQuizzes = async () => {
     try {
       let url = "/admin/all-quizzes";
@@ -89,7 +76,7 @@ const AllQuiz = () => {
   });
 
   const handleViewQuiz = (quizId) => {
-  console.log("Navigating to Quiz ID:", quizId); // මේක දාලා බලන්න undefined ද කියලා
+  console.log("Navigating to Quiz ID:", quizId); 
   if (quizId) {
     navigate(`/s-viewquizz/${quizId}`);
   } else {
@@ -102,7 +89,7 @@ const AllQuiz = () => {
 <h1 className="about-title" style={{paddingTop : "0px", marginTop :"-15px", paddingBottom: "20px"}}>
             Explore <span className="highlight">All </span>Quizes
           </h1>
-      {/* Enhanced Search & Filter Section */}
+      {/* Search & Filter Section */}
 
       <div className="quizpagesearch-container">
         {/* Animated Search Box */}
@@ -143,8 +130,8 @@ const AllQuiz = () => {
                 src={
                   quiz.Quiz_IMG
                     ? quiz.Quiz_IMG.startsWith("http")
-                      ? quiz.Quiz_IMG // Web link එකක් නම් කෙලින්ම පෙන්වන්න
-                      : `${BASE_URL}/uploads/${quiz.Quiz_IMG}` // Local upload එකක් නම් path එක හදන්න
+                      ? quiz.Quiz_IMG // Web link - show direclty
+                      : `${BASE_URL}/uploads/${quiz.Quiz_IMG}` // Local upload - give path 
                     : "https://via.placeholder.com/300x200?text=No+Image"
                 }
                 alt={quiz.title}

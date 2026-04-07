@@ -181,16 +181,7 @@
   line-height: 1.3;
 }
 
-.link-preview {
-  color: #ffeb3b;
-  text-decoration: none;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 20px;
-  transition: 0.2s;
-}
+
 
 .link-preview:hover {
   text-decoration: underline;
@@ -400,7 +391,7 @@
     border-radius: 8px;
     cursor: pointer;
 }
-
+  
 
 /* Acourse.js,AddCourse.js,AddQuiz.js*/
 /* Floating Back Button Style 

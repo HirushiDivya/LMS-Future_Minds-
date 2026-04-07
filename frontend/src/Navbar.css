@@ -17,21 +17,6 @@
   --card-bg: #1e1e1e;
 }
 
-
-
-/* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  transition: background var(--transition-speed) ease, color var(--transition-speed) ease;
-  font-family: 'Poppins', sans-serif;
-}
-
 /* --- Navbar Container --- */
 .navbar {
   background-color: var(--nav-bg);

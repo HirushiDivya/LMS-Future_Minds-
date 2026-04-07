@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import API from "../API";
 import { useNavigate } from "react-router-dom";
-import "./Studentcoursecontent.css";
+//import "./Studentcoursecontent.css";
 //courses -> science
 export default function SciencePage() {
   const [courses, setCourses] = useState([]);

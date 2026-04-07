@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import API from "../API";
 import { useNavigate } from "react-router-dom";
-//import "./Studentcoursecontent.css";
 import "./Course.css";
 
 export default function Coursepage() {
@@ -12,7 +11,7 @@ export default function Coursepage() {
   const [module, setModule] = useState(""); //module code
   const [category, setCategory] = useState("All");
 
-  const BASE_URL = "http://localhost:5000"; // ඔබේ backend port එක 5000 නම්
+  const BASE_URL = "http://localhost:5000"; 
 
   const categories =
     category === "All" ? ["Science", "Technology", "Mathematics"] : [category];
@@ -149,7 +148,6 @@ export default function Coursepage() {
          
  
           <div className="courses-grid" style={{paddingBottom: "30px"}}>
-            {/* categories.map වෙනුවට කෙලින්ම courses.map භාවිතා කරන්න */}
             {courses.length > 0 ? (
               courses.map((course) => (
                 <div key={course.id} className="coursepge-card">
@@ -160,8 +158,8 @@ export default function Coursepage() {
                     src={
                       course.course_img
                         ? course.course_img.startsWith("http")
-                          ? course.course_img // Web link එකක් නම් කෙලින්ම පෙන්වන්න
-                          : `${BASE_URL}/uploads/${course.course_img}` // Local upload එකක් නම් path එක හදන්න
+                          ? course.course_img // Web link - direct
+                          : `${BASE_URL}/uploads/${course.course_img}` // Local upload - give path 
                          : "https://via.placeholder.com/300x200?text=No+Image"
                     }
                     alt={course.title}

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import API from "../API";
-import { useParams } from "react-router-dom";
-import "../Admin/css/Coursecontent.css";
+import { useParams, useNavigate } from "react-router-dom";
+//import "../Admin/css/Coursecontent.css";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+ import "./cours.css";
 
 export default function CourseContent() {
   const { course_code } = useParams();
@@ -140,25 +140,19 @@ export default function CourseContent() {
   };
 
   return (
-    <div className="content-page-container">
-      <div className="content-header">
-        <div
-          className="content-header"
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
+    <div className="admin-main-content">
+      <div className="dashboard-title-text" style={{ marginTop: "40px", paddingBottom: "30px" }}>
+        
+        
           <h2>
             {courseTitle ? `${courseTitle} - ${course_code}` : course_code}
           </h2>
-        </div>
+      
       </div>
 
-      <div className="content-grid">
+      <div className="courses-grid">
         <div
-          className="content-card"
+          className="coursepge-card"
           onClick={() => setShowAddModal(true)}
           style={{
             border: "2px dashed rgba(255, 255, 255, 0.3)",
@@ -167,7 +161,7 @@ export default function CourseContent() {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            minHeight: "250px",
+            minHeight: "150px",
             transition: "all 0.3s ease",
           }}
           onMouseOver={(e) =>
@@ -193,8 +187,8 @@ export default function CourseContent() {
 
         {!loading &&
           contents.map((item) => (
-            <div key={item.id} className="content-card">
-              <div className="content-type-badge">{item.content_type}</div>
+            <div key={item.id} className="coursepge-card" style={{ border: "1px solid #696464" }}>
+              <div className="course-badge" style={{background: "#53789d", marginTop:"-15px"}}>{item.content_type}</div>
               <h3>{item.title}</h3>
               {item.external_link && (
                 <a
@@ -206,15 +200,15 @@ export default function CourseContent() {
                   View Resource
                 </a>
               )}
-              <div className="card-actions">
+              <div className="card-actions" style={{marginLeft: "90px"}}>
                 <button
-                  className="c-edit-btn"
+                  className="course-view-btn"
                   onClick={() => setEditContent(item)}
                 >
                   Edit
                 </button>
                 <button
-                  className="c-delete-btn"
+                  className="course-view-btn"
                   onClick={() => handleDelete(item.id)}
                 >
                   Delete

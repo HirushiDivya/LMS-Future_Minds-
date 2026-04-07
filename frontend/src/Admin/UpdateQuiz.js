@@ -51,7 +51,7 @@ const AUpdateQuiz = () => {
       text: 'Quiz Updated Successfully!',
       icon: 'success',
       confirmButtonColor: '#3085d6',
-      timer: 2000 // Thappara 2kin auto close wenna
+      timer: 2000 // after 2 sec off auto
     });
 
     setEditQuiz(null);
