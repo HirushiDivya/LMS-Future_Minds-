@@ -4,7 +4,8 @@ const connection = mysql.createConnection({
   host: 'mysql-2e81e578-divyanjalie789-1021.i.aivencloud.com',
   port: 10760,
   user: 'avnadmin',
-  password: 'AVNS_zRY-hBim_pSn1krmwF8',
+  password: process.env.DB_PASSWORD,
+  //password: 'AVNS_zRY-hBim_pSn1krmwF8',
   database: 'defaultdb',
   ssl: {
     rejectUnauthorized: false // Aiven සඳහා මෙය අනිවාර්යයි
