@@ -13,18 +13,18 @@ Before running the project, ensure you have the following installed:
 Node.js 
 
 ### ⚙️ Setup Instructions
-##### 1. Database Configuration
+### 1. Database Configuration
 Open MySQL Workbench.
 Create a new database named lms_db (or your preferred name).
 Navigate to the /database folder in this project.
 Import the lms_backup.sql file into your newly created database.
 
-##### 2. Backend Setup
+### 2. Backend Setup
 1. Navigate to the BACKEND folder:   ** cd BACKEND**
 2. Install dependencies:  **npm install**
 3. Start the backend server: ** npm start**
 
-##### 3. Frontend Setup
+### 3. Frontend Setup
 Navigate to the frontend folder:  **cd frontend**
 Install dependencies:   ** npm install**
 Start the React application:   **npm start**
