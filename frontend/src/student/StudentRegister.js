@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../API";
 import "./StudentRegister.css";
+import Swal from "sweetalert2";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function StudentRegister() {
   const [form, setForm] = useState({
@@ -10,6 +12,7 @@ export default function StudentRegister() {
     mobile: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -22,21 +25,21 @@ export default function StudentRegister() {
 
     // check it empty or not
     if (!full_name || !email || !mobile || !password) {
-      alert("Please fill all fields.");
+      Swal.fire({ icon: 'warning', title: 'Oops...', text: 'Please fill all fields.' });
       return false;
     }
 
     // check email formt
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      alert("Please enter a valid email address.");
+      Swal.fire({ icon: 'error', title: 'Invalid Email', text: 'Please enter a valid email address.' });
       return false;
     }
 
     //  Mobile number (10 no)
     const mobileRegex = /^[0-9]{10}$/;
     if (!mobileRegex.test(mobile)) {
-      alert("Mobile number must be exactly 10 digits.");
+      Swal.fire({ icon: 'error', title: 'Invalid Mobile', text: 'Mobile number must be exactly 10 digits.' });
       return false;
     }
 
@@ -44,7 +47,7 @@ export default function StudentRegister() {
     try {
       const res = await API.get(`/students/profile/${email}`);
       if (res.data) {
-        alert("This email is already registered. Please login.");
+        Swal.fire({ icon: 'info', title: 'Already Registered', text: 'This email is already registered. Please login.' });
         return false;
       }
     } catch (err) {
@@ -65,10 +68,10 @@ export default function StudentRegister() {
 
     try {
       const res = await API.post("/register/register", form);
-      alert(res.data.message);
+      Swal.fire({ icon: 'success', title: 'Success', text: res.data.message });
       navigate("/verify-otp", { state: { email: form.email } });
     } catch (err) {
-      alert(err.response?.data?.message || "Server not responding.");
+      Swal.fire({ icon: 'error', title: 'Error', text: err.response?.data?.message || 'Server not responding.' });
     }
   };
 
@@ -90,27 +93,52 @@ export default function StudentRegister() {
 
         <div className="form-group">
           <label>Mobile</label>
-          <input 
-            name="mobile" 
-            value={form.mobile} 
-            onChange={handleChange} 
-            placeholder="07XXXXXXXX" 
+          <input
+            name="mobile"
+            value={form.mobile}
+            onChange={handleChange}
+            placeholder="07XXXXXXXX"
             maxLength={10} // can not type no more than 10
           />
         </div>
 
         <div className="form-group">
           <label>Password</label>
-          <input name="password" type="password" value={form.password} onChange={handleChange} />
+          <div className="password-wrapper" style={{ position: 'relative', width: '100%' }}>
+            <input
+              name="password"
+              type={showPassword ? "text" : "password"} // වෙනස් කළා
+              value={form.password}
+              onChange={handleChange}
+              style={{ width: '100%', paddingRight: '40px' }} // Icon එකට ඉඩ තැබීමට
+            />
+            <span
+              className="password-toggle-btn"
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: 'absolute',
+                right: '12px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center', // මෙතන alignItems ලෙස වෙනස් කළා
+                color: '#666666',     // මේවා style object එක ඇතුළටම ගත්තා
+                zIndex: 10
+              }}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
+          </div>
         </div>
 
         <button className="register-btn" onClick={register}>Register</button>
 
         <div className="form-footer">
-          <span onClick={() => navigate("/fogot-pw")} style={{cursor: "pointer"}}>Forgot Password?</span>
-          <span onClick={() => navigate("/login")} style={{cursor: "pointer"}}>Already have an account?</span>
+          <span onClick={() => navigate("/fogot-pw")} style={{ cursor: "pointer" }}>Forgot Password?</span>
+          <span onClick={() => navigate("/login")} style={{ cursor: "pointer" }}>Already have an account?</span>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
