@@ -5,6 +5,7 @@
   /* Light Mode background  */
   background: #fff;
   width: 100%;
+  padding-left: 150px;
   transition: all 0.3s ease;
   color: white;
 }

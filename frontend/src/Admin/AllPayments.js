@@ -76,7 +76,7 @@ export default function AllPayments() {
   if (loading) return <div className="loading-screen">Loading...</div>;
 
   return (
-    <div className="admin-dashboard-wrapper" >
+    <div className="admin-dashboard-wrapper"  style={{maxWidth: "1500px"}}>
       <main className="admin-main-content">
         <header
           className="content-headerr"
@@ -91,6 +91,8 @@ export default function AllPayments() {
             All Payments (Courses & Quizzes) 💰
           </h1>
         </header>
+
+      <div className="course-category-section-conatiner" style={{marginTop:"50px", marginLeft:"10px"}}>
 
         <div className="card-panel admin-table-container" style={{maxWidth: "1170px"}}>
           <table className="admin-table" >
@@ -175,6 +177,7 @@ export default function AllPayments() {
               ))}
             </tbody>
           </table>
+        </div>
         </div>
         <div className="download-btn-container">
           <button onClick={generatePDF} className="review-btn" style={{marginTop: "20px"}}>

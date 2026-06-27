@@ -14,7 +14,7 @@
 
 /* "Add New"*/
 [data-theme='light'] .aadd-new-card {
-    border: 2px dashed #007bff !important; 
+    border: 2px dashed #1c1c1d !important; 
     cursor: pointer;
     background: #ab2424;
     border-radius: 20px;
@@ -209,7 +209,6 @@ background-color: #efedede6;
 .csv-input::file-selector-button:hover {
   background-color: #07315c; 
 }
-
 
 
 

@@ -8,7 +8,7 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   transition: background 0.3s ease;
 }
-
+ 
 /* The Glassmorphism Card */
 .register-card {
   background: rgba(255, 255, 255, 0.15);
@@ -573,4 +573,28 @@
   .course-grid-row {
     grid-template-columns: 1fr;
   }
+}
+
+
+
+.form-footer {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  width: 100%;
+  margin-top: 20px; 
+}
+
+.form-footer span {
+  font-size: 0.85rem;
+  color: #ffffff; 
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+
+.form-footer span:hover {
+  color: #e0e0e0; 
+  text-decoration: underline; 
 }

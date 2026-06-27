@@ -138,7 +138,6 @@ export default function AddCourse() {
           <div style={{ marginBottom: "15px" }}>
             <label>Course Image (Upload or Paste Link)</label>
 
-            {/* Link එක ඇතුළත් කරන Input එක */}
             <input
               type="text"
               placeholder="Paste Image URL here..."
@@ -182,7 +181,7 @@ export default function AddCourse() {
               />
               <label
                 htmlFor="imgInput"
-                style={{ cursor: "pointer", color: "#00d2ff" }}
+                style={{ cursor: "pointer", color: "#374649" }}
               >
                 {selectedFile
                   ? `✅ ${selectedFile.name}`
@@ -192,7 +191,7 @@ export default function AddCourse() {
               {/* Preview  */}
               {previewUrl && (
                 <div style={{ marginTop: "15px" }}>
-                  <p style={{ fontSize: "12px", color: "#888" }}>
+                  <p style={{ fontSize: "12px", color: "#706d6d" }}>
                     Image Preview:
                   </p>
                   <img
@@ -228,15 +227,16 @@ export default function AddCourse() {
                 type="number"
                 name="price"
                 placeholder="5000"
+                min="0"
                 required
                 value={formData.price}
                 onChange={handleChange}
               />
             </div>
 
-            <div>
+            <div className="category-container">
               <label>Category</label>
-              <select
+              <select className="category"
                 name="category"
                 value={formData.category}
                 onChange={handleChange}

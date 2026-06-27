@@ -107,10 +107,10 @@ export default function StudentRegister() {
           <div className="password-wrapper" style={{ position: 'relative', width: '100%' }}>
             <input
               name="password"
-              type={showPassword ? "text" : "password"} // වෙනස් කළා
+              type={showPassword ? "text" : "password"} 
               value={form.password}
               onChange={handleChange}
-              style={{ width: '100%', paddingRight: '40px' }} // Icon එකට ඉඩ තැබීමට
+              style={{ width: '100%', paddingRight: '40px' }} 
             />
             <span
               className="password-toggle-btn"
@@ -122,9 +122,8 @@ export default function StudentRegister() {
                 transform: 'translateY(-50%)',
                 cursor: 'pointer',
                 display: 'flex',
-                alignItems: 'center', // මෙතන alignItems ලෙස වෙනස් කළා
-                color: '#666666',     // මේවා style object එක ඇතුළටම ගත්තා
-                zIndex: 10
+                alignItems: 'center', 
+                color: '#666666',     
               }}
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -138,6 +137,8 @@ export default function StudentRegister() {
           <span onClick={() => navigate("/fogot-pw")} style={{ cursor: "pointer" }}>Forgot Password?</span>
           <span onClick={() => navigate("/login")} style={{ cursor: "pointer" }}>Already have an account?</span>
         </div>
+
+        
       </div>
     </div >
   );

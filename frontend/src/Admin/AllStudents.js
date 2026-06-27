@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../API";
 import "../Admin/css/AllStudents.css";
+import Swal from "sweetalert2";
 
 export default function AllStudents() {
   const [students, setStudents] = useState([]);
@@ -56,9 +57,27 @@ export default function AllStudents() {
   };
 
   const handleEditClick = (student) => setEditStudent(student);
-
+  /*
+    const handleEditChange = (e) => {
+      setEditStudent({ ...editStudent, [e.target.name]: e.target.value });
+    };
+  */
   const handleEditChange = (e) => {
-    setEditStudent({ ...editStudent, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    if (name === "mobile") {
+      const onlyNums = value.replace(/[^0-9]/g, '');
+
+      setEditStudent({
+        ...editStudent,
+        [name]: onlyNums
+      });
+    } else {
+      setEditStudent({
+        ...editStudent,
+        [name]: value
+      });
+    }
   };
 
   const handleUpdate = () => {
@@ -69,12 +88,26 @@ export default function AllStudents() {
       })
       .catch((err) => console.error(err));
   };
+
+
+  const handleMobileBlur = (e) => {
+    const value = e.target.value;
+
+   if (value.length > 0 && value.length < 10) {
+  Swal.fire({
+    icon: 'warning',
+    title: 'Invalid Mobile Number',
+    text: 'Mobile number must contain exactly 10 digits!',
+    confirmButtonColor: '#3085d6',
+  });
+}
+  };
  
   return (
-    <div className="admin-dashboard-wrapper">
+    <div className="admin-dashboard-wrapper" style={{ maxWidth: "1500px"}}>
       <main className="admin-main-content">
         <header className="dashboard-header-flex">
-          
+
           <h1 className="allstudent-title-text" >All Students</h1>
           <div className="search-wrapper">
             <input
@@ -87,7 +120,7 @@ export default function AllStudents() {
           </div>
         </header>
 
-        <div className="card-panel">
+        <div className="card-panel" style={{maxWidth: "1300px"}}>
           {loading ? (
             <div className="loading-text">Loading students...</div>
           ) : students.length === 0 ? (
@@ -146,24 +179,24 @@ export default function AllStudents() {
             <div className="modal-content glass-effect">
               <h3 className="modal-title">Edit Student</h3>
               <div className="input-group">
-                <label style={{marginTop:"-40px"}}>Full Name</label>
+                <label style={{ marginTop: "-15px" }}>Full Name</label>
                 <input type="text" name="full_name" className="modal-input" value={editStudent.full_name} onChange={handleEditChange} />
               </div>
               <div className="input-group">
-                <label style={{marginTop:"-40px"}}>Email</label>
+                <label style={{ marginTop: "-15px" }}>Email</label>
                 <input type="email" name="email" className="modal-input" value={editStudent.email} onChange={handleEditChange} />
               </div>
               <div className="input-group">
-                <label style={{marginTop:"-40px"}}>Mobile</label>
-                <input type="text" name="mobile" className="modal-input" value={editStudent.mobile} onChange={handleEditChange} />
+                <label style={{ marginTop: "-15px" }}>Mobile</label>
+                <input type="text" name="mobile" className="modal-input" value={editStudent.mobile} onChange={handleEditChange} onBlur={handleMobileBlur} maxLength={10} />
               </div>
               <div className="input-group">
-                <label style={{marginTop:"-40px"}}>Reset Password</label>
+                <label style={{ marginTop: "-15px" }}>Reset Password</label>
                 <input type="password" name="password" className="modal-input" placeholder="New password" onChange={handleEditChange} />
               </div>
               <div className="input-group">
-                <label style={{marginTop:"-40px"}}>Account Status</label>
-                <select name="status" className="modal-input" value={editStudent.status} onChange={handleEditChange}>
+                <label style={{ marginTop: "-15px" }}>Account Status</label>
+                <select name="status" className="modal-input" style={{ color: "black" }} value={editStudent.status} onChange={handleEditChange}>
                   <option value="Active">Active</option>
                   <option value="Deactive">Deactive</option>
                 </select>
@@ -181,7 +214,7 @@ export default function AllStudents() {
           <div className="modal-overlay">
             <div className="modal-content glass-effect delete-modal">
               <h3 className="delete-title">Are you sure?</h3>
-              <p className="delete-desc">This action cannot be undone. Do you really want to delete this student?</p>
+              <p className="delete-desc" style={{color:"black"}}>This action cannot be undone. Do you really want to delete this student?</p>
               <div className="modal-buttons">
                 <button onClick={confirmDelete} className="confirm-delete-btn">Yes, Delete</button>
                 <button onClick={() => setDeleteStudentId(null)} className="cancel-btn">No, Keep it</button>
@@ -189,7 +222,7 @@ export default function AllStudents() {
             </div>
           </div>
         )}
- 
+
         <button className="floating-back-btn" onClick={() => navigate("/a-dashbord")}>
           ← BACK TO DASHBOARD
         </button>

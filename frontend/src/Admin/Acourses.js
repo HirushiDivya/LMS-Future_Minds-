@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 //import "../Admin/css/Coursecontent.css";
 import "./cours.css";
 import Swal from "sweetalert2";
- 
+
 export default function Coursepage() {
   const [courses, setCourses] = useState([]);
   const [search, setSearch] = useState("");
@@ -13,7 +13,7 @@ export default function Coursepage() {
   const navigate = useNavigate();
   const BASE_URL = "http://localhost:5000";
   const [totalCourses, setTotalCourses] = useState(0);
- 
+
   const fetchCourses = async () => {
     try {
       let url = "/courses";
@@ -52,7 +52,7 @@ export default function Coursepage() {
     // Image URL ekakda nathnam file name ekakda kiyala check kirima
     const currentImageUrl = course.course_img?.startsWith("http")
       ? course.course_img
-      : `${API.defaults.baseURL}/uploads/${course.course_img}`; // Backend upload path eka danna
+      : `${API.defaults.baseURL}/uploads/${course.course_img}`; // Backend upload path eka 
 
     const { value: formValues } = await Swal.fire({
       title: `<span style="color: #00d2ff">Edit Course: ${courseCode}</span>`,
@@ -109,7 +109,6 @@ export default function Coursepage() {
         formData.append("price", formValues.price);
         formData.append("category", course.category);
 
-        // File ekak thiyenawanam eka yawanawa, nathnam URL eka yawanawa
         if (formValues.image_file) {
           formData.append("course_img", formValues.image_file);
         } else {
@@ -202,7 +201,7 @@ export default function Coursepage() {
         </span>
       </div>
 
-      <div className="search-container" style={{ marginLeft: "100px" }}>
+      <div className="search-container" style={{ marginLeft: "250px" }}>
         <div className="search-box">
           <span>🔍</span>
           <input
@@ -234,7 +233,7 @@ export default function Coursepage() {
         </div>
       </div>
 
-      <div className="course-category-section-conatiner">
+      <div className="course-category-section-conatiner" style={{ marginTop: "50px", marginLeft: "110px" }}>
         <section>
           <div
             className="acourse-grid"
@@ -248,7 +247,6 @@ export default function Coursepage() {
               <h3>Add New Course</h3>
             </div>
 
-            {/* categories.map වෙනුවට කෙලින්ම courses.map භාවිතා කරන්න */}
             {courses.length > 0 ? (
               courses.map((course) => (
                 <div key={course.id} className="coursepge-card">
@@ -259,8 +257,8 @@ export default function Coursepage() {
                     src={
                       course.course_img
                         ? course.course_img.startsWith("http")
-                          ? course.course_img // Web link එකක් නම් කෙලින්ම පෙන්වන්න
-                          : `${BASE_URL}/uploads/${course.course_img}` // Local upload එකක් නම් path එක හදන්න
+                          ? course.course_img
+                          : `${BASE_URL}/uploads/${course.course_img}`
                         : "https://via.placeholder.com/300x200?text=No+Image"
                     }
                     alt={course.title}
@@ -275,14 +273,14 @@ export default function Coursepage() {
                       <span>👥 {course.students}k Students</span>
                     </div>
 
-                    <h3>{course.title}</h3> 
+                    <h3>{course.title}</h3>
                     <h3>{course.course_code}</h3>
                     {/*
                     <div className="course-footer">
                       <span className="price">LKR {course.price}</span>
                     </div> */}
                     <div className="course-footer">
-                      <span className="course-price">LKR {course.price}</span>
+                      <span className="course-price" style={{ color: "#111105", fontWeight: "bold", fontSize: "18px" }}>LKR {course.price} </span>
                       <div
                         style={{
                           display: "flex",
@@ -296,7 +294,7 @@ export default function Coursepage() {
                           }
                           className="course-view-btn"
                         >
-                          Edit
+                          Edit Content
                         </button>
 
                         <button
@@ -306,10 +304,28 @@ export default function Coursepage() {
                           Delete
                         </button>
 
-                        <button
-                        className="edit-icon-btn"
+
+
+                        <button className="edit-icon-btn"
                           onClick={() => handleEditCourse(course.course_code)}
                           title="Edit Course"
+                          style={{
+                            position: "absolute",
+                            top: "12px",
+                            right: "12px",
+                            backgroundColor: "rgba(30, 41, 59, 0.8)", // blur/semi-transparent look
+                            backdropFilter: "blur(4px)",
+                            border: "none",
+                            borderRadius: "50%",
+                            width: "32px",
+                            height: "32px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            cursor: "pointer",
+                            boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
+                            zIndex: 10
+                          }}
                         >
                           ✏️
                         </button>

@@ -141,7 +141,8 @@ export default function AdminEnrollmentRequests() {
   if (loading) return <div className="loading-screen">Loading...</div>;
 
   return (
-    <div className="admin-dashboard-wrapper" style={{ marginRight: "450px" }}>
+    
+    <div className="admin-dashboard-wrapper" style={{ maxWidth: "1250px", margin: "0 auto", paddingRight: "230px" }}>
       <main className="admin-main-content">
         {/*  Section 1: Course Enrollments  */}
         <div style={{ marginBottom: "50px" }}>

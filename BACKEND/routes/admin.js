@@ -228,7 +228,7 @@ router.put("/student/:id", async (req, res) => {
   });
 });
 
-
+ /*
 //http://localhost:5000/api/admin/api/admin/student/:id
 //delete student
 router.delete("/student/:id", (req, res) => {
@@ -257,7 +257,47 @@ router.delete("/student/:id", (req, res) => {
     res.json({ message: "Student deleted successfully" });
   });
 });
+*/
 
+
+// http://localhost:5000/api/admin/student/:id
+// delete student anyway (Handling all foreign key tables)
+router.delete("/student/:id", async (req, res) => {
+  const { id } = req.params;
+
+  const deleteProgressSql = "DELETE FROM content_progress WHERE student_id = ?";
+  const deleteEnrollmentsSql = "DELETE FROM enrollments WHERE student_id = ?";
+  const deletePaymentsSql = "DELETE FROM course_payments WHERE student_id = ?";
+  const deleteStudentSql = "DELETE FROM students WHERE id = ?";
+
+  try {
+    await new Promise((resolve, reject) => {
+      db.query(deleteProgressSql, [id], (err) => err ? reject(err) : resolve());
+    });
+
+    await new Promise((resolve, reject) => {
+      db.query(deleteEnrollmentsSql, [id], (err) => err ? reject(err) : resolve());
+    });
+
+    await new Promise((resolve, reject) => {
+      db.query(deletePaymentsSql, [id], (err) => err ? reject(err) : resolve());
+    });
+    db.query(deleteStudentSql, [id], (err, result) => {
+      if (err) {
+        return res.status(500).json({ error: "Failed to delete student: " + err.message });
+      }
+
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ message: "Student not found" });
+      }
+
+      res.json({ message: "Student and all associated records deleted successfully" });
+    });
+
+  } catch (error) {
+    return res.status(500).json({ error: "Database relation cleanup failed: " + error.message });
+  }
+});
 
 
 //http://localhost:5000/api/admin/course/verify-payment/1

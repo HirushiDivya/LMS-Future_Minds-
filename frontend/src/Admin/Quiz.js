@@ -20,7 +20,7 @@ const AQuiz = () => {
       console.error("Error fetching quizzes", err);
       setQuizzes([]);
     }
-  }; 
+  };
 
   const fetchTotalCount = async () => {
     try {
@@ -245,7 +245,7 @@ const AQuiz = () => {
 
       {message && <div className="status-message">{message}</div>}
 
-      <div className="search-container" style={{ marginLeft: "100px" }}>
+      <div className="search-container" style={{ marginLeft: "250px" }}>
         <div className="search-box">
           <span>🔍</span>
           <input
@@ -256,6 +256,8 @@ const AQuiz = () => {
           />
         </div>
       </div>
+
+      <div className="course-category-section-conatiner" style={{marginTop:"50px", marginLeft:"110px"}}>
 
       <div className="acourse-grid">
         {/* ADD NEW QUIZ CARD */}
@@ -325,6 +327,7 @@ const AQuiz = () => {
             </div>
           </div>
         ))}
+      </div>
       </div>
 
       <button
