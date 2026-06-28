@@ -199,12 +199,12 @@ const fetchQuizData = async () => {
 
       </div>
       <div style={{ marginTop: "50px" }}>
-        <button className="floating-back-btn" onClick={() => navigate("/a-dashbord")}>
+        <button className="floating-back-btn" onClick={() => navigate(-1)}>
           ← BACK TO Quizes
         </button>
       </div>
     </div>
   );
-};
+}; 
 
 export default ViewQuiz;

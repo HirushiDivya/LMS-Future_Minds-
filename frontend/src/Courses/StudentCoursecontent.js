@@ -330,7 +330,7 @@ export default function CourseContent() {
                   const matchesSearch = item.title
                     .toLowerCase()
                     .includes(searchTerm.toLowerCase());
-                  const matchesSidebar =
+                  const matchesSidebar = 
                     selectedItemId === "all" ||
                     selectedItemId === `content-${item.id}`;
                   return matchesSearch && matchesSidebar;
@@ -502,11 +502,11 @@ export default function CourseContent() {
                   : "Enroll Now"}
             </button>
           </div>
-        )}
+        )} 
         <button
           className="floating-back-btn"
           style={{ marginBottom: "40px" }}
-          onClick={() => navigate("/a-dashbord")}
+          onClick={() => navigate("/all-courses")}
         >
           ← BACK TO DASHBOARD
         </button>

@@ -88,7 +88,7 @@ export default function StudentRegister() {
 
         <div className="form-group">
           <label>Email Address</label>
-          <input name="email" value={form.email} onChange={handleChange} placeholder="example@mail.com" />
+          <input name="email" value={form.email} onChange={handleChange} placeholder="example@mail.com" autoComplete="new-password" />
         </div>
 
         <div className="form-group">
@@ -110,6 +110,7 @@ export default function StudentRegister() {
               type={showPassword ? "text" : "password"} 
               value={form.password}
               onChange={handleChange}
+              autoComplete="new-password" 
               style={{ width: '100%', paddingRight: '40px' }} 
             />
             <span

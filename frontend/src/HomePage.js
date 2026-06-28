@@ -182,7 +182,7 @@ export default function HomePage() {
         <button className="btn-signup" onClick={() => navigate("/student-reg")}>
           <FaUserPlus /> Sign Up
         </button>
-      </div>
+      </div> 
 
       {/* Hero Section */}
       <section className="hero">

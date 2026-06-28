@@ -264,7 +264,7 @@ const ViewQuiz = () => {
           bottom: "30px",
           right: "30px",
           zIndex: "1000",
-          padding: "12px 30px",
+          padding: "12px 30px", 
           borderRadius: "30px",
           background: "rgba(255, 255, 255, 0.2)", 
           backdropFilter: "blur(10px)",
@@ -287,3 +287,4 @@ const ViewQuiz = () => {
 };
 
 export default ViewQuiz;
+ 
